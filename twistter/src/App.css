@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  text-align: left;
 }
 
 .App-logo {
@@ -11,7 +11,7 @@
 .App-header {
   background-color: white;
   min-height: 100vh;
-  display: inline;
+  display: inline-block;
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -23,6 +23,19 @@
 
 .App-link {
   color: white;
+}
+
+.SearchBar {
+  text-align: right;
+  background-color: white;
+  min-height: 100vh;
+  display: inline-block;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: black;
+
 }
 
 @keyframes App-logo-spin {

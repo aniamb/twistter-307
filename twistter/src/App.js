@@ -15,24 +15,22 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <div>
-            <Navbar bg="light" expand="lg">
-            <Nav className="mr-auto">
+          <Navbar>
               <Nav.Link href="#home">Home</Nav.Link>
-              <div>
-              <h1> Twistter </h1>
-              </div>
-            </Nav>
-            <div>
-            <Form inline>
+          </Navbar>
+          <div className="SearchBar">
+            <Form>
               <FormControl type="text" placeholder="Search" className="mr-sm-2" />
               <Button variant="outline-success">Search</Button>
             </Form>
-            </div>
-          </Navbar>
-        </div>
+          </div>
       </header>
+      <body>
+        <h1> twistter </h1>
+      </body>
+
     </div>
+
   );
 }
 
