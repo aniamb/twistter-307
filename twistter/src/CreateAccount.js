@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import {Switch, Route, NavLink} from 'react-router-dom'
+import Login from './Login'
 import './CreateAccount.css';
 
 class CreateAccount extends Component {
@@ -24,10 +26,10 @@ class CreateAccount extends Component {
                     <input type="submit" value="Submit"/>
                 </form>
                 <br/>
-                Existing User?
+                <NavLink to="/login">Existing User?</NavLink>
             </div>
 
-           
+            
         
         
         
