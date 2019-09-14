@@ -8,7 +8,6 @@ class CreateAccount extends Component {
     return (
         <div className="CreateAccount">
             <div className="inputBox">
-                <h1> TWISTTER </h1>
                 <h3> Create Account </h3>
                 <form>
                     First Name: <br/>

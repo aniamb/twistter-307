@@ -8,7 +8,6 @@ class Login extends Component {
     return (
         <div className="Login">
             <div className="inputBox">
-                <h1> TWISTTER </h1>
                 <h3> Existing User Login! </h3>
                 <form>
                     Email:<br/> 
