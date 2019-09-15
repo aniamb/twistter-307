@@ -21,7 +21,7 @@ class CreateAccount extends Component {
                     Confirm Password: <br/>
                     <input type="text" name="passwordConfirm" value=""/><br></br>
                     @ <br/> 
-                    <input type="text" name="passwordConfirm" value=""/><br></br>
+                    <input type="text" name="handle" value=""/><br></br>
                     <input type="submit" value="Submit"/>
                 </form>
                 <br/>
