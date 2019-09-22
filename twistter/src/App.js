@@ -24,6 +24,9 @@ function App() {
               <Button variant="outline-success">Search</Button>
             </Form>
           </div>
+          <Navbar>
+              <Nav.Link href="#profile">Profile Page</Nav.Link>
+          </Navbar>
       </header>
       <body>
         <h1> twistter </h1>
