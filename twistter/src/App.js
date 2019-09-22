@@ -13,7 +13,7 @@ function App() {
       <h1>Twistter</h1>
     </div>
       <Switch>
-        <Route path="/createaccount" component={CreateAccount}/>
+          <Route path="/createaccount" component={CreateAccount}/>
         <Route path="/login" component={Login}/>
         <Route render= {() =>
             <CreateAccount />

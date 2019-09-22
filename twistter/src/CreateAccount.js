@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {Switch, Route, NavLink} from 'react-router-dom'
 import Login from './Login'
-import './CreateAccount.css';
 
 class CreateAccount extends Component {
     render(){
@@ -27,12 +26,6 @@ class CreateAccount extends Component {
                 <br/>
                 <NavLink to="/login">Existing User?</NavLink>
             </div>
-
-            
-        
-        
-        
-        
         
         </div>
     )
