@@ -4,7 +4,7 @@ import './App.css';
 import CreateAccount from './CreateAccount'
 import Login from './Login'
 import EditProfile from './EditProfile'
-import Timeline from './Timeline.js'
+// import Timeline from './Timeline.js'
 import {Switch, Route} from 'react-router-dom'
 
 function App() {
