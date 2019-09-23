@@ -71,8 +71,6 @@ class CreateAccount extends Component {
                 <NavLink to="/login">Existing User?</NavLink><br></br>
                 <NavLink to="/editprofile">Edit profile?</NavLink>
             </div>
-        
-        
         </div>
     )
     }
