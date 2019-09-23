@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import CreateAccount from './CreateAccount'
 import Login from './Login'
+import EditProfile from './EditProfile'
 
 import {Switch, Route} from 'react-router-dom'
 
@@ -15,6 +16,7 @@ function App() {
       <Switch>
         <Route path="/createaccount" component={CreateAccount}/>
         <Route path="/login" component={Login}/>
+        <Route path="/editprofile" component={EditProfile}/>
         <Route render= {() =>
             <CreateAccount />
            }/>
