@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import Timeline from './Timeline'
 import Search from './Search'
+import Profile from './Profile'
 import { Redirect } from 'react-router-dom'
 import {Switch, Route} from 'react-router-dom'
 
