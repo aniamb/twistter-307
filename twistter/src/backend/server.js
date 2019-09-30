@@ -19,9 +19,20 @@ app.get('/', (req, res) => res.send('Hello World!'));
 
 app.get('/home', (req, res) => res.send("I'm home"));
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 app.post('/register', function(req, res) {
   console.log(req.body);
+  var user = new User(req.body);
+  user.save()
+  .then(user => {
+        res.status(200).json({'user': 'new user added to the db successfully'});
+      })
+      .catch(err => {
+        res.status(400).send('adding new user to fridge failed');
+        console.log(err);
+      });
+      // redirect to editprofile
+      res.redirect('http://localhost:3000/editprofile');
   // res.end();
 });
