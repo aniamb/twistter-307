@@ -8,13 +8,13 @@ import { Redirect } from 'react-router-dom'
 import CreateAccount from './CreateAccount'
 import Login from './Login'
 import EditProfile from './EditProfile'
-import {Switch, Route} from 'react-router-dom'
+import {Switch, NavLink, Route} from 'react-router-dom'
 
 function App() {
   return (
     <div className="App">
       <div className="App-header">
-          <h1>Twistter</h1>
+          <h1><NavLink to="/Timeline">Twistter</NavLink></h1>
       </div>
         <Switch>
             <Route path="/timeline" component={Timeline}/>

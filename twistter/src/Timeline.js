@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import logo from './logo.svg';
 import Search from './Search'
 import './App.css';
-import { Route, Redirect, Link } from 'react-router-dom'
+import { Route, NavLink, Redirect, Link } from 'react-router-dom'
 
 class Timeline extends Component{
     constructor(props){
@@ -21,7 +21,7 @@ class Timeline extends Component{
             <div className="Timeline">
                 <div className="links">
                     <ul className="navLinks">
-                        <li>Twistter</li>
+                        <li><NavLink to="/Timeline">Twistter</NavLink></li>
                         {/* <li><NavLink exact to="/">home</NavLink></li> */}
                         <li>My Profile</li>
                         <li>
