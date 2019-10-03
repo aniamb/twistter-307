@@ -26,13 +26,15 @@ app.post('/register', function(req, res) {
   var user = new User(req.body);
   user.save()
   .then(user => {
-        res.status(200).json({'user': 'new user added to the db successfully'});
+        // res.status(200).json({'user': 'new user added to the db successfully'});
+        res.redirect('http://localhost:3000/editprofile');
+
       })
       .catch(err => {
         res.status(400).send('adding new user to fridge failed');
         console.log(err);
       });
       // redirect to editprofile
-      res.redirect('http://localhost:3000/editprofile');
+      // res.redirect('http://localhost:3000/editprofile');
   // res.end();
 });
