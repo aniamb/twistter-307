@@ -32,7 +32,7 @@ class CreateAccount extends Component {
     handlePasswordChange(event) {
         this.setState({password: event.target.value})
     }
-    
+
     handlePasswordConfirmChange(event) {
         this.setState({passwordConfirm: event.target.value})
     }
@@ -46,14 +46,14 @@ class CreateAccount extends Component {
         <div className="CreateAccount">
             <div className="inputBox">
                 <h3> Create Account </h3>
-                <form>
+                <form action="http://localhost:5000/register" method="POST">
                     First Name: <br/>
                     <input type="text" name="firstname"  value={this.state.firstname}
                     onChange={this.handleFirstNameChange.bind(this)} focus /><br></br>
                     Last Name: <br/>
                     <input type="text" name="lastname" value={this.state.lastname}
                     onChange={this.handleLastNameChange.bind(this)} /><br></br>
-                    Email:<br/> 
+                    Email:<br/>
                     <input type="text" name="email" value={this.state.email}
                     onChange={this.handleEmailChange.bind(this)} /><br></br>
                     Password: <br/>
@@ -62,7 +62,7 @@ class CreateAccount extends Component {
                     Confirm Password: <br/>
                     <input type="text" name="passwordConfirm" value={this.state.passwordConfirm}
                     onChange={this.handlePasswordConfirmChange.bind(this)} /><br></br>
-                    @ <br/> 
+                    @ <br/>
                     <input type="text" name="handle" value={this.state.handle}
                     onChange={this.handleHandleChange.bind(this)} />
                     <input type="submit" value="Submit"/><br></br>

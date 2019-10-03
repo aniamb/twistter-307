@@ -26,22 +26,20 @@
   padding: 2px;
   width: 150px;
 
-/*  margin-left: auto;*/
-/*  margin-right: auto;*/
+/*  margin-left: auto ;*/
+/*  margin-right: auto ;*/
   margin: 0 auto;
   display: inline-block;
   font-weight: 500;
 }
 
-.links {
-        padding: 1px 1px;
-  /*      width: 100%; */
-        margin-left: auto;
-        margin-right: auto;
-         height: 40px;
+.links{
+      padding: 1px 1px;
+/*      width: 100%;*/
+      margin-left: auto;
+      margin-right: auto ;
+       height: 40px;
 }
-
-
 
 .App-link {
   color: white;
