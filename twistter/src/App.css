@@ -13,33 +13,34 @@
   color: white;
 }
 .navLinks{
-  list-style:none;
-  display: inline;
-  align-items: stretch;
-  justify-content: space-between;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  margin-bottom: 2px;
+  list-style:none;
+  display: inline;
+  align-items: stretch;
+  justify-content: space-between;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 2px;
 }
-.navLinks li {
-  padding: 2px;
-  width: 150px;
 
-/*  margin-left: auto ;*/
-/*  margin-right: auto ;*/
-  margin: 0 auto;
-  display: inline-block;
-  font-weight: 500;
+.navLinks li {
+  padding: 2px;
+  width: 150px;
+
+/* margin-left: auto ;
+margin-right: auto ; */
+  margin: 0 auto;
+  display: inline-block;
+  font-weight: 500;
 }
 
 .links{
-      padding: 1px 1px;
-/*      width: 100%;*/
-      margin-left: auto;
-      margin-right: auto ;
-       height: 40px;
-}
+      padding: 1px 1px;
+      /* width: 100%; */
+      margin-left: auto;
+      margin-right: auto ;
+      height: 40px;
+    }
 
 .App-link {
   color: white;
