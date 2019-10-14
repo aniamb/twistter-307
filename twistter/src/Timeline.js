@@ -27,7 +27,8 @@ class Timeline extends Component{
                         {/* <li><NavLink exact to="/">home</NavLink></li> */}
                         <li>My Profile</li>
                         <li>
-                            <form action="/search" method="post">
+                            <form action="http://localhost:5000/searchserver" method="post">
+                                {/*Redirect to search in backend*/}
                                 Search users: <br/>
                                 <input type="text" placeholder="Search.." name="searchparam"></input>
                                 <br/>

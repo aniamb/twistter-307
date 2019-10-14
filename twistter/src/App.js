@@ -9,7 +9,6 @@ import CreateAccount from './CreateAccount'
 import Login from './Login'
 import EditProfile from './EditProfile'
 import {Switch, NavLink, Route} from 'react-router-dom'
-import Timeline from './Timeline.js'
 
 function App() {
   return (
@@ -24,6 +23,7 @@ function App() {
             <Route path="/search" component={Search}/>
             <Route render= {() =>
                 <Timeline />
+                // <CreateAccount />
             }/>
         </Switch>
 
