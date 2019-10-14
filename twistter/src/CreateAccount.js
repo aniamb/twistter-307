@@ -47,6 +47,7 @@ class CreateAccount extends Component {
             <div className="inputBox">
                 <h3> Create Account </h3>
                 <form action="http://localhost:5000/register" method="POST">
+                    {/*add validation so it tells you as you type*/}
                     First Name: <br/>
                     <input type="text" name="firstname"  value={this.state.firstname}
                     onChange={this.handleFirstNameChange.bind(this)} focus /><br></br>
@@ -57,10 +58,10 @@ class CreateAccount extends Component {
                     <input type="text" name="email" value={this.state.email}
                     onChange={this.handleEmailChange.bind(this)} /><br></br>
                     Password: <br/>
-                    <input type="text" name="password" value={this.state.password}
+                    <input type="password" name="password" value={this.state.password}
                     onChange={this.handlePasswordChange.bind(this)} /><br></br>
                     Confirm Password: <br/>
-                    <input type="text" name="passwordConfirm" value={this.state.passwordConfirm}
+                    <input type="password" name="passwordConfirm" value={this.state.passwordConfirm}
                     onChange={this.handlePasswordConfirmChange.bind(this)} /><br></br>
                     @ <br/>
                     <input type="text" name="handle" value={this.state.handle}

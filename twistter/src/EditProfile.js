@@ -20,6 +20,7 @@ class EditProfile extends Component{
             <div className="EditingBox">
                 <h3> Edit Profile </h3>
                 <form action="http://localhost:5000/editprofile" method="POST">
+                    {/*Make a text area instead of a text box*/}
                     Bio: <br/>
                     <input type="text" name="bio" value={this.state.bio}
                     onChange={this.handleChange.bind(this)}/><br></br>
