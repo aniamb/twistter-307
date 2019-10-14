@@ -1,8 +1,17 @@
 const express = require('express');
-const session = require('express-session');
+// const session = require('express-session');
 const cors = require('cors');
 const app = express();
 const port = 3000;
+const dbConnectionString = 'mongodb+srv://user:lebronjames@twistter-4gumf.mongodb.net/test?retryWrites=true&w=majority';
+const mongoose = require('mongoose');
+
+mongoose.connect(dbConnectionString, { useNewUrlParser: true });
+let db = mongoose.connection;
+db.once('open', () => console.log('connected to the database'));
+
+// checks if connection with the database is successful
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.get('/', (req, res) => res.send('Hello World!'));
 
