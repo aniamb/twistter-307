@@ -43,17 +43,31 @@ app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 app.post('/register', function(req, res) {
   console.log(req.body);
   var user = new User(req.body);
+  // use passport js to hash
   user.save()
   .then(user => {
         // res.status(200).json({'user': 'new user added to the db successfully'});
         res.redirect('http://localhost:3000/editprofile');
 
       })
-      .catch(err => {
-        res.status(400).send('adding new user to fridge failed');
-        console.log(err);
-      });
+  .catch(err => {
+    console.log(err);
+  });
       // redirect to editprofile
       // res.redirect('http://localhost:3000/editprofile');
   // res.end();
+});
+
+
+app.post('/editprofile', function(req, res) {
+  console.log(req.body)
+  // get global variable of userID, and update with bio
+  // req.body should be bio
+  res.redirect('http://localhost:3000/timeline');
+
+  // need callback here
+  // .then(function(data) {
+  // });
+
+
 });

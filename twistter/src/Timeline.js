@@ -3,6 +3,8 @@ import logo from './logo.svg';
 import Search from './Search'
 import './App.css';
 import { Route, NavLink, Redirect, Link } from 'react-router-dom'
+// import Form from 'react-bootstrap/Form'
+//import FormControl from 'react-bootstrap/FormControl'
 
 class Timeline extends Component{
     constructor(props){
