@@ -25,7 +25,7 @@ class Login extends Component {
         <div className="Login">
             <div className="inputBox">
                 <h3> Existing User Login! </h3>
-                <form>
+                <form action="http://localhost:5000/login" method="POST">
                     Email:<br/> 
                     <input type="text" name="email" value={this.state.email} onChange={this.handleEmail.bind(this)} /><br></br>
                     Password: <br/>
