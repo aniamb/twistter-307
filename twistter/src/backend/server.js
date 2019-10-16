@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 
 let User = require('./models/user');
 app.use(express.urlencoded());
+
 mongoose.connect(dbConnectionString, { useNewUrlParser: true });
 let db = mongoose.connection;
 db.once('open', () => console.log('connected to the database'));
