@@ -50,3 +50,21 @@ app.post('/editprofile', function(req, res) {
   // .then(function(data) {
   // });
 });
+
+//LOGIN PAGE CODE 
+app.post('/login', function(req, res) {
+  console.log(req.body);
+  User.findOne({ 
+  'email': req.body.email,
+  'password':req.body.password }, function(err, user) {
+    if (user) {
+      // user exists 
+      console.log('user found successfully');
+      res.redirect('http://localhost:3000/timeline')
+    } else {
+      // user does not exist
+      console.log('user not in base');
+      res.redirect('http://localhost:3000/login');
+    }
+ })
+});
