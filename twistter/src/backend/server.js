@@ -49,6 +49,4 @@ app.post('/editprofile', function(req, res) {
   // need callback here
   // .then(function(data) {
   // });
-
-
 });
