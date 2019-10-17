@@ -8,6 +8,17 @@ const mongoose = require('mongoose');
 
 let User = require('./models/user');
 app.use(express.urlencoded());
+
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+   next();
+  });
+  
+  
+  
+  
 mongoose.connect(dbConnectionString, { useNewUrlParser: true });
 let db = mongoose.connection;
 db.once('open', () => console.log('connected to the database'));
@@ -64,6 +75,7 @@ app.post('/login', function(req, res) {
     } else {
       // user does not exist
       console.log('user not in base');
+      //res.status(400).send('Email or Password does not exist');
       res.redirect('http://localhost:3000/login');
     }
  })
