@@ -1,24 +1,19 @@
 const express = require('express');
+const bodyParser = require("body-parser");
 // const session = require('express-session');
 const cors = require('cors');
 const app = express();
 const port = 5000;
 const dbConnectionString = 'mongodb+srv://user:lebronjames@twistter-4gumf.mongodb.net/test?retryWrites=true&w=majority';
 const mongoose = require('mongoose');
-
 let User = require('./models/user');
+app.use(cors());
+
+
+app.use(bodyParser.json()); 
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.urlencoded());
 
-
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-   next();
-  });
-  
-  
-  
-  
 mongoose.connect(dbConnectionString, { useNewUrlParser: true });
 let db = mongoose.connection;
 db.once('open', () => console.log('connected to the database'));
@@ -64,19 +59,25 @@ app.post('/editprofile', function(req, res) {
 
 //LOGIN PAGE CODE 
 app.post('/login', function(req, res) {
-  console.log(req.body);
+  console.log('overall body ' + req.body);
+  //console.log(req);
+
   User.findOne({ 
   'email': req.body.email,
   'password':req.body.password }, function(err, user) {
     if (user) {
       // user exists 
       console.log('user found successfully');
-      res.redirect('http://localhost:3000/timeline')
+      res.status(200).send('found successfully');
+      res.end();
+      //res.redirect('http://localhost:3000/timeline');
+
     } else {
       // user does not exist
       console.log('user not in base');
-      //res.status(400).send('Email or Password does not exist');
-      res.redirect('http://localhost:3000/login');
+      res.status(400).send('Email or Password does not exist');
+      res.end();
+      //res.redirect('http://localhost:3000/login');
     }
  })
 });

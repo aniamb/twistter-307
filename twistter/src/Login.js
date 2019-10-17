@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import {Switch, Route, NavLink} from 'react-router-dom'
+import {Switch, Route, NavLink, Redirect} from 'react-router-dom'
+import axios from 'axios'
 
 import './Login.css';
 
@@ -10,6 +11,7 @@ class Login extends Component {
             email: '',
             password:'',
             isSubmitted: false,
+            isRedirect: false
         }
     }
 
@@ -21,14 +23,16 @@ class Login extends Component {
     }
     handleSubmit(event){ 
         event.preventDefault();
-        fetch('http://localhost:5000/login', {
-           method: 'POST',
-           headers: {'Access-Control-Allow-Origin': '*',},
-           body: JSON.stringify({
-                "email": this.state.email,
-                "password":this.state.password
-           })
-        });
+        const loginInfo = {email: this.state.email, password:this.state.password};
+        axios.post('http://localhost:5000/login', loginInfo).then(response=> {
+                console.log('user found through axios')
+                this.setState({isRedirect: true});
+            })
+            .catch((err)=> {
+                this.setState({isRedirect: false});
+                console.log('user not found through axios');
+            })
+
     };
     
     render(){
@@ -46,8 +50,12 @@ class Login extends Component {
                 </form>
                 <br/>
                 <NavLink to="/createaccount">New User?</NavLink>
+                {this.state.isRedirect && <Redirect to={{
+                    pathname: '/timeline'
+                }}/>}
             </div>
         </div>
+        
     )
     }
 }
