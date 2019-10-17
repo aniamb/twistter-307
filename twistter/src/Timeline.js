@@ -43,13 +43,19 @@ class Timeline extends Component{
                   </div>
                   <div className="microOrder">
                     <div className="microblogs">
-                      <h1> I really like tennis. </h1>
+                      <h3> @User: I really like tennis. </h3>
+                      <p> favorite </p>
+                      <p> repost </p>
                     </div>
                     <div className="microblogs">
-                      <h1> CS 307 at purdue is really trash. </h1>
+                      <h3> @User: CS 307 is a interesting course. </h3>
+                      <p> favorite </p>
+                      <p> repost </p>
                     </div>
                     <div className="microblogs">
-                      <h1> Boiler Up! </h1>
+                      <h3> @User: Boiler Up! </h3>
+                      <p> favorite </p>
+                      <p> repost </p>
                     </div>
                   </div>
                 </div>
