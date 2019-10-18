@@ -43,7 +43,13 @@ class Timeline extends Component{
                   </div>
                   <div className="microOrder">
                     <div className="microblogs">
-
+                    <form>
+                      <label>
+                          Create a new microblog:
+                          <input type="text" name="newMicroblog" maxlength = "280" />
+                      </label>
+                          <input type="submit" value="Submit" />
+                    </form>
                     </div>
                     <div className="microblogs">
                       <h3> @User: I really like tennis. </h3>
