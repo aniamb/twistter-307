@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
-import Search from './Search'
+//import logo from './logo.svg';
+//import Search from './Search'
 import './App.css';
-import { Route, NavLink, Redirect, Link } from 'react-router-dom'
+// import { Route, NavLink, Redirect, Link } from 'react-router-dom'
+import { NavLink, Redirect} from 'react-router-dom'
 import axios from 'axios'
 
 class Timeline extends Component{
@@ -15,27 +16,28 @@ class Timeline extends Component{
     }
 
     handleSearch = (ev) => {
-        this.setState({email: ev.target.value});
-    }
+        this.setState({searchTerm: ev.target.value});
+    };
 
-    handleClick = () => { // handles search transition
-        // event.preventDefault();
+    handleClick(event){ // handles search transition
+        event.preventDefault();
+        console.log("This is the state:" + this.state.navigate);
         var searchTerm = {searchTerm: this.state.searchTerm};
         axios.post('http://localhost:5000/searchserver', searchTerm).then(response=>{
             console.log('Search is complete')
             this.setState({navigate: true});
+            // fetch for response here
         })
             .catch((err)=>{
-                this.setState({navigate: true});
                 console.log("Search function failed");
+                this.setState({navigate: false});
             })
-    }
+    };
 
     render() {
         return (
             <div className="Timeline">
-
-                <div class="row">
+                <div className="row">
                   <div className="sidebar" >
                     <div className="links">
                         <ul className="navLinks">
@@ -52,7 +54,7 @@ class Timeline extends Component{
                                 </form>
                                 <br/>
                                 {this.state.navigate && <Redirect to={{
-                                    pathname: 'search'
+                                    pathname: '/search'
                                 }}/>}
                             </li>
                         </ul>

@@ -7,7 +7,7 @@ const port = 5000;
 const dbConnectionString = 'mongodb+srv://user:lebronjames@twistter-4gumf.mongodb.net/test?retryWrites=true&w=majority';
 const mongoose = require('mongoose');
 let User = require('./models/user');
-app.user(cors());
+app.use(cors());
 
 
 app.use(bodyParser.json());
@@ -58,6 +58,10 @@ app.post('/editprofile', function(req, res) {
 });
 
 app.post('/searchserver', function(req, res){
-    console.log(req.body); // outputs {searchserver: (whatever the parameter was}
-    res.redirect('http://localhost:3000/search')
+    console.log(req.body); // outputs {searchTerm: (whatever the parameter was}
+    console.log(req.body.searchTerm);
+    // parse mongodb for users with that search term
+    // send a post request with the list to search.js
+    res.status(200).send("Found");
+    res.end();
 });
