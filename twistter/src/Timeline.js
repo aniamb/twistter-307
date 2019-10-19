@@ -3,19 +3,32 @@ import logo from './logo.svg';
 import Search from './Search'
 import './App.css';
 import { Route, NavLink, Redirect, Link } from 'react-router-dom'
-// import Form from 'react-bootstrap/Form'
-//import FormControl from 'react-bootstrap/FormControl'
+import axios from 'axios'
 
 class Timeline extends Component{
     constructor(props){
         super(props);
         this.state = {
+            searchTerm: '',
             navigate: false
         }
     }
 
-    handleClick = () => {
-        this.setState({navigate: true});
+    handleSearch = (ev) => {
+        this.setState({email: ev.target.value});
+    }
+
+    handleClick = () => { // handles search transition
+        // event.preventDefault();
+        var searchTerm = {searchTerm: this.state.searchTerm};
+        axios.post('http://localhost:5000/searchserver', searchTerm).then(response=>{
+            console.log('Search is complete')
+            this.setState({navigate: true});
+        })
+            .catch((err)=>{
+                this.setState({navigate: true});
+                console.log("Search function failed");
+            })
     }
 
     render() {
@@ -30,13 +43,17 @@ class Timeline extends Component{
                             {/* <li><NavLink exact to="/">home</NavLink></li> */}
                             <li>My Profile</li>
                             <li>
-                                <form action="http://localhost:5000/searchserver" method="post">
+                                <form onSubmit={this.handleClick.bind(this)}>
                                     {/*Redirect to search in backend*/}
                                     Search users: <br/>
-                                    <input type="text" placeholder="Search.." name="searchparam"></input>
+                                    <input type="text" placeholder="Search.." name="searchparam" onChange={this.handleSearch.bind(this)}></input>
                                     <br/>
-                                    <button type="submit">Click To Search<i className="fa fa-search"></i></button>
+                                    <input type="submit" value="Click to Search"/>
                                 </form>
+                                <br/>
+                                {this.state.navigate && <Redirect to={{
+                                    pathname: 'search'
+                                }}/>}
                             </li>
                         </ul>
                     </div>
