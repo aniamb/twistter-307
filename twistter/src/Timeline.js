@@ -10,13 +10,29 @@ class Timeline extends Component{
     constructor(props){
         super(props);
         this.state = {
-            navigate: false
+            clicks: 0,
+            navigate: false,
+            show: true
+
         }
     }
 
     handleClick = () => {
         this.setState({navigate: true});
     }
+
+    IncrementItem = () => {
+      this.setState({ clicks: this.state.clicks + 1 });
+    }
+
+    DecreaseItem = () => {
+      this.setState({ clicks: this.state.clicks - 1 });
+    }
+
+    ToggleClick = () => {
+      this.setState({ show: !this.state.show });
+    }
+
 
     render() {
         return (
@@ -53,17 +69,30 @@ class Timeline extends Component{
                     </div>
                     <div className="microblogs">
                       <h3> @User: I really like tennis. </h3>
-                      <p> favorite </p>
+                      <div>
+                        
+                        <button onClick={this.IncrementItem}>Favorite</button>
+                        <button onClick={this.DecreaseItem}>Unfavorite</button>
+                        { this.state.show ? <p>Likes: { this.state.clicks }</p> : '' }
+                      </div>
                       <p> repost </p>
                     </div>
                     <div className="microblogs">
                       <h3> @User: CS 307 is a interesting course. </h3>
-                      <p> favorite </p>
+                      <div>
+                        <button onClick={this.IncrementItem}>Favorite</button>
+                        <button onClick={this.DecreaseItem}>Unfavorite</button>
+                        { this.state.show ? <p>Likes: { this.state.clicks }</p> : '' }
+                      </div>
                       <p> repost </p>
                     </div>
                     <div className="microblogs">
                       <h3> @User: Boiler Up! </h3>
-                      <p> favorite </p>
+                      <div>
+                        <button onClick={this.IncrementItem}>Favorite</button>
+                        <button onClick={this.DecreaseItem}>Unfavorite</button>
+                        { this.state.show ? <p>Likes: { this.state.clicks }</p> : '' }
+                      </div>
                       <p> repost </p>
                     </div>
                   </div>
