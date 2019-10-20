@@ -1,22 +1,61 @@
 import React, {Component} from 'react';
+import logo from './logo.svg';
+
 import './App.css';
-import './Timeline';
+import { Route, NavLink, Redirect, Link } from 'react-router-dom'
+// import Form from 'react-bootstrap/Form'
+//import FormControl from 'react-bootstrap/FormControl'
 
 class Search extends Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            navigate: false
+        }
+    }
+
+    handleClick = () => {
+        this.setState({navigate: true});
+    }
+
     render() {
-        // Use the same div logic as timeline. Instead of putting in tweets put in usernames
-        // The usernames should also be able to link to their profile
         return (
             <div className="Search">
-                THIS IS SEARCH
-                <br/>
-                {this.props.location.state.list}
-                <br/>
+              <h1> Search Results: </h1>
+                <div class="row">
+                  <div className="sidebar" >
+                    <div className="links">
+                        <ul className="navLinks">
+                            <li><NavLink to="/Timeline">Twistter</NavLink></li>
+                            {/* <li><NavLink exact to="/">home</NavLink></li> */}
+                            <li>My Profile</li>
+                            <li>
+                                <form action="http://localhost:5000/searchserver" method="post">
+                                    {/*Redirect to search in backend*/}
+                                    Search users: <br/>
+                                    <input type="text" placeholder="Search.." name="searchparam"></input>
+                                    <br/>
+                                    <button type="submit">Click To Search<i className="fa fa-search"></i></button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                  </div>
+                  <div className="userOrder">
+                    <div className="searchResults">
+                      <h3> @User </h3>
+                    </div>
+                    <div className="searchResults">
+                      <h3> @User </h3>
+                    </div>
+                    <div className="searchResults">
+                      <h3> @User </h3>
+                    </div>
+                  </div>
+                </div>
             </div>
 
         );
     }
-
 }
-
-export default Search
+export default Search;
