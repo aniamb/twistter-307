@@ -9,6 +9,10 @@ class Search extends Component{
         return (
             <div className="Search">
                 THIS IS SEARCH
+                <br/>
+                {this.props.location.state.list}
+                <br/>
+                {["test", "123"]}
             </div>
 
         );

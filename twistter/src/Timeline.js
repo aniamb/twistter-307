@@ -11,6 +11,7 @@ class Timeline extends Component{
         super(props);
         this.state = {
             searchTerm: '',
+            data:[], // list of strings that hyperlinks to profile
             navigate: false
         }
     }
@@ -25,8 +26,12 @@ class Timeline extends Component{
         var searchTerm = {searchTerm: this.state.searchTerm};
         axios.post('http://localhost:5000/searchserver', searchTerm).then(response=>{
             console.log('Search is complete')
-            this.setState({navigate: true});
+
             // fetch for response here
+            console.log(response.data.results);
+            this.setState({data: this.state.data.concat([response.data.results])})
+
+            this.setState({navigate: true});
         })
             .catch((err)=>{
                 console.log("Search function failed");
@@ -54,7 +59,9 @@ class Timeline extends Component{
                                 </form>
                                 <br/>
                                 {this.state.navigate && <Redirect to={{
-                                    pathname: '/search'
+                                    pathname: '/search',
+                                    // state: {"list": "Albert"}
+                                    state: {"list": this.state.data}
                                 }}/>}
                             </li>
                         </ul>

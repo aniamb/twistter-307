@@ -62,6 +62,7 @@ app.post('/searchserver', function(req, res){
     console.log(req.body.searchTerm);
     // parse mongodb for users with that search term
     // send a post request with the list to search.js
-    res.status(200).send("Found");
+    var squad = ["Albert", "Murugan", "Anita", "Netra", "Polymnia"];
+    res.status(200).json({results: squad});
     res.end();
 });
