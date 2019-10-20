@@ -12,7 +12,6 @@ class Search extends Component{
                 <br/>
                 {this.props.location.state.list}
                 <br/>
-                {["test", "123"]}
             </div>
 
         );

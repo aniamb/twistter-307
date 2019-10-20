@@ -43,24 +43,6 @@ function App() {
     {/*         }/>*/}
     {/*  </Switch>*/}
 
-      <header className="App-header">
-        <div className = "links">
-          <ul className="navLinks">
-            <li>Twistter</li>
-              {/* <li><NavLink exact to="/">home</NavLink></li> */}
-              <li>My Profile</li>
-              <li>
-                <form>
-                  <input type="text" placeholder="Search.." name="search"></input>
-                  <button type="submit"><i class="fa fa-search"></i></button>
-                </form>
-              </li>
-          </ul>
-        </div>
-      </header>
-      <body>
-        <h1> twistter </h1>
-      </body>
     </div>
 
   );
