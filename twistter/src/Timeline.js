@@ -59,18 +59,18 @@ class Timeline extends Component{
                   </div>
                   <div className="microOrder">
                     <div className="microblogs">
-                    <form>
-                      <label>
-                          Create a new microblog:
-                          <input type="text" name="newMicroblog" maxlength = "280" />
-                      </label>
-                          <input type="submit" value="Submit" />
+                    <form action="http://localhost:5000/addmicroblogs" method="post">
+                        {/*Redirect to search in backend*/}
+                        Create a new microblog: <br/>
+                        <input type="text" placeholder="Text goes here.." name="searchparam"></input>
+                        <br/>
+                        <button type="submit">Post!</button>
                     </form>
                     </div>
                     <div className="microblogs">
                       <h3> @User: I really like tennis. </h3>
                       <div>
-                        
+
                         <button onClick={this.IncrementItem}>Favorite</button>
                         <button onClick={this.DecreaseItem}>Unfavorite</button>
                         { this.state.show ? <p>Likes: { this.state.clicks }</p> : '' }
