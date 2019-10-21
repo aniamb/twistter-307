@@ -113,6 +113,24 @@ div.sidebar {
   width: 100%
 }
 
+div.searchResults {
+  border: 3px solid black;
+  text-align: center;
+}
+
+div.sidebar {
+  border: 3px solid black;
+}
+
+.userOrder {
+  flex-direction: column;
+  width: 100%
+}
+
+.Search h1{
+  text-align: center;
+}
+
 
 @keyframes App-logo-spin {
   from {
