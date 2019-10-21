@@ -55,3 +55,12 @@ app.post('/searchserver', function(req, res){
     console.log(req.body); // outputs {searchserver: (whatever the parameter was
     res.redirect('http://localhost:3000/search')
 });
+
+app.post('/addmicroblogs', function(req, res){
+    console.log(req.body); // outputs {searchTerm: (whatever the parameter was}
+    // parse mongodb for users with that search term
+    // send a post request with the list to search.js
+  //  var squad = ["Albert", "Murugan", "Anita", "Netra", "Polymnia"];
+  //  res.status(200).json({results: squad});
+    res.end();
+});

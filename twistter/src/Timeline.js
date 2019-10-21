@@ -62,7 +62,7 @@ class Timeline extends Component{
                     <form action="http://localhost:5000/addmicroblogs" method="post">
                         {/*Redirect to search in backend*/}
                         Create a new microblog: <br/>
-                        <input type="text" placeholder="Text goes here.." name="searchparam"></input>
+                        <input type="text" placeholder="Text goes here.." name="microblog"></input>
                         <br/>
                         <button type="submit">Post!</button>
                     </form>
