@@ -5,6 +5,7 @@ import CreateAccount from './CreateAccount'
 import Login from './Login'
 import EditProfile from './EditProfile'
 import Timeline from './Timeline.js'
+import UserProfile from './UserProfile'
 import {Switch, Route} from 'react-router-dom'
 
 function App() {
@@ -18,8 +19,9 @@ function App() {
           <Route path="/login" component={Login}/>
           <Route path="/editprofile" component={EditProfile}/>
           <Route path="/timeline" component={Timeline}/>
+          <Route path="/userprofile" component={UserProfile}/>
           <Route render= {() =>
-              <CreateAccount />
+              <UserProfile />
              }/>
       </Switch>
     </div>
