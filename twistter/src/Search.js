@@ -18,12 +18,15 @@ class Search extends Component{
         this.setState({navigate: true});
     }
 
+
+
     render() {
         var userNames = [];
         for(var i=0;i<this.props.location.state.list[0].length;i++){
-            userNames.push(<div className="searchResults"> <h3>{this.props.location.state.list[0][i]} </h3></div> );
+            userNames.push(<div className="searchResults"> <h3>@{this.props.location.state.list[0][i]} </h3></div> );
         }
         return (
+
             <div className="Search">
               <h1> Search Results: </h1>
                 <div class="row">
