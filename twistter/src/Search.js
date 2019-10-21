@@ -19,6 +19,10 @@ class Search extends Component{
     }
 
     render() {
+        var userNames = [];
+        for(var i=0;i<this.props.location.state.list[0].length;i++){
+            userNames.push(<div className="searchResults"> <h3>{this.props.location.state.list[0][i]} </h3></div> );
+        }
         return (
             <div className="Search">
               <h1> Search Results: </h1>
@@ -42,15 +46,7 @@ class Search extends Component{
                     </div>
                   </div>
                   <div className="userOrder">
-                    <div className="searchResults">
-                      <h3> @User </h3>
-                    </div>
-                    <div className="searchResults">
-                      <h3> @User </h3>
-                    </div>
-                    <div className="searchResults">
-                      <h3> @User </h3>
-                    </div>
+                      {userNames}
                   </div>
                 </div>
             </div>
