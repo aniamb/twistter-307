@@ -48,7 +48,7 @@ class Search extends Component{
                 /*        @{this.props.location.state.list[0][i]}*/
                 /*    </h3>*/
                 /*</div>*/ // requires javascript to be enabled
-                <a key={this.props.location.state.list[0][i]} href="http://twitter">
+                <a key={this.props.location.state.list[0][i]} href="http://twitter.com">
                     <div className="searchResults">
                         <h3>
                             @{this.props.location.state.list[0][i]}
