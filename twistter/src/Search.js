@@ -40,7 +40,7 @@ class Search extends Component{
     render() {
         var userNames = [];
         for(var i=0;i<this.props.location.state.list[0].length;i++){
-            // for now locations is google.com
+            // for now locations is twitter.com
             // userNames.push(<div key={this.props.location.state.list[0][i]} className="searchResults"> <h3>@{this.props.location.state.list[0][i]} </h3></div> );
             userNames.push(
                 /*<div style = "cursor: pointer;" onclick="window.location='http://google.com';" className="searchResults">*/
@@ -48,7 +48,7 @@ class Search extends Component{
                 /*        @{this.props.location.state.list[0][i]}*/
                 /*    </h3>*/
                 /*</div>*/ // requires javascript to be enabled
-                <a key={this.props.location.state.list[0][i]} href="http://google.com">
+                <a key={this.props.location.state.list[0][i]} href="http://twitter">
                     <div className="searchResults">
                         <h3>
                             @{this.props.location.state.list[0][i]}
