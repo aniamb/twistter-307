@@ -32,11 +32,10 @@ class Timeline extends Component{
             this.setState({data: this.state.data.concat([response.data.results])})
 
             this.setState({navigate: true});
-        })
-            .catch((err)=>{
+        }).catch((err)=>{
                 console.log("Search function failed");
                 this.setState({navigate: false});
-            })
+        })
     };
 
     render() {
