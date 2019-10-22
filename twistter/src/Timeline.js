@@ -23,8 +23,7 @@ class Timeline extends Component{
     handleClick(event){ // handles search transition
         event.preventDefault();
         console.log("This is the state:" + this.state.navigate);
-        var searchTerm = {searchTerm: this.state.searchTerm};
-        axios.post('http://localhost:5000/searchserver', searchTerm).then(response=>{
+        axios.post('http://localhost:5000/searchserver', {searchTerm : this.state.searchTerm}).then(response=>{
             console.log('Search is complete')
 
             // fetch for response here
@@ -45,8 +44,7 @@ class Timeline extends Component{
                   <div className="sidebar" >
                     <div className="links">
                         <ul className="navLinks">
-                            <li><NavLink to="/Timeline">Twistter</NavLink></li>
-                            {/* <li><NavLink exact to="/">home</NavLink></li> */}
+                            <li><NavLink to="/timeline">Twistter</NavLink></li>
                             <li>My Profile</li>
                             <li>
                                 <form onSubmit={this.handleClick.bind(this)}>

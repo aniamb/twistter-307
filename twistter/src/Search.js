@@ -15,10 +15,13 @@ class Search extends Component{
         }
     }
 
+    handleSearch = (ev) => {
+        this.setState({searchTerm: ev.target.value});
+    };
+
     handleClick(event){
         event.preventDefault();
-        var searchTerm = {searchTerm: this.state.searchTerm};
-        axios.post('http://localhost:5000/searchserver', searchTerm).then(response=>{
+        axios.post('http://localhost:5000/searchserver', {searchTerm: this.state.searchTerm}).then(response=>{
             console.log('Search is complete');
 
             // fetch for response here
@@ -37,24 +40,38 @@ class Search extends Component{
     render() {
         var userNames = [];
         for(var i=0;i<this.props.location.state.list[0].length;i++){
-            userNames.push(<div className="searchResults"> <h3>@{this.props.location.state.list[0][i]} </h3></div> );
+            // for now locations is google.com
+            // userNames.push(<div key={this.props.location.state.list[0][i]} className="searchResults"> <h3>@{this.props.location.state.list[0][i]} </h3></div> );
+            userNames.push(
+                /*<div style = "cursor: pointer;" onclick="window.location='http://google.com';" className="searchResults">*/
+                /*    <h3>*/
+                /*        @{this.props.location.state.list[0][i]}*/
+                /*    </h3>*/
+                /*</div>*/ // requires javascript to be enabled
+                <a key={this.props.location.state.list[0][i]} href="http://google.com">
+                    <div className="searchResults">
+                        <h3>
+                            @{this.props.location.state.list[0][i]}
+                        </h3>
+                    </div>
+                </a>
+            );
         }
         return (
 
             <div className="Search">
               <h1> Search Results: </h1>
-                <div class="row">
+                <div className="row">
                   <div className="sidebar" >
                     <div className="links">
                         <ul className="navLinks">
                             <li><NavLink to="/timeline">Twistter</NavLink></li>
-                            {/* <li><NavLink exact to="/">home</NavLink></li> */}
                             <li>My Profile</li>
                             <li>
                                 <form onSubmit={this.handleClick.bind(this)}>
                                     {/*Redirect to search in backend*/}
                                     Search users: <br/>
-                                    <input type="text" placeholder="Search.." name="searchparam"></input>
+                                    <input type="text" placeholder="Search.." name="searchparam" onChange={this.handleSearch.bind(this)}></input>
                                     <br/>
                                     <button type="submit">Click To Search<i className="fa fa-search"></i></button>
                                 </form>
