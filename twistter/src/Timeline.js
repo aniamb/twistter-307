@@ -13,9 +13,10 @@ class Timeline extends Component{
             clicks: 0,
             show: true,
             searchTerm: '',
-            postBody: '', // this is the post that the user makes
+            postBody: '', // this is the post that the user make
             data:[], // list of strings that hyperlinks to profile
-            navigate: false
+            navigate: false,
+            errorMessage: false
         }
     }
 
@@ -48,7 +49,11 @@ class Timeline extends Component{
         event.preventDefault(); // should actually stay in default no redirection happens
         axios.post('http://localhost:5000/addmicroblogs', {postBody: this.state.postBody}).then(response=>{
             console.log("Posted from front end");
-            // no response needed
+            this.setState({errorMessage: false});
+            document.forms["blogID"].reset();
+        }).catch((err)=>{
+            this.setState({errorMessage: true});
+            document.forms["blogID"].reset();
         })
 
     }
@@ -94,11 +99,12 @@ class Timeline extends Component{
                   </div>
                   <div className="microOrder">
                     <div className="microblogs">
-                    <form onSubmit={this.handleBlogPosting.bind(this)}>
+                    <form id="blogID" onSubmit={this.handleBlogPosting.bind(this)}>
                         Create a new microblog: <br/>
                         <input type="text" placeholder="Text goes here.." name="microblog" onChange={this.handlePostBody.bind(this)}></input>
                         <br/>
                         <input type="submit" value = "Post!"/>
+                        {this.state.errorMessage ? <p> Post must be less than 280 characters: </p> : '' }
                     </form>
                     </div>
                     <div className="microblogs">

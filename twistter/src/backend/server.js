@@ -71,12 +71,13 @@ app.post('/addmicroblogs', function(req, res){
     console.log(req.body); // outputs {searchTerm: (whatever the parameter was}
     console.log(req.body.postBody);
     var post = req.body.postBody;
+    console.log(post.length);
     if(post.length <= 280){
         // valid post
         res.status(200);
         // store in database
     }else{
-        res.status(414);
+        res.status(400);
     }
     res.end();
 });
