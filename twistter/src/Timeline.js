@@ -1,25 +1,43 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
-import Search from './Search'
+//import logo from './logo.svg';
+//import Search from './Search'
 import './App.css';
-import { Route, NavLink, Redirect, Link } from 'react-router-dom'
-// import Form from 'react-bootstrap/Form'
-//import FormControl from 'react-bootstrap/FormControl'
+// import { Route, NavLink, Redirect, Link } from 'react-router-dom'
+import { NavLink, Redirect} from 'react-router-dom'
+import axios from 'axios'
 
 class Timeline extends Component{
     constructor(props){
         super(props);
         this.state = {
             clicks: 0,
-            navigate: false,
-            show: true
-
+            show: true,
+            searchTerm: '',
+            data:[], // list of strings that hyperlinks to profile
+            navigate: false
         }
     }
 
-    handleClick = () => {
-        this.setState({navigate: true});
-    }
+    handleSearch = (ev) => {
+        this.setState({searchTerm: ev.target.value});
+    };
+
+    handleClick(event){ // handles search transition
+        event.preventDefault();
+        console.log("This is the state:" + this.state.navigate);
+        axios.post('http://localhost:5000/searchserver', {searchTerm : this.state.searchTerm}).then(response=>{
+            console.log('Search is complete')
+
+            // fetch for response here
+            console.log(response.data.results);
+            this.setState({data: this.state.data.concat([response.data.results])})
+
+            this.setState({navigate: true});
+        }).catch((err)=>{
+                console.log("Search function failed");
+                this.setState({navigate: false});
+        })
+    };
 
     IncrementItem = () => {
       this.setState({ clicks: this.state.clicks + 1 });
@@ -37,22 +55,26 @@ class Timeline extends Component{
     render() {
         return (
             <div className="Timeline">
-
-                <div class="row">
+                <div className="row">
                   <div className="sidebar" >
                     <div className="links">
                         <ul className="navLinks">
-                            <li><NavLink to="/Timeline">Twistter</NavLink></li>
-                            {/* <li><NavLink exact to="/">home</NavLink></li> */}
+                            <li><NavLink to="/timeline">Twistter</NavLink></li>
                             <li>My Profile</li>
                             <li>
-                                <form action="http://localhost:5000/searchserver" method="post">
+                                <form onSubmit={this.handleClick.bind(this)}>
                                     {/*Redirect to search in backend*/}
                                     Search users: <br/>
-                                    <input type="text" placeholder="Search.." name="searchparam"></input>
+                                    <input type="text" placeholder="Search.." name="searchparam" onChange={this.handleSearch.bind(this)}></input>
                                     <br/>
-                                    <button type="submit">Click To Search<i className="fa fa-search"></i></button>
+                                    <input type="submit" value="Click to Search"/>
                                 </form>
+                                <br/>
+                                {this.state.navigate && <Redirect to={{
+                                    pathname: '/search',
+                                    // state: {"list": "Albert"}
+                                    state: {"list": this.state.data}
+                                }}/>}
                             </li>
                         </ul>
                     </div>

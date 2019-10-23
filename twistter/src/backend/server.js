@@ -1,13 +1,19 @@
 const express = require('express');
+const bodyParser = require("body-parser");
 // const session = require('express-session');
 const cors = require('cors');
 const app = express();
 const port = 5000;
 const dbConnectionString = 'mongodb+srv://user:lebronjames@twistter-4gumf.mongodb.net/test?retryWrites=true&w=majority';
 const mongoose = require('mongoose');
-
 let User = require('./models/user');
+app.use(cors());
+
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.urlencoded());
+
 mongoose.connect(dbConnectionString, { useNewUrlParser: true });
 let db = mongoose.connection;
 db.once('open', () => console.log('connected to the database'));
@@ -52,8 +58,13 @@ app.post('/editprofile', function(req, res) {
 });
 
 app.post('/searchserver', function(req, res){
-    console.log(req.body); // outputs {searchserver: (whatever the parameter was
-    res.redirect('http://localhost:3000/search')
+    console.log(req.body); // outputs {searchTerm: (whatever the parameter was}
+    console.log(req.body.searchTerm);
+    // parse mongodb for users with that search term
+    // send a post request with the list to search.js
+    var squad = ["Albert", "Murugan", "Anita", "Netra", "Polymnia"];
+    res.status(200).json({results: squad});
+    res.end();
 });
 
 app.post('/addmicroblogs', function(req, res){

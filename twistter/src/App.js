@@ -20,10 +20,11 @@ function App() {
             <Route path="/createaccount" component={CreateAccount}/>
             <Route path="/login" component={Login}/>
             <Route path="/timeline" component={Timeline}/>
+            <Route path="/editprofile" component={EditProfile}/>
             <Route path="/search" component={Search}/>
             <Route render= {() =>
-                <Timeline />
-                // <CreateAccount />
+                // <Timeline />
+                <CreateAccount />
             }/>
         </Switch>
 
@@ -42,6 +43,7 @@ function App() {
     {/*          <CreateAccount />*/}
     {/*         }/>*/}
     {/*  </Switch>*/}
+
     </div>
 
   );
