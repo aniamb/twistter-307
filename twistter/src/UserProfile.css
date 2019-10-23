@@ -46,8 +46,16 @@ row {
     border-style: solid;
     background-color: white;
 }
-#settings{
+.redirect{
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
     position: absolute;
+}
+#settings{
     width:20px;
     height:20px;
     margin-left: 5px;
