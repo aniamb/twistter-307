@@ -13,6 +13,7 @@ class Timeline extends Component{
             clicks: 0,
             show: true,
             searchTerm: '',
+            postBody: '', // this is the post that the user makes
             data:[], // list of strings that hyperlinks to profile
             navigate: false
         }
@@ -20,6 +21,10 @@ class Timeline extends Component{
 
     handleSearch = (ev) => {
         this.setState({searchTerm: ev.target.value});
+    };
+
+    handlePostBody = (ev) => {
+        this.setState({postBody: ev.target.value});
     };
 
     handleClick(event){ // handles search transition
@@ -39,7 +44,16 @@ class Timeline extends Component{
         })
     };
 
-    IncrementItem = () => {
+    handleBlogPosting(event){ // handles blog posting
+        event.preventDefault(); // should actually stay in default no redirection happens
+        axios.post('http://localhost:5000/addmicroblogs', {postBody: this.state.postBody}).then(response=>{
+            console.log("Posted from front end");
+            // no response needed
+        })
+
+    }
+
+    IncrementItem = () => { // TODO: increment and decrement should both be changes to the database
       this.setState({ clicks: this.state.clicks + 1 });
     }
 
@@ -72,7 +86,6 @@ class Timeline extends Component{
                                 <br/>
                                 {this.state.navigate && <Redirect to={{
                                     pathname: '/search',
-                                    // state: {"list": "Albert"}
                                     state: {"list": this.state.data}
                                 }}/>}
                             </li>
@@ -81,12 +94,11 @@ class Timeline extends Component{
                   </div>
                   <div className="microOrder">
                     <div className="microblogs">
-                    <form action="http://localhost:5000/addmicroblogs" method="post">
-                        {/*Redirect to search in backend*/}
+                    <form onSubmit={this.handleBlogPosting.bind(this)}>
                         Create a new microblog: <br/>
-                        <input type="text" placeholder="Text goes here.." name="microblog"></input>
+                        <input type="text" placeholder="Text goes here.." name="microblog" onChange={this.handlePostBody.bind(this)}></input>
                         <br/>
-                        <button type="submit">Post!</button>
+                        <input type="submit" value = "Post!"/>
                     </form>
                     </div>
                     <div className="microblogs">
