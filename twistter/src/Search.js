@@ -27,7 +27,6 @@ class Search extends Component{
             // fetch for response here
             console.log(response.data.results);
             this.setState({data: this.state.data.concat([response.data.results])})
-
             this.setState({navigate: true});
         }).catch((err)=>{
                 console.log("Search function failed");
@@ -43,11 +42,6 @@ class Search extends Component{
             // for now locations is twitter.com
             // userNames.push(<div key={this.props.location.state.list[0][i]} className="searchResults"> <h3>@{this.props.location.state.list[0][i]} </h3></div> );
             userNames.push(
-                /*<div style = "cursor: pointer;" onclick="window.location='http://google.com';" className="searchResults">*/
-                /*    <h3>*/
-                /*        @{this.props.location.state.list[0][i]}*/
-                /*    </h3>*/
-                /*</div>*/ // requires javascript to be enabled
                 <a key={this.props.location.state.list[0][i]} href="http://twitter.com">
                     <div className="searchResults">
                         <h3>
@@ -78,11 +72,7 @@ class Search extends Component{
                                 <br/>
                                 {this.state.navigate &&<Redirect to={{
                                     pathname: '/search',
-                                    // state: {"list": this.state.data}
-                                    // for some reason this.state.data is not a list
-                                    // parsing logic may have to be changed depending on how mongoose sends data back
-                                    state: {"list" : ["Testing", "Testing2"]}
-                                    // this would return @T, @e, ... and not look at Testing2
+                                    state: {"list" : this.state.data}
                                 }}/>}
                             </li>
                         </ul>
