@@ -1,11 +1,11 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Timeline from './Timeline'
 import Search from './Search'
 import Profile from './Profile'
 import { Redirect } from 'react-router-dom'
 import CreateAccount from './CreateAccount'
+import Timeline from './Timeline'
 import Login from './Login'
 import EditProfile from './EditProfile'
 import UserProfile from './UserProfile'
