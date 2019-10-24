@@ -21,6 +21,9 @@ class CreateAccount extends Component {
             isReceived: null
         }
     }
+    componentDidMount(){
+        localStorage.clear();
+    }
 
     handleFirstNameChange(event) {
         this.setState({firstname: event.target.value})
