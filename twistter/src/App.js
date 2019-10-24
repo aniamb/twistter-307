@@ -22,7 +22,6 @@ function App() {
             <Route path="/login" component={Login}/>
             <Route path="/timeline" component={Timeline}/>
             <Route path="/editprofile" component={EditProfile}/>
-            <Route path="/userprofile" component={UserProfile}/>
             <Route path="/search" component={Search}/>
             <Route path="/userprofile" component={UserProfile}/>
             <Route render= {() =>
