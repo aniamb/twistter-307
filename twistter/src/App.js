@@ -8,10 +8,6 @@ import { Redirect } from 'react-router-dom'
 import CreateAccount from './CreateAccount'
 import Login from './Login'
 import EditProfile from './EditProfile'
-<<<<<<< HEAD
-=======
-import Timeline from './Timeline.js'
->>>>>>> a7195e33aeb7015e66f1983608e3e065aaf121d3
 import UserProfile from './UserProfile'
 import {Switch, NavLink, Route} from 'react-router-dom'
 
