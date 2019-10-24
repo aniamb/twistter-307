@@ -10,8 +10,8 @@ let User = require('./models/user');
 app.use(cors());
 
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json()); 
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.urlencoded());
 
 mongoose.connect(dbConnectionString, { useNewUrlParser: true });
@@ -45,7 +45,6 @@ app.post('/register', function(req, res) {
   // res.end();
 });
 
-
 app.post('/editprofile', function(req, res) {
   console.log(req.body)
   // get global variable of userID, and update with bio
@@ -56,6 +55,31 @@ app.post('/editprofile', function(req, res) {
   // .then(function(data) {
   // });
 });
+
+//LOGIN PAGE CODE 
+app.post('/login', function(req, res) {
+  console.log('overall body ' + req.body);
+  //console.log(req);
+
+  User.findOne({ 
+  'email': req.body.email,
+  'password':req.body.password }, function(err, user) {
+    if (user) {
+      // user exists 
+      console.log('user found successfully');
+      res.status(200).send(user.handle);
+      res.end();
+      //res.redirect('http://localhost:3000/timeline');
+
+    } else {
+      // user does not exist
+      console.log('user not in base');
+      res.status(400).send('Email or Password does not exist');
+      res.end();
+      //res.redirect('http://localhost:3000/login');
+    }
+ })
+})
 
 app.post('/searchserver', function(req, res){
     console.log(req.body); // outputs {searchTerm: (whatever the parameter was}
@@ -102,3 +126,28 @@ app.post('/addmicroblogs', function(req, res){
     }
     res.end();
 });
+
+//LOADING INFO INTO USER PROFILE CODE
+app.get('/userprofile', function(req, res){
+  console.log(req.query.userHandle);
+  User.findOne({ 
+    'handle': req.query.userHandle}, function(err, user) {
+      if (user) {
+        // user exists 
+        var userInfo = {
+          firstname: user.firstname,
+          lastname: user.lastname
+        }
+        res.status(200).send(userInfo);
+        res.end();
+  
+      } else {
+        // user does not exist
+        console.log('user not in base');
+        res.status(400).send('Email or Password does not exist');
+        res.end();
+      }
+   })
+
+
+})

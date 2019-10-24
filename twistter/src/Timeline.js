@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 //import logo from './logo.svg';
 //import Search from './Search'
 import './App.css';
+import './Timeline.css';
+
 // import { Route, NavLink, Redirect, Link } from 'react-router-dom'
 import { NavLink, Redirect} from 'react-router-dom'
 import axios from 'axios'
