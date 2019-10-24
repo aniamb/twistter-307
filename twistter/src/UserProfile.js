@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect} from 'react-router-dom'
-import 'bootstrap/dist/css/bootstrap.min.css';
+//import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios'
 
 
@@ -39,7 +39,7 @@ class UserProfile extends Component {
       this.setState({editRedirect: true});
     };
  render(){
-    
+
     return (
         <div className="UserProfile">
         <br/>
@@ -47,7 +47,7 @@ class UserProfile extends Component {
             <div className="row">
                 {/* User Profile */}
                 <div className="column">
-                    <button className = "redirect"><img id="settings" onClick = {this.editProfileRedirect} src={require('/Users/netrapradhan/twistter-307/twistter/src/images/gear.png')}/></button>
+                    <button className = "redirect"><img id="settings" onClick = {this.editProfileRedirect}/></button>
                     {this.state.editRedirect ? <Redirect to='/editprofile'/> : null}
                         <div className="circle"/>
                         <br/>
@@ -62,7 +62,7 @@ class UserProfile extends Component {
                                 <span id = "topics">CS</span>
                                 <span id = "topics">Math</span>
                                 <span id = "topics">English</span>
-                                <span id = "topics">History</span> 
+                                <span id = "topics">History</span>
                             </p>
                 </div>
                 <div className='double-column'>
@@ -83,10 +83,10 @@ class UserProfile extends Component {
                     </div>
                 </div>
             </div>
-        
-        </div> 
-    
-    </div>  
+
+        </div>
+
+    </div>
     )
     }
 }

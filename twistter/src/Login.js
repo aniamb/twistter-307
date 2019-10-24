@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Switch, Route, NavLink, Redirect} from 'react-router-dom'
 import axios from 'axios'
-import { Alert } from 'react-alert'
+//import { Alert } from 'react-alert'
 
 import './Login.css';
 
@@ -23,7 +23,7 @@ class Login extends Component {
     handlePassword = (ev) => {
         this.setState({password:ev.target.value});
     }
-    handleSubmit(event){ 
+    handleSubmit(event){
         event.preventDefault();
         event.target.reset();
         this.setState({receivedRequest: true});
@@ -38,7 +38,7 @@ class Login extends Component {
             })
 
     };
-    
+
     render(){
         const isValid = this.state.email.length > 0 || this.state.password.length > 0;
     return (
@@ -47,14 +47,14 @@ class Login extends Component {
                 <h3> Existing User Login! </h3>
                 {/* <form action="http://localhost:5000/login" method="POST"> */}
                 <form onSubmit = {this.handleSubmit.bind(this)}>
-                    Email:<br/> 
+                    Email:<br/>
                     <input type="text" name="email" value={this.state.email} onChange={this.handleEmail.bind(this)} /><br></br>
                     Password: <br/>
                     <input type="password" name="password" value={this.state.password} onChange={this.handlePassword.bind(this)}/><br></br>
                     { isValid? null: <div className='invalid-feedback'>please enter email/password</div> }
 
                     {/* if(!this.state.isRedirect){
-                        <div> ERROR</div> 
+                        <div> ERROR</div>
                     } else {
                         <div> NOT ERROR </div>
                     } */}
@@ -62,7 +62,7 @@ class Login extends Component {
                         {/* {this.state.isRedirect? (
                             <div> should redirect </div>
                         ): (
-                            <div> should not redirect must error</div> 
+                            <div> should not redirect must error</div>
                         )} */}
                         {/* {this.state.receivedRequest && this.state.isRedirect && <div> should not redirect must error</div> }
                         {this.state.receivedRequest && this.state.isRedirect && <Redirect to={{
@@ -85,7 +85,7 @@ class Login extends Component {
                 }}/>}
             </div>
         </div>
-        
+
     )
     }
 }
