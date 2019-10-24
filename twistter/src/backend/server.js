@@ -79,8 +79,12 @@ app.post('/login', function(req, res) {
       //res.redirect('http://localhost:3000/login');
     }
  })
+<<<<<<< HEAD
 })
 
+=======
+  
+>>>>>>> a7195e33aeb7015e66f1983608e3e065aaf121d3
 app.post('/searchserver', function(req, res){
     console.log(req.body); // outputs {searchTerm: (whatever the parameter was}
     console.log(req.body.searchTerm);
