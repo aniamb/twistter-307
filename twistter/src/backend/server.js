@@ -67,8 +67,7 @@ app.post('/login', function(req, res) {
     if (user) {
       // user exists 
       console.log('user found successfully');
-      res.status(200).send(user.handle);
-      res.end();
+
       //res.redirect('http://localhost:3000/timeline');
 
     } else {
