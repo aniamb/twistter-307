@@ -24,6 +24,18 @@ let User = new mongoose.Schema({
   handle: {
     type: String,
     required: true
+  },
+  bio: {
+    type: String
+  },
+  topics: {
+    type:[String]
+  },
+  followers: {
+    type: [String]
+  },
+  following: {
+    type: [String]
   }
 });
 

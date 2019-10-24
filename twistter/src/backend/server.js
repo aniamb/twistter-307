@@ -79,7 +79,6 @@ app.post('/login', function(req, res) {
     }
  })
 })
-
 app.post('/searchserver', function(req, res){
     console.log(req.body); // outputs {searchTerm: (whatever the parameter was}
     console.log(req.body.searchTerm);
@@ -111,6 +110,4 @@ app.get('/userprofile', function(req, res){
         res.end();
       }
    })
-
-
 })
