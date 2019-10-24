@@ -67,7 +67,8 @@ app.post('/login', function(req, res) {
     if (user) {
       // user exists 
       console.log('user found successfully');
-
+      res.status(200).send(user.handle);
+      res.end();
       //res.redirect('http://localhost:3000/timeline');
 
     } else {
@@ -79,6 +80,7 @@ app.post('/login', function(req, res) {
     }
  })
 })
+  
 app.post('/searchserver', function(req, res){
     console.log(req.body); // outputs {searchTerm: (whatever the parameter was}
     console.log(req.body.searchTerm);
