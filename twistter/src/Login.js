@@ -29,15 +29,13 @@ class Login extends Component {
         this.setState({receivedRequest: true});
         const loginInfo = {email: this.state.email, password:this.state.password};
         axios.post('http://localhost:5000/login', loginInfo).then(response=> {
-                console.log('user found through axios')
+                localStorage.setItem("currentUser", response.data);
                 this.setState({isRedirect: true});
             })
             .catch((err)=> {
                 this.setState({isRedirect: false});
-                alert('yuhhhhhh');
-                console.log('user not found through axios');
+                alert('Invalid Email/Password');
             })
-            console.log(this.state.isRedirect);
 
     };
     

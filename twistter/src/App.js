@@ -8,6 +8,8 @@ import { Redirect } from 'react-router-dom'
 import CreateAccount from './CreateAccount'
 import Login from './Login'
 import EditProfile from './EditProfile'
+import Timeline from './Timeline.js'
+import UserProfile from './UserProfile'
 import {Switch, NavLink, Route} from 'react-router-dom'
 
 function App() {
@@ -21,6 +23,7 @@ function App() {
             <Route path="/login" component={Login}/>
             <Route path="/timeline" component={Timeline}/>
             <Route path="/editprofile" component={EditProfile}/>
+            <Route path="/userprofile" component={UserProfile}/>
             <Route path="/search" component={Search}/>
             <Route render= {() =>
                 // <Timeline />
