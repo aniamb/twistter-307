@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './App.css';
+import './Search.css'
 import { Route, NavLink, Redirect, Link } from 'react-router-dom'
 import axios from 'axios'
 // import Form from 'react-bootstrap/Form'

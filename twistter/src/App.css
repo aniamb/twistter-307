@@ -78,58 +78,6 @@
   color: white;
 }
 
-.SearchBar {
-  text-align: right;
-  background-color: white;
-  min-height: 100vh;
-  display: inline-block;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: black;
-
-}
-
-
-.row {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  border: 3px solid black;
-}
-
-div.microblogs {
-  border: 3px solid black;
-  text-align: center;
-}
-
-div.sidebar {
-  border: 3px solid black;
-}
-
-.microOrder {
-  flex-direction: column;
-  width: 100%
-}
-
-div.searchResults {
-  border: 3px solid black;
-  text-align: center;
-}
-
-div.sidebar {
-  border: 3px solid black;
-}
-
-.userOrder {
-  flex-direction: column;
-  width: 100%
-}
-
-.Search h1{
-  text-align: center;
-}
 
 
 @keyframes App-logo-spin {
