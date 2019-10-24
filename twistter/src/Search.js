@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './App.css';
+import './Search.css'
 import { Route, NavLink, Redirect, Link } from 'react-router-dom'
 import axios from 'axios'
 // import Form from 'react-bootstrap/Form'
@@ -9,7 +10,7 @@ class Search extends Component{
     constructor(props){
         super(props);
         this.state = {
-            navigate: false, // only navigates to /searhc again
+            navigate: false, // only navigates to /search again
             searchTerm: '',
             data: [] // list of strings that hyperlink to profile
         }
