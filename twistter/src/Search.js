@@ -11,31 +11,12 @@ class Search extends Component{
         super(props);
         this.state = {
             navigate: false, // only navigates to /search again
-            searchTerm: '',
-            data: [] // list of strings that hyperlink to profile
         }
     }
 
     handleSearch = (ev) => {
         this.setState({searchTerm: ev.target.value});
     };
-
-    handleClick(event){
-        event.preventDefault();
-        axios.post('http://localhost:5000/searchserver', {searchTerm: this.state.searchTerm}).then(response=>{
-            console.log('Search is complete');
-
-            // fetch for response here
-            console.log(response.data.results);
-            this.setState({data: this.state.data.concat([response.data.results])})
-            this.setState({navigate: true});
-        }).catch((err)=>{
-                console.log("Search function failed");
-                this.setState({navigate: false});
-        })
-    };
-
-
 
     render() {
         var userNames = [];
@@ -61,21 +42,7 @@ class Search extends Component{
                     <div className="links">
                         <ul className="navLinks">
                             <li><NavLink to="/timeline">Twistter</NavLink></li>
-                            <li>My Profile</li>
-                            <li>
-                                <form onSubmit={this.handleClick.bind(this)}>
-                                    {/*Redirect to search in backend*/}
-                                    Search users: <br/>
-                                    <input type="text" placeholder="Search.." name="searchparam" onChange={this.handleSearch.bind(this)}></input>
-                                    <br/>
-                                    <button type="submit">Click To Search<i className="fa fa-search"></i></button>
-                                </form>
-                                <br/>
-                                {this.state.navigate &&<Redirect to={{
-                                    pathname: '/search',
-                                    state: {"list" : this.state.data}
-                                }}/>}
-                            </li>
+                            <li>My Profile</li> {/* This needs to be a link */}
                         </ul>
                     </div>
                   </div>
