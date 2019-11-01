@@ -3,6 +3,7 @@ import {Switch, Route, NavLink, Redirect} from 'react-router-dom'
 import axios from 'axios'
 //import { Alert } from 'react-alert'
 
+
 import './Login.css';
 
 class Login extends Component {
@@ -23,6 +24,7 @@ class Login extends Component {
     handlePassword = (ev) => {
         this.setState({password:ev.target.value});
     }
+
     handleSubmit(event){
         event.preventDefault();
         event.target.reset();
