@@ -6,8 +6,10 @@ const app = express();
 const port = 5000;
 const dbConnectionString = 'mongodb+srv://user:lebronjames@twistter-4gumf.mongodb.net/test?retryWrites=true&w=majority';
 const mongoose = require('mongoose');
+
 let User = require('./models/user');
 app.use(cors());
+const bcrypt = require('bcrypt');
 
 
 app.use(bodyParser.json()); 
@@ -28,22 +30,36 @@ app.get('/home', (req, res) => res.send("I'm home"));
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 app.post('/register', function(req, res) {
-  console.log(req.body);
-  var user = new User(req.body);
-  // use passport js to hash
-  user.save()
-  .then(user => {
-        // res.status(200).json({'user': 'new user added to the db successfully'});
-        res.redirect('http://localhost:3000/editprofile');
-
-      })
-  .catch(err => {
-    console.log(err);
+     //password hash
+     bcrypt.hash(req.body.password, 10, function(err, hash){
+      console.log(req.body);
+       User.findOne({$or: [
+          {'email' : req.body.email},
+          {'handle': req.body.handle}]}).exec(function (err, user){
+           if(user){
+              //user with email/handle exists
+              console.log('email or handle already in use');
+              res.status(400).send('Email or handle already in use');
+              res.end();
+            }else{  
+              //user unique ->add to db
+              User.create({
+              firstname : req.body.firstname,
+              lastname: req.body.lastname,
+              email: req.body.email,
+              password: hash,
+              passwordConfirm: hash,
+              handle: req.body.handle
+              })
+               res.status(200).send(req.body.handle);
+               res.end();
+            } 
+          });
+     
+        });
   });
-      // redirect to editprofile
-      // res.redirect('http://localhost:3000/editprofile');
-  // res.end();
-});
+
+
 
 app.post('/editprofile', function(req, res) {
   console.log(req.body)
@@ -58,29 +74,33 @@ app.post('/editprofile', function(req, res) {
 
 //LOGIN PAGE CODE 
 app.post('/login', function(req, res) {
-  console.log('overall body ' + req.body);
-  //console.log(req);
-
+  console.log('overall body ' + req.body); 
   User.findOne({ 
-  'email': req.body.email,
-  'password':req.body.password }, function(err, user) {
+  'email': req.body.email }, function(err, user) {
     if (user) {
-      // user exists 
-      console.log('user found successfully');
-      res.status(200).send(user.handle);
-      res.end();
-      //res.redirect('http://localhost:3000/timeline');
-
+      //email exists
+      if(bcrypt.compareSync(req.body.password, user.password)) {
+        // Passwords match
+        console.log('user found successfully');
+        res.status(200).send(user.handle);
+        res.end();
+        //res.redirect('http://localhost:3000/timeline');
+       } else {
+        // Passwords don't match
+        console.log('user not in base123');
+        res.status(400).send('Email or Password does not exist');
+        res.end();
+      } 
     } else {
-      // user does not exist
-      console.log('user not in base');
-      res.status(400).send('Email or Password does not exist');
-      res.end();
-      //res.redirect('http://localhost:3000/login');
+        // user does not exist
+        console.log('user not in base');
+        res.status(400).send('Email or Password does not exist');
+        res.end();
+        //res.redirect('http://localhost:3000/login');
     }
  })
-})
-  
+});
+
 app.post('/searchserver', function(req, res){
     console.log(req.body); // outputs {searchTerm: (whatever the parameter was}
     var handle = req.body.searchTerm;
