@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {Switch, Route, NavLink, Redirect} from 'react-router-dom'
 import axios from 'axios'
-import { Alert } from 'react-alert'
+//import { Alert } from 'react-alert'
+
 
 import './Login.css';
 
@@ -23,24 +24,23 @@ class Login extends Component {
     handlePassword = (ev) => {
         this.setState({password:ev.target.value});
     }
-    handleSubmit(event){ 
+
+    handleSubmit(event){
         event.preventDefault();
         event.target.reset();
         this.setState({receivedRequest: true});
         const loginInfo = {email: this.state.email, password:this.state.password};
         axios.post('http://localhost:5000/login', loginInfo).then(response=> {
-                console.log('user found through axios')
+                localStorage.setItem("currentUser", response.data);
                 this.setState({isRedirect: true});
             })
             .catch((err)=> {
                 this.setState({isRedirect: false});
-                alert('Invalid email/password');
-                console.log('user not found through axios');
+                alert('Invalid Email/Password');
             })
-            console.log(this.state.isRedirect);
 
     };
-    
+
     render(){
     return (
         <div className="Login">
@@ -62,7 +62,7 @@ class Login extends Component {
                 }}/>}
             </div>
         </div>
-        
+
     )
     }
 }
