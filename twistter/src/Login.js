@@ -42,7 +42,6 @@ class Login extends Component {
     };
     
     render(){
-        const isValid = this.state.email.length > 0 || this.state.password.length > 0;
     return (
         <div className="Login">
             <div className="inputBox">
@@ -53,30 +52,6 @@ class Login extends Component {
                     <input type="email" name="email" value={this.state.email} onChange={this.handleEmail.bind(this)} required /><br></br>
                     Password: <br/>
                     <input type="password" name="password" value={this.state.password} onChange={this.handlePassword.bind(this)} required/><br></br>
-                    { isValid? null: <div className='invalid-feedback'>please enter email/password</div> }
-
-                    {/* if(!this.state.isRedirect){
-                        <div> ERROR</div> 
-                    } else {
-                        <div> NOT ERROR </div>
-                    } */}
-
-                        {/* {this.state.isRedirect? (
-                            <div> should redirect </div>
-                        ): (
-                            <div> should not redirect must error</div> 
-                        )} */}
-                        {/* {this.state.receivedRequest && this.state.isRedirect && <div> should not redirect must error</div> }
-                        {this.state.receivedRequest && this.state.isRedirect && <Redirect to={{
-                    pathname: '/timeline'
-                }}/>} */}
-
-                    {/* isLoggedIn ? (
-        <LogoutButton onClick={this.handleLogoutClick} />
-      ) : (
-        <LoginButton onClick={this.handleLoginClick} />
-      )} */}
-
                     <input type="submit" value="Submit"/>
                 </form>
                 <br/>

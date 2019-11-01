@@ -8,6 +8,7 @@ const dbConnectionString = 'mongodb+srv://user:lebronjames@twistter-4gumf.mongod
 const mongoose = require('mongoose');
 let User = require('./models/user');
 app.use(cors());
+const bcrypt = require('bcrypt');
 
 
 app.use(bodyParser.json()); 
@@ -59,25 +60,29 @@ app.post('/editprofile', function(req, res) {
 
 //LOGIN PAGE CODE 
 app.post('/login', function(req, res) {
-  console.log('overall body ' + req.body);
-  //console.log(req);
-
+  console.log('overall body ' + req.body); 
   User.findOne({ 
-  'email': req.body.email,
-  'password':req.body.password }, function(err, user) {
+  'email': req.body.email }, function(err, user) {
     if (user) {
-      // user exists 
-      console.log('user found successfully');
-      res.status(200).send('found successfully');
-      res.end();
-      //res.redirect('http://localhost:3000/timeline');
-
+      //email exists
+      if(bcrypt.compareSync(req.body.password, user.password)) {
+        // Passwords match
+        console.log('user found successfully');
+        res.status(200).send('found successfully');
+        res.end();
+        //res.redirect('http://localhost:3000/timeline');
+       } else {
+        // Passwords don't match
+        console.log('user not in base');
+        res.status(400).send('Email or Password does not exist');
+        res.end();
+      } 
     } else {
-      // user does not exist
-      console.log('user not in base');
-      res.status(400).send('Email or Password does not exist');
-      res.end();
-      //res.redirect('http://localhost:3000/login');
+        // user does not exist
+        console.log('user not in base');
+        res.status(400).send('Email or Password does not exist');
+        res.end();
+        //res.redirect('http://localhost:3000/login');
     }
  })
 });
