@@ -103,7 +103,7 @@ class Timeline extends Component{
                     <div className="microblogs">
                     <form id="blogID" onSubmit={this.handleBlogPosting.bind(this)}>
                         Create a new microblog: <br/>
-                        <input type="text" placeholder="Text goes here.." maxlength="280" name="microblog" onChange={this.handlePostBody.bind(this)}></input>
+                        <input type="text" placeholder="Text goes here.." maxLength="280" name="microblog" onChange={this.handlePostBody.bind(this)}></input>
                         <br/>
                         <input type="submit" value = "Post!"/>
                         {this.state.errorMessage ? <p> Post must be less than 280 characters: </p> : '' }
