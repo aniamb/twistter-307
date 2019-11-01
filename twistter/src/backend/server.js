@@ -7,6 +7,7 @@ const port = 5000;
 const dbConnectionString = 'mongodb+srv://user:lebronjames@twistter-4gumf.mongodb.net/test?retryWrites=true&w=majority';
 const mongoose = require('mongoose');
 let User = require('./models/user');
+let Microblog = require('./models/microblog');
 app.use(cors());
 
 
@@ -118,6 +119,26 @@ app.post('/addmicroblogs', function(req, res){
     console.log(req.body.postBody);
     var post = req.body.postBody;
     console.log(post.length);
+    var microblog = new Microblog(req.body);
+    // microblog.save()
+
+    microblog.save(function (err) {
+      if (err) {
+        console.log("ERRR");
+        console.log(err);
+      };
+	// Next, find the User you want to leave the review for by ObjectId - mySpecifiedUserId and push the review ObjectId only
+	// with the option to return the review data
+      User.findOneAndUpdate(
+		      {handle: req.body.username},
+		      {"$push":{"microblog":microblog._id}},
+		      {upsert:true, select:'microblog'}
+	// populate and return the review data
+      ).populate('microblog').exec(function(err, data) {
+                console.log("lol");
+                console.log(data);
+        });
+      });
     if(post.length <= 280){
         // valid post
         res.status(200);

@@ -36,7 +36,11 @@ let User = new mongoose.Schema({
   },
   following: {
     type: [String]
-  }
+  },
+  microblog:[{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Microblog'
+  }]
 });
 
 var userModel = mongoose.model('User', User);
