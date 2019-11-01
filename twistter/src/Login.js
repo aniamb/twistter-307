@@ -56,7 +56,6 @@ class Login extends Component {
                 </form>
                 <br/>
                 <NavLink to="/createaccount">New User?</NavLink>
-
                 {this.state.isRedirect && <Redirect to={{
                     pathname: '/timeline'
                 }}/>}

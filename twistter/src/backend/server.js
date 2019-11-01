@@ -59,26 +59,7 @@ app.post('/register', function(req, res) {
         });
   });
 
-  
 
-//LOGIN PAGE CODE 
-app.post('/login', function(req, res) {
-  console.log(req.body);
-  User.findOne({ 
-  'email': req.body.email,
-  'password':req.body.password }, function(err, user) {
-    if (user) {
-      // user exists 
-      console.log('user found successfully');
-     // res.redirect('http://localhost:3000/timeline')
-    } else {
-      // user does not exist
-      console.log('user not in base');
-      //res.redirect('http://localhost:3000/login');
-    }
- })
-
-});
 
 app.post('/editprofile', function(req, res) {
   console.log(req.body)
@@ -101,12 +82,12 @@ app.post('/login', function(req, res) {
       if(bcrypt.compareSync(req.body.password, user.password)) {
         // Passwords match
         console.log('user found successfully');
-        res.status(200).send(user.body.handle);
+        res.status(200).send(user.handle);
         res.end();
         //res.redirect('http://localhost:3000/timeline');
        } else {
         // Passwords don't match
-        console.log('user not in base');
+        console.log('user not in base123');
         res.status(400).send('Email or Password does not exist');
         res.end();
       } 
@@ -118,7 +99,8 @@ app.post('/login', function(req, res) {
         //res.redirect('http://localhost:3000/login');
     }
  })
-})
+});
+
 app.post('/searchserver', function(req, res){
     console.log(req.body); // outputs {searchTerm: (whatever the parameter was}
     var handle = req.body.searchTerm;
