@@ -6,6 +6,7 @@ const app = express();
 const port = 5000;
 const dbConnectionString = 'mongodb+srv://user:lebronjames@twistter-4gumf.mongodb.net/test?retryWrites=true&w=majority';
 const mongoose = require('mongoose');
+var ObjectId = require('mongodb').ObjectID;
 let User = require('./models/user');
 let Microblog = require('./models/microblog');
 app.use(cors());
@@ -139,13 +140,48 @@ app.post('/addmicroblogs', function(req, res){
                 console.log(data);
         });
       });
-    if(post.length <= 280){
-        // valid post
-        res.status(200);
-        // store in database
-    }else{
-        res.status(400);
-    }
+
+      User.findOne({
+      'handle': req.query.username}, function(err, user) {
+        if (user) {
+          console.log(user);
+          var userInfo = user.microblog;
+          microblogList = [];
+          console.log(userInfo);
+          for (let i = 0; i < userInfo.length; i++) {
+            //for (var j = 0; j< userInfo.length; j++) {
+            console.log('User Info: ' + userInfo[i]);
+            console.log(typeof(userInfo[i]));
+           var id = JSON.stringify(userInfo[i]);
+            console.log("printing id");
+            // console.log(id);
+            // console.log(typeof(id));
+          //  var id = id.substring(1,(id.length)-1);
+          //  console.log(id);
+        //  console.log("hi:" + ObjectId("\"${userInfo[i])}\""));
+            Microblog.findById({'_id': ObjectId(userInfo[i])}, function(err, microblog) {
+              if (err) {
+                console.log(err);
+              }
+              if(microblog) {
+                console.log("yyet");
+                console.log(microblog[0]);
+                // microblogList.push(microblog);
+              }
+                console.log("pbjghfhgfh");
+            })
+
+            //}
+          }
+          console.log(microblogList);
+      //    res.status(200).json({microblog: userInfo});
+            res.status(200).send("yeeHAWWWW");
+        } else {
+          console.log("user not in db");
+        }
+    })
+
+
     res.end();
 });
 

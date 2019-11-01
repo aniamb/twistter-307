@@ -21,7 +21,6 @@ class Timeline extends Component{
             quoteCount: 0,
             topics:[], // this is the post that the user make
             data:[], // list of strings that hyperlinks to profile
-            microblog:[];
             navigate: false,
             errorMessage: false
         }
@@ -54,7 +53,7 @@ class Timeline extends Component{
 
     handleBlogPosting(event){ // handles blog posting
         event.preventDefault(); // should actually stay in default no redirection happens
-        axios.post('http://localhost:5000/addmicroblogs', microblog[{username: window.localStorage.getItem('currentUser'), postBody: this.state.postBody, likes: 5, quoteCount: 5, topics:['nba','purdue']}]).then(response=>{
+        axios.post('http://localhost:5000/addmicroblogs', {username: window.localStorage.getItem('currentUser'), postBody: this.state.postBody, likes: 5, quoteCount: 5, topics:['nba','purdue']}).then(response=>{
 
             this.setState({errorMessage: false});
             document.forms["blogID"].reset();
@@ -111,10 +110,15 @@ class Timeline extends Component{
                         <input type="text" placeholder="Text goes here.." maxLength="280" name="microblog" onChange={this.handlePostBody.bind(this)}></input>
                         <br/>
                         <input type="submit" value = "Post!"/>
-                        {this.state.errorMessage ? <p> Post must be less than 280 characters: </p> : '' }
                     </form>
+                        {this.state.navigate && <Redirect to={{
+                          pathname: '/timeline',
+                          state: {"list": this.state.data}
+                        }}/>}
                     </div>
+
                     <div className="microblogs">
+
                       <h3> @User: I really like tennis. </h3>
                       <div>
 
@@ -142,6 +146,7 @@ class Timeline extends Component{
                       </div>
                       <p> repost </p>
                     </div>
+
                   </div>
                 </div>
             </div>
