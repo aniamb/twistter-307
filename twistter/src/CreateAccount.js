@@ -18,7 +18,8 @@ class CreateAccount extends Component {
             passwordConfirm: '',
             handle: '',
             isSubmitted: false,
-            isReceived: null
+            isRedirect: null,
+            //receivedRequest: false
         }
     }
     componentDidMount(){
@@ -42,7 +43,6 @@ class CreateAccount extends Component {
 
     handlePasswordConfirmChange(event) {
         this.setState({passwordConfirm: event.target.value})
-        //this.validateForm();
     }
 
     handleHandleChange(event) {
@@ -50,33 +50,26 @@ class CreateAccount extends Component {
     }
 
     handleSubmit(event){
+        const { password, passwordConfirm } = this.state
+        
         event.preventDefault();
         event.target.reset();
-        const registerInfo = {firstname: this.state.firstname, lastname: this.state.lastname, email: this.state.email, password: this.state.password, handle: this.state.handle}
-        axios.post('http://localhost:5000/register', registerInfo).then(response=> {
+        const registerInfo = {firstname: this.state.firstname, lastname: this.state.lastname, email: this.state.email, password: this.state.password, passwordConfirm: this.state.passwordConfirm, handle: this.state.handle}
+        if(password != passwordConfirm){
+            alert("Passwords don't match");
+        }else{
+            axios.post('http://localhost:5000/register', registerInfo).then(response=> {
                 localStorage.setItem("currentUser", response.data);
                  console.log('create account success');
-                 this.setState({isReceived: true})
+                 this.setState({isRedirect: true})
             })
-            .catch((err)=> {
-                this.setState({isReceived: false});
-                console.log('create account fail');
-            })
+             .catch((err)=> {
+                 this.setState({isRedirect: false});
+                 console.log('create account fail');
+                 alert("Email or handle already in use");
+             })
+            }
     }
-
-    //return true-submits data to db
-    validatePassword(form){
-        var pass = form.password.value;
-        var pass_conf = form.passwordConfirm.value;
-        if(pass != pass_conf){
-            alert("passwords don't match");
-            //pass_conf.setCustomValidity("Passwords don't match");
-            return false;
-        }else{
-            return true;
-        }    
-       } 
-    
 
     render(){
     return (
@@ -86,7 +79,7 @@ class CreateAccount extends Component {
                 <form onSubmit={this.handleSubmit.bind(this)}>
                     First Name: <br/>
                     <input type="text" name="firstname"  value={this.state.firstname}
-                    onChange={this.handleFirstNameChange.bind(this)} focus required/><br></br>
+                    onChange={this.handleFirstNameChange.bind(this)} required/><br></br>
                     Last Name: <br/>
                     <input type="text" name="lastname" value={this.state.lastname}
                     onChange={this.handleLastNameChange.bind(this)} required/><br></br>
@@ -106,7 +99,6 @@ class CreateAccount extends Component {
                 </form>
                 <br/>
                 <NavLink to="/login">Existing User?</NavLink><br></br>
-                <NavLink to="/editprofile">Edit profile?</NavLink>
                 {this.state.isRedirect && <Redirect to={{
                     pathname: '/editprofile'
                 }}/>}

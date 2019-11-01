@@ -30,32 +30,36 @@ app.get('/home', (req, res) => res.send("I'm home"));
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 app.post('/register', function(req, res) {
-  console.log(req.body);
-  var user = new User(req.body);
-  //password hash
-    // bcrypt.hash(user.password, 10, function(err, hash){
-    //check if email and handle are unique
-    // TODO: ENSURE THIS IS CORRECT
-    User.findOne({
-      'email' : req.body.email,
-      'handle': req.body.handle}, function (err, user){
-        if(user){
-          //user with email/handle exists
-          console.log('email or handle already in use');
-          res.status(400).send('Email or handle already in use');
-          res.end();
-        }else{
-          //user unique -> add to database
-          user.save()
-          res.status(200).send(req.body.handle);
-          res.end();
-          
-        }
-      })
-    });
-//  });
-  
+     //password hash
+     bcrypt.hash(req.body.password, 10, function(err, hash){
+      console.log(req.body);
+       User.findOne({$or: [
+          {'email' : req.body.email},
+          {'handle': req.body.handle}]}).exec(function (err, user){
+           if(user){
+              //user with email/handle exists
+              console.log('email or handle already in use');
+              res.status(400).send('Email or handle already in use');
+              res.end();
+            }else{  
+              //user unique ->add to db
+              User.create({
+              firstname : req.body.firstname,
+              lastname: req.body.lastname,
+              email: req.body.email,
+              password: hash,
+              passwordConfirm: hash,
+              handle: req.body.handle
+              })
+               res.status(200).send(req.body.handle);
+               res.end();
+            } 
+          });
+     
+        });
+  });
 
+  
 
 //LOGIN PAGE CODE 
 app.post('/login', function(req, res) {
