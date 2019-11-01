@@ -10,7 +10,7 @@ let User = require('./models/user');
 app.use(cors());
 
 
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.urlencoded());
 
@@ -56,16 +56,16 @@ app.post('/editprofile', function(req, res) {
   // });
 });
 
-//LOGIN PAGE CODE 
+//LOGIN PAGE CODE
 app.post('/login', function(req, res) {
   console.log('overall body ' + req.body);
   //console.log(req);
 
-  User.findOne({ 
+  User.findOne({
   'email': req.body.email,
   'password':req.body.password }, function(err, user) {
     if (user) {
-      // user exists 
+      // user exists
       console.log('user found successfully');
       res.status(200).send(user.handle);
       res.end();
@@ -80,6 +80,8 @@ app.post('/login', function(req, res) {
     }
  })
 })
+
+//search functionality
 app.post('/searchserver', function(req, res){
     console.log(req.body); // outputs {searchTerm: (whatever the parameter was}
     var handle = req.body.searchTerm;
@@ -129,17 +131,17 @@ app.post('/addmicroblogs', function(req, res){
 //LOADING INFO INTO USER PROFILE CODE
 app.get('/userprofile', function(req, res){
   console.log(req.query.userHandle);
-  User.findOne({ 
+  User.findOne({
     'handle': req.query.userHandle}, function(err, user) {
       if (user) {
-        // user exists 
+        // user exists
         var userInfo = {
           firstname: user.firstname,
           lastname: user.lastname
         }
         res.status(200).send(userInfo);
         res.end();
-  
+
       } else {
         // user does not exist
         console.log('user not in base');

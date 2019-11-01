@@ -15,7 +15,11 @@ class Timeline extends Component{
             clicks: 0,
             show: true,
             searchTerm: '',
-            postBody: '', // this is the post that the user make
+            username:'',
+            likes: 0,
+            postBody: '',
+            quoteCount: 0,
+            topics:[], // this is the post that the user make
             data:[], // list of strings that hyperlinks to profile
             navigate: false,
             errorMessage: false
@@ -49,8 +53,12 @@ class Timeline extends Component{
 
     handleBlogPosting(event){ // handles blog posting
         event.preventDefault(); // should actually stay in default no redirection happens
-        axios.post('http://localhost:5000/addmicroblogs', {postBody: this.state.postBody}).then(response=>{
-            console.log("Posted from front end");
+        axios.post('http://localhost:5000/addmicroblogs', {username: window.localStorage.getItem('currentUser'), postBody: this.state.postBody, likes: 5, quoteCount: 5, topics:['nba','purdue']}).then(response=>{
+            console.log(this.state.postBody);
+            console.log(this.state.username);
+            console.log(this.state.likes);
+            console.log(this.state.quoteCount);
+            console.log(this.state.topics);
             this.setState({errorMessage: false});
             document.forms["blogID"].reset();
         }).catch((err)=>{
