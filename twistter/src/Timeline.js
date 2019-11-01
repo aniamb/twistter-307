@@ -12,14 +12,22 @@ class Timeline extends Component{
     constructor(props){
         super(props);
         this.state = {
+            clicks: 0,
+            show: true,
             searchTerm: '',
+            postBody: '', // this is the post that the user make
             data:[], // list of strings that hyperlinks to profile
-            navigate: false
+            navigate: false,
+            errorMessage: false
         }
     }
 
     handleSearch = (ev) => {
         this.setState({searchTerm: ev.target.value});
+    };
+
+    handlePostBody = (ev) => {
+        this.setState({postBody: ev.target.value});
     };
 
     handleClick(event){ // handles search transition
@@ -38,6 +46,32 @@ class Timeline extends Component{
                 this.setState({navigate: false});
         })
     };
+
+    handleBlogPosting(event){ // handles blog posting
+        event.preventDefault(); // should actually stay in default no redirection happens
+        axios.post('http://localhost:5000/addmicroblogs', {postBody: this.state.postBody}).then(response=>{
+            console.log("Posted from front end");
+            this.setState({errorMessage: false});
+            document.forms["blogID"].reset();
+        }).catch((err)=>{
+            this.setState({errorMessage: true});
+            document.forms["blogID"].reset();
+        })
+
+    }
+
+    IncrementItem = () => { // TODO: increment and decrement should both be changes to the database
+      this.setState({ clicks: this.state.clicks + 1 });
+    }
+
+    DecreaseItem = () => {
+      this.setState({ clicks: this.state.clicks - 1 });
+    }
+
+    ToggleClick = () => {
+      this.setState({ show: !this.state.show });
+    }
+
 
     render() {
         return (
@@ -59,7 +93,6 @@ class Timeline extends Component{
                                 <br/>
                                 {this.state.navigate && <Redirect to={{
                                     pathname: '/search',
-                                    // state: {"list": "Albert"}
                                     state: {"list": this.state.data}
                                 }}/>}
                             </li>
@@ -68,18 +101,40 @@ class Timeline extends Component{
                   </div>
                   <div className="microOrder">
                     <div className="microblogs">
+                    <form id="blogID" onSubmit={this.handleBlogPosting.bind(this)}>
+                        Create a new microblog: <br/>
+                        <input type="text" placeholder="Text goes here.." maxlength="280" name="microblog" onChange={this.handlePostBody.bind(this)}></input>
+                        <br/>
+                        <input type="submit" value = "Post!"/>
+                        {this.state.errorMessage ? <p> Post must be less than 280 characters: </p> : '' }
+                    </form>
+                    </div>
+                    <div className="microblogs">
                       <h3> @User: I really like tennis. </h3>
-                      <p> favorite </p>
+                      <div>
+
+                        <button onClick={this.IncrementItem}>Favorite</button>
+                        <button onClick={this.DecreaseItem}>Unfavorite</button>
+                        { this.state.show ? <p>Likes: { this.state.clicks }</p> : '' }
+                      </div>
                       <p> repost </p>
                     </div>
                     <div className="microblogs">
                       <h3> @User: CS 307 is a interesting course. </h3>
-                      <p> favorite </p>
+                      <div>
+                        <button onClick={this.IncrementItem}>Favorite</button>
+                        <button onClick={this.DecreaseItem}>Unfavorite</button>
+                        { this.state.show ? <p>Likes: { this.state.clicks }</p> : '' }
+                      </div>
                       <p> repost </p>
                     </div>
                     <div className="microblogs">
                       <h3> @User: Boiler Up! </h3>
-                      <p> favorite </p>
+                      <div>
+                        <button onClick={this.IncrementItem}>Favorite</button>
+                        <button onClick={this.DecreaseItem}>Unfavorite</button>
+                        { this.state.show ? <p>Likes: { this.state.clicks }</p> : '' }
+                      </div>
                       <p> repost </p>
                     </div>
                   </div>
