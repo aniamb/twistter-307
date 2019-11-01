@@ -34,7 +34,7 @@ class Login extends Component {
             })
             .catch((err)=> {
                 this.setState({isRedirect: false});
-                alert('yuhhhhhh');
+                alert('Invalid email/password');
                 console.log('user not found through axios');
             })
             console.log(this.state.isRedirect);
@@ -50,9 +50,9 @@ class Login extends Component {
                 {/* <form action="http://localhost:5000/login" method="POST"> */}
                 <form onSubmit = {this.handleSubmit.bind(this)}>
                     Email:<br/> 
-                    <input type="text" name="email" value={this.state.email} onChange={this.handleEmail.bind(this)} /><br></br>
+                    <input type="email" name="email" value={this.state.email} onChange={this.handleEmail.bind(this)} required /><br></br>
                     Password: <br/>
-                    <input type="password" name="password" value={this.state.password} onChange={this.handlePassword.bind(this)}/><br></br>
+                    <input type="password" name="password" value={this.state.password} onChange={this.handlePassword.bind(this)} required/><br></br>
                     { isValid? null: <div className='invalid-feedback'>please enter email/password</div> }
 
                     {/* if(!this.state.isRedirect){
