@@ -26,7 +26,8 @@ let User = new mongoose.Schema({
     required: true
   },
   bio: {
-    type: String
+    type: String,
+    default: ""
   },
   topics: {
     type:[String]

@@ -59,17 +59,53 @@ app.post('/register', function(req, res) {
         });
   });
 
-
-
 app.post('/editprofile', function(req, res) {
   console.log(req.body)
   // get global variable of userID, and update with bio
   // req.body should be bio
-  res.redirect('http://localhost:3000/timeline');
+  let currUser = req.body.currUser;
+  console.log(req.body.bio);
+  // User.findOne({ 
+  //   'handle': currUser }, function(err, user) {
+  //     if (user) {
+  //       //found user entry
+        
+  //     } else {
+  //         // didnt find user entry
+  //         console.log('couldnt update bio');
+  //         res.status(400).send('couldnt update bio');
+  //         res.end();
+  //     }
+  //  })
 
-  // need callback here
-  // .then(function(data) {
-  // });
+// User.findOneAndUpdate(
+// 		      {handle: currUser},
+// 		      {"$push":{"bio":req.body.bio}},
+// 		      {upsert:true, select:'bio'}
+//         )
+
+// User.update({"handle": currUser}, {$set: {"bio": req.body.bio}})
+// User.updateOne(
+//   { handle: currUser },
+//   {
+//     $set: { "bio": req.body.bio}
+//   }
+// )
+// User.findOneAndUpdate(
+//   {handle: currUser},
+//   {"$push":{"bio":req.body.bio}},
+//   {upsert:true, select:'bio'}
+// // populate and return the review data
+// ).populate('bio').exec(function(err, data) {
+//         console.log("lol");
+//         console.log(data);
+//        res.status(200).send('bio updated');
+//        res.end();
+// })
+User.update({handle:currUser}, {$set: {"bio":req.body.bio}})
+       res.status(200).send('bio updated');
+       res.end();
+
 });
 
 //LOGIN PAGE CODE 
