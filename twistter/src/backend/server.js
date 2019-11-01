@@ -83,11 +83,47 @@ app.post('/login', function(req, res) {
   
 app.post('/searchserver', function(req, res){
     console.log(req.body); // outputs {searchTerm: (whatever the parameter was}
-    console.log(req.body.searchTerm);
+    var handle = req.body.searchTerm;
+    if (handle.charAt(0) == '@') {
+      handle = handle.substring(1);
+    }
+    console.log(handle);
     // parse mongodb for users with that search term
+    var userList = [];
+    User.find({"handle": { "$regex": handle, "$options": "i" } }, function(err, users){
+      if (err) throw err;
+      console.log(users);
+
+      for (var i = 0; i < users.length; i++) {
+        console.log(typeof(users[i].handle));
+      //  userList.push(users[i].handle.repeat(1));
+        userList.push(users[i].handle);
+  //      console.log(userList);
+      }
+      console.log(userList);
+      res.status(200).json({results: userList});
+      res.end();
+    });
     // send a post request with the list to search.js
-    var squad = ["Albert", "Murugan", "Anita", "Netra", "Polymnia"];
-    res.status(200).json({results: squad});
+    // console.log("printing user list");
+    // console.log(userList);
+    // var squad = ["Albert", "Murugan", "Anita", "Netra", "Polymnia"];
+    // res.status(200).json({results: squad});
+    //res.end();
+});
+
+app.post('/addmicroblogs', function(req, res){
+    console.log(req.body); // outputs {searchTerm: (whatever the parameter was}
+    console.log(req.body.postBody);
+    var post = req.body.postBody;
+    console.log(post.length);
+    if(post.length <= 280){
+        // valid post
+        res.status(200);
+        // store in database
+    }else{
+        res.status(400);
+    }
     res.end();
 });
 
