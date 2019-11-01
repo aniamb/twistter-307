@@ -59,6 +59,22 @@ app.post('/register', function(req, res) {
         });
   });
 
+app.post('/delete', function(req, res) {
+  console.log(req.body.currUser);
+  User.find({'handle':req.body.currUser}).remove().exec();
+  // User.findOne({
+  //   'handle': req.body.currUser }, function(err, user) {
+  //     if(user){
+  //       //delete account
+  //       User.deleteOne({"handle": user.handle});
+  //       console.log('delete account success')
+  //     }else{
+  //       //user not found
+  //       console.log('delete account fail')
+  //     }
+  // })
+});
+
 app.post('/editprofile', function(req, res) {
   console.log(req.body)
   // get global variable of userID, and update with bio

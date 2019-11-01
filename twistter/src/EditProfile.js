@@ -19,10 +19,17 @@ class EditProfile extends Component{
 
     handleDelete(event) {
         event.preventDefault();
-
-
-        
+        const delAccount = {currUser: localStorage.getItem('currentUser')};
+        axios.post('http://localhost:5000/delete', delAccount).then(response=> {
+            console.log('account deleted')
+            //this.setState({isRedirect: true});
+        })
+        .catch((err)=> {
+            //this.setState({isRedirect: false});
+            console.log('delete account failed')
+        })     
     }
+    
     handleSubmit(event){
         event.preventDefault();
         event.target.reset();
