@@ -28,7 +28,7 @@ class GenericProfile extends Component {
             var displayName = first.charAt(0).toUpperCase() + first.substring(1) + " " + last.charAt(0).toUpperCase() + last.substring(1);
             console.log(displayName);
             this.setState({userDisplayName: displayName});
-            this.setState({userHandle: '@'+currHandle});
+            this.setState({userHandle: '@'+this.props.location.state.username});
         })
             .catch((err) => {
                 console.log('error getting info');
