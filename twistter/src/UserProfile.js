@@ -53,7 +53,7 @@ class UserProfile extends Component {
                         <br/>
                         <h3>{this.state.userDisplayName}</h3>
                         <h6>{this.state.userHandle}</h6>
-                        <p>Team 1 Squad</p>
+                        <p>I hate CS307</p>
                         <hr/>
                         <p>+Followers</p>
                         <p>+Following</p>
@@ -67,19 +67,19 @@ class UserProfile extends Component {
                 </div>
                 <div className='double-column'>
                     <div className='twist'>
-                        This is the first post
+                        Hate CS
                     </div>
                     <div className='twist'>
-                        Woah this is my second post
+                        Love CS
                     </div>
                     <div className='twist'>
-                        Third post gang
+                        Hate CS
                     </div>
                     <div className='twist'>
-                        Fourth post
+                        Love CS
                     </div>
                     <div className='twist'>
-                        Fifth post
+                        Hate CS
                     </div>
                 </div>
             </div>
