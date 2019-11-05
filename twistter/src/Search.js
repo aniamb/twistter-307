@@ -18,20 +18,20 @@ class Search extends Component{
         this.setState({searchTerm: ev.target.value});
     };
 
+    testCallback = (username) => {
+        console.log("THIS IS: " + username);
+    };
+
     render() {
-        var userNames = [];
-        for(var i=0;i<this.props.location.state.list[0].length;i++){
-            // for now locations is twitter.com
-            // userNames.push(<div key={this.props.location.state.list[0][i]} className="searchResults"> <h3>@{this.props.location.state.list[0][i]} </h3></div> );
+        let userNames = [];
+        for(let i = 0; i< this.props.location.state.list[0].length; i++){
             userNames.push(
-                <a key={this.props.location.state.list[0][i]} href="http://twitter.com">
-                    <div className="searchResults">
-                        <h3>
-                            @{this.props.location.state.list[0][i]}
-                        </h3>
-                    </div>
-                </a>
-            );
+                <div key={this.props.location.state.list[0][i]} className="searchResults">
+                    <h3>
+                        <button onClick={() => this.testCallback(this.props.location.state.list[0][i])} >@{this.props.location.state.list[0][i]}</button>
+                    </h3>
+                </div>
+            )
         }
         return (
 
