@@ -20,7 +20,7 @@ class GenericProfile extends Component {
         // var currHandle = localStorage.getItem('currentUser'); receive username
         axios.get('http://localhost:5000/userprofile', {
             params: {
-                userHandle: currHandle
+                userHandle: this.props.location.state.username
             }
         }).then((response) => {
             var first = response.data.firstname;
