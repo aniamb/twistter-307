@@ -45,7 +45,7 @@ class Search extends Component{
                     <div className="links">
                         <ul className="navLinks">
                             <li><NavLink to="/timeline">Twistter</NavLink></li>
-                            <li>My Profile</li> {/* This needs to be a link */}
+                            <li><NavLink to="/userprofile">My Profile</NavLink></li>
                         </ul>
                     </div>
                   </div>

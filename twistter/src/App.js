@@ -16,7 +16,7 @@ function App() {
   return (
     <div className="App">
       <div className="App-header">
-          <h1><NavLink to="/Timeline">Twistter</NavLink></h1>
+          <h1>Twistter</h1>
       </div>
         <Switch>
             <Route path="/createaccount" component={CreateAccount}/>

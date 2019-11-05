@@ -53,7 +53,7 @@ class GenericProfile extends Component {
                             <br/>
                             <h3>{this.state.userDisplayName}</h3>
                             <h6>{this.state.userHandle}</h6>
-                            <p>I hate CS307</p>
+                            <p>Team 1 Squad</p>
                             <hr/>
                             <p>+Followers</p>
                             <p>+Following</p>
@@ -67,19 +67,19 @@ class GenericProfile extends Component {
                         </div>
                         <div className='double-column'>
                             <div className='twist'>
-                                Hate CS
+                                This is my first post
                             </div>
                             <div className='twist'>
-                                Love CS
+                                Woah this is my second post
                             </div>
                             <div className='twist'>
-                                Hate CS
+                                Third post gang
                             </div>
                             <div className='twist'>
-                                Love CS
+                                Fourth post
                             </div>
                             <div className='twist'>
-                                Hate CS
+                                Fifth post
                             </div>
                         </div>
                     </div>
