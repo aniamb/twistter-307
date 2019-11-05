@@ -81,7 +81,7 @@ class Timeline extends Component{
                     <div className="links">
                         <ul className="navLinks">
                             <li><NavLink to="/timeline">Twistter</NavLink></li>
-                            <li>My Profile</li>
+                            <li><NavLink to="/userprofile">My Profile</NavLink></li>
                             <li>
                                 <form onSubmit={this.handleClick.bind(this)}>
                                     {/*Redirect to search in backend*/}
