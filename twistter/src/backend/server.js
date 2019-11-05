@@ -220,4 +220,6 @@ app.get('/userprofile', function(req, res){
         res.end();
       }
    })
-})
+});
+
+// get a request for generic profile

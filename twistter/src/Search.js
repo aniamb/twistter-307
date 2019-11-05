@@ -11,6 +11,7 @@ class Search extends Component{
         super(props);
         this.state = {
             navigate: false, // only navigates to /search again
+            username: ""
         }
     }
 
@@ -18,8 +19,10 @@ class Search extends Component{
         this.setState({searchTerm: ev.target.value});
     };
 
-    testCallback = (username) => {
-        console.log("THIS IS: " + username);
+    linkToProfile = (username) => {
+        // console.log("THIS IS: " + username);
+        this.setState({navigate : true});
+        this.setState({username: username});
     };
 
     render() {
@@ -28,7 +31,7 @@ class Search extends Component{
             userNames.push(
                 <div key={this.props.location.state.list[0][i]} className="searchResults">
                     <h3>
-                        <button onClick={() => this.testCallback(this.props.location.state.list[0][i])} >@{this.props.location.state.list[0][i]}</button>
+                        <button onClick={() => this.linkToProfile(this.props.location.state.list[0][i])} >@{this.props.location.state.list[0][i]}</button>
                     </h3>
                 </div>
             )
@@ -49,6 +52,10 @@ class Search extends Component{
                   <div className="userOrder">
                       {userNames}
                   </div>
+                {this.state.navigate && <Redirect to={{
+                    pathname: '/genericprofile',
+                    state: {"username": this.state.username}
+                }}/>}
                 </div>
             </div>
 
