@@ -17,6 +17,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.urlencoded());
 
 mongoose.connect(dbConnectionString, { useNewUrlParser: true });
+mongoose.set('useFindAndModify', false);
 let db = mongoose.connection;
 db.once('open', () => console.log('connected to the database'));
 
@@ -80,48 +81,24 @@ app.post('/editprofile', function(req, res) {
   // get global variable of userID, and update with bio
   // req.body should be bio
   let currUser = req.body.currUser;
-  console.log(req.body.bio);
-  // User.findOne({ 
-  //   'handle': currUser }, function(err, user) {
-  //     if (user) {
-  //       //found user entry
-        
-  //     } else {
-  //         // didnt find user entry
-  //         console.log('couldnt update bio');
-  //         res.status(400).send('couldnt update bio');
-  //         res.end();
-  //     }
-  //  })
+  console.log(typeof req.body.bio);
 
-// User.findOneAndUpdate(
-// 		      {handle: currUser},
-// 		      {"$push":{"bio":req.body.bio}},
-// 		      {upsert:true, select:'bio'}
-//         )
+    User.findOneAndUpdate(
+        {"handle" : currUser},
+        {$set: {bio : req.body.bio} },
+        function(err, items){
+            if(err){
+                res.status(400).send('Error happened when updating bio')
+            }else{
+                console.log("Successfully updated bio");
+                res.status(200).send('bio updated');
+            }
+            res.end();
+        }
+    );
 
-// User.update({"handle": currUser}, {$set: {"bio": req.body.bio}})
-// User.updateOne(
-//   { handle: currUser },
-//   {
-//     $set: { "bio": req.body.bio}
-//   }
-// )
-// User.findOneAndUpdate(
-//   {handle: currUser},
-//   {"$push":{"bio":req.body.bio}},
-//   {upsert:true, select:'bio'}
-// // populate and return the review data
-// ).populate('bio').exec(function(err, data) {
-//         console.log("lol");
-//         console.log(data);
-//        res.status(200).send('bio updated');
-//        res.end();
-// })
-User.update({handle:currUser}, {$set: {"bio":req.body.bio}})
-       res.status(200).send('bio updated');
-       res.end();
-
+   // res.status(200).send('bio updated');
+   // res.end();
 });
 
 //LOGIN PAGE CODE 

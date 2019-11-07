@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Switch, Route, NavLink} from 'react-router-dom'
+import {Switch, Route, NavLink, Redirect} from 'react-router-dom'
 import './EditProfile.css';
 import axios from 'axios'
 
@@ -9,7 +9,9 @@ class EditProfile extends Component{
         this.state = {
             bio: '',
             isSubmitted: false,
-            currUser: null
+            currUser: null,
+            timelineRedirect: false,
+            deleteRedirect: false
         }
     }
 
@@ -21,15 +23,15 @@ class EditProfile extends Component{
         event.preventDefault();
         const delAccount = {currUser: localStorage.getItem('currentUser')};
         axios.post('http://localhost:5000/delete', delAccount).then(response=> {
-            console.log('account deleted')
-            //this.setState({isRedirect: true});
+            console.log("Bio is updated");
+            this.setState({deleteRedirect: true});
         })
         .catch((err)=> {
-            //this.setState({isRedirect: false});
             console.log('delete account failed')
+            this.setState({deleteRedirect: false});
+
         })     
     }
-    
     handleSubmit(event){
         event.preventDefault();
         event.target.reset();
@@ -38,12 +40,11 @@ class EditProfile extends Component{
 
         axios.post('http://localhost:5000/editprofile', updateBio).then(response=> {
                 console.log('bio updated')
-                //this.setState({isRedirect: true});
+                this.setState({timelineRedirect: true});
             })
             .catch((err)=> {
-                //this.setState({isRedirect: false});
-                //alert('Invalid Email/Password');
-                console.log('bio not updated')
+                console.log('bio not updated');
+                this.setState({timelineRedirect: false});
             })
 
     };
@@ -61,6 +62,9 @@ class EditProfile extends Component{
                     <br></br>
                     <input type="button" value="Delete" onClick={this.handleDelete.bind(this)}/>
                 </form>
+                {this.state.timelineRedirect && <Redirect to={{
+                    pathname: '/timeline'
+                }}/>}
             </div>
 
 
