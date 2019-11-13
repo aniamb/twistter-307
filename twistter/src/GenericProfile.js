@@ -10,7 +10,7 @@ class GenericProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            editRedirect: false,
+            timelineRedirect: false,
             userDisplayName: null,
             userHandle: null,
         }
@@ -35,8 +35,8 @@ class GenericProfile extends Component {
             })
     }
 
-    editProfileRedirect = () => {
-        this.setState({editRedirect: true});
+    timelineRedirect = () => {
+        this.setState({timelineRedirect: true});
     };
     render(){
 
@@ -47,8 +47,8 @@ class GenericProfile extends Component {
                     <div className="row">
                         {/* User Profile */}
                         <div className="column">
-                            <button className = "redirect"><img id="settings" onClick = {this.editProfileRedirect}/></button>
-                            {this.state.editRedirect ? <Redirect to='/editprofile'/> : null}
+                            <button className = "redirect"><img id="settings" onClick = {this.timelineRedirect}/></button>
+                            {this.state.timelineRedirect ? <Redirect to='/timeline'/> : null}
                             <div className="circle"/>
                             <br/>
                             <h3>{this.state.userDisplayName}</h3>
