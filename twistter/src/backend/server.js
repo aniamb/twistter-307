@@ -44,7 +44,7 @@ app.post('/register', function(req, res) {
               console.log('email or handle already in use');
               res.status(400).send('Email or handle already in use');
               res.end();
-            }else{  
+            }else{
               //user unique ->add to db
               User.create({
               firstname : req.body.firstname,
@@ -56,9 +56,9 @@ app.post('/register', function(req, res) {
               })
                res.status(200).send(req.body.handle);
                res.end();
-            } 
+            }
           });
-     
+
         });
   });
 
@@ -175,12 +175,12 @@ app.post('/addmicroblogs', function(req, res){
       if (err) {
         console.log("ERRR");
         console.log(err);
-      };
+      }
 	// Next, find the User you want to leave the review for by ObjectId - mySpecifiedUserId and push the review ObjectId only
 	// with the option to return the review data
       User.findOneAndUpdate(
 		      {handle: req.body.username},
-		      {"$push":{"microblog":microblog._id}},
+		 //     {"$push":{"microblog":microblog._id}},
 		      {upsert:true, select:'microblog'}
 	// populate and return the review data
       ).populate('microblog').exec(function(err, data) {
@@ -190,23 +190,20 @@ app.post('/addmicroblogs', function(req, res){
       });
 
       User.findOne({
-      'handle': req.query.username}, function(err, user) {
+      'handle': req.body.username}, function(err, user) {
         if (user) {
-          console.log(user);
+
+          console.log("wtf is this: " + user);
           var userInfo = user.microblog;
           microblogList = [];
-          console.log(userInfo);
+          console.log("USER info: " + userInfo);
           for (let i = 0; i < userInfo.length; i++) {
-            //for (var j = 0; j< userInfo.length; j++) {
+
             console.log('User Info: ' + userInfo[i]);
             console.log(typeof(userInfo[i]));
-           var id = JSON.stringify(userInfo[i]);
+            var id = JSON.stringify(userInfo[i]);
             console.log("printing id");
-            // console.log(id);
-            // console.log(typeof(id));
-          //  var id = id.substring(1,(id.length)-1);
-          //  console.log(id);
-        //  console.log("hi:" + ObjectId("\"${userInfo[i])}\""));
+
             Microblog.findById({'_id': ObjectId(userInfo[i])}, function(err, microblog) {
               if (err) {
                 console.log(err);
@@ -214,16 +211,14 @@ app.post('/addmicroblogs', function(req, res){
               if(microblog) {
                 console.log("yyet");
                 console.log(microblog[0]);
-                // microblogList.push(microblog);
               }
                 console.log("pbjghfhgfh");
             })
 
-            //}
           }
           console.log(microblogList);
       //    res.status(200).json({microblog: userInfo});
-            res.status(200).send("yeeHAWWWW");
+    //        res.status(200).send("yeeHAWWWW");
         } else {
           console.log("user not in db");
         }
