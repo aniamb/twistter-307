@@ -38,6 +38,16 @@ class GenericProfile extends Component {
     timelineRedirect = () => {
         this.setState({timelineRedirect: true});
     };
+
+    updateFollowButton = () => {
+        var button = document.getElementsByClassName("follow");
+        if (button.value=="Follow") {
+            button.value = "Following";
+        } else {
+            button.value = "Follow"; // this is unfollowing
+        }
+    };
+
     render(){
 
         return (
@@ -55,6 +65,7 @@ class GenericProfile extends Component {
                             <h6>{this.state.userHandle}</h6>
                             <p>Team 1 Squad</p>
                             <hr/>
+                            <button className = "follow" value= "Follow" onClick = {this.updateFollowButton}></button>
                             <p>+Followers</p>
                             <p>+Following</p>
                             <p>My Topics</p>
