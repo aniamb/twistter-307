@@ -10,12 +10,13 @@ import Login from './Login'
 import EditProfile from './EditProfile'
 import UserProfile from './UserProfile'
 import {Switch, NavLink, Route} from 'react-router-dom'
+import GenericProfile from "./GenericProfile";
 
 function App() {
   return (
     <div className="App">
       <div className="App-header">
-          <h1><NavLink to="/Timeline">Twistter</NavLink></h1>
+          <h1>Twistter</h1>
       </div>
         <Switch>
             <Route path="/createaccount" component={CreateAccount}/>
@@ -24,6 +25,7 @@ function App() {
             <Route path="/editprofile" component={EditProfile}/>
             <Route path="/search" component={Search}/>
             <Route path="/userprofile" component={UserProfile}/>
+            <Route path="/genericprofile" component={GenericProfile}/>
             <Route render= {() =>
                 // <Timeline />
                 <CreateAccount />
