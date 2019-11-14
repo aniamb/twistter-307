@@ -10,6 +10,7 @@ import Login from './Login'
 import EditProfile from './EditProfile'
 import UserProfile from './UserProfile'
 import {Switch, NavLink, Route} from 'react-router-dom'
+import GenericProfile from "./GenericProfile";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/editprofile" component={EditProfile}/>
             <Route path="/search" component={Search}/>
             <Route path="/userprofile" component={UserProfile}/>
+            <Route path="/genericprofile" component={GenericProfile}/>
             <Route render= {() =>
                 // <Timeline />
                 <CreateAccount />

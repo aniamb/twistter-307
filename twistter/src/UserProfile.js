@@ -67,7 +67,7 @@ class UserProfile extends Component {
                 </div>
                 <div className='double-column'>
                     <div className='twist'>
-                        This is the first post
+                        This is my first post
                     </div>
                     <div className='twist'>
                         Woah this is my second post
