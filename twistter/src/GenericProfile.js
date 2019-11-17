@@ -13,6 +13,8 @@ class GenericProfile extends Component {
             timelineRedirect: false,
             userDisplayName: null,
             userHandle: null,
+            status: null,
+            following: false // determines whether or not current user follows the generic profile
         }
     }
 
@@ -29,6 +31,7 @@ class GenericProfile extends Component {
             console.log(displayName);
             this.setState({userDisplayName: displayName});
             this.setState({userHandle: '@'+this.props.location.state.username});
+            this.checkFollowingStatus(this.props.location.state.username);
         })
             .catch((err) => {
                 console.log('error getting info');
@@ -39,17 +42,50 @@ class GenericProfile extends Component {
         this.setState({timelineRedirect: true});
     };
 
+    checkFollowingStatus = (handle) => { // updates the following variable
+        // axios post to check if user is following this generic profile.
+        var currHandle = localStorage.getItem('currentUser');
+        axios.get('http://localhost:5000/searchFollowers',{
+            params: {
+                otherHandle: handle, // this is the user of the generic profile
+                userHandle: currHandle // this is the current user looking at the profile
+            }
+        }).then((response)=>{
+            // response will return a boolean. true will represent that currUser does follow
+            if(response.data.follow){
+                this.setState({following: true});
+                this.setState({status: "Following"});
+            }else{
+                this.setState({following: false});
+                this.setState({status: "Follow"});
+            }
+        })
+    };
+
     updateFollowButton = () => {
-        var button = document.getElementsByClassName("follow");
-        if (button.value=="Follow") {
-            button.value = "Following";
-        } else {
-            button.value = "Follow"; // this is unfollowing
+        if (this.state.status==="Follow") { // user wants to follow the generic user
+            // add axios call here
+            let currHandle = localStorage.getItem('currentUser');
+            axios.get('http://localhost:5000/followLogic', {
+                params: {
+                    otherHandle: this.props.location.state.username,
+                    userHandle: currHandle,
+                    follow: true
+                }
+            }).then((response)=>{
+                this.setState({status: "Following"});
+            }).catch((err)=>{
+                console.log("INVALID FOLLOW REQUEST");
+            });
+
+        } else { // user wants to unfollow the generic user
+            // add axios call here
+            let currHandle = localStorage.getItem('currentUser');
+            this.setState({status: "Follow"});
         }
     };
 
     render(){
-
         return (
             <div className="UserProfile">
                 <br/>
@@ -60,12 +96,13 @@ class GenericProfile extends Component {
                             <button className = "redirect"><img id="settings" onClick = {this.timelineRedirect}/></button>
                             {this.state.timelineRedirect ? <Redirect to='/timeline'/> : null}
                             <div className="circle"/>
+
                             <br/>
                             <h3>{this.state.userDisplayName}</h3>
                             <h6>{this.state.userHandle}</h6>
                             <p>Team 1 Squad</p>
                             <hr/>
-                            <button className = "follow" value= "Follow" onClick = {this.updateFollowButton}></button>
+                            <button onClick={this.updateFollowButton}>{this.state.status}</button>
                             <p>+Followers</p>
                             <p>+Following</p>
                             <p>My Topics</p>
