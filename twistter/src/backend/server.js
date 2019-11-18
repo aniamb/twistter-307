@@ -224,7 +224,16 @@ app.post('/addmicroblogs', function(req, res){
         }
     })
 
+    // microblogs = ['test', 'lol', 'hi']
+    var microblogs = {
+      "blogs": {
+        "user": "albert",
+        "microblog": "asdflkjasdf",
+        "topics": "ball"
+      }
 
+    };
+    res.status(200).json({results: microblogs});
     res.end();
 });
 
