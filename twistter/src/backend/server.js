@@ -230,7 +230,6 @@ app.get('/followLogic', function(req, res){
     console.log("Curr user is " + currUser);
     console.log(typeof req.query.follow);
     if(req.query.follow === "true"){ // logic for following a user
-        console.log("HOW THE FUCK");
         User.findOneAndUpdate(
             {"handle" : currUser},
             {$addToSet: {following : genericUser}}, // this adds the genericUser to the currUser's following list
