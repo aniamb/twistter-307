@@ -109,9 +109,7 @@ class Timeline extends Component{
                         {this.state.errorMessage ? <p> Post must be less than 280 characters: </p> : '' }
                     </form>
                     </div>
-
                     <div className="microblogs">
-
                       <h3> @User: I really like tennis. </h3>
                       <div>
 
