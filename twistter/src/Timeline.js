@@ -18,8 +18,31 @@ class Timeline extends Component{
             postBody: '',
             data:[], // list of strings that hyperlinks to profile
             navigate: false,
-            errorMessage: false
+            errorMessage: false,
+            microblogs: [] // list of microblogs to show
         }
+    }
+
+    componentDidMount(){
+        var currHandle = localStorage.getItem('currentUser');
+        axios.get('http://localhost:5000/getfollowing', {
+            params: {
+                currUser: currHandle
+            }
+        }).then((response) => {
+            // console.log(response.data.results); // pass the results into
+            axios.get('http://localhost:5000/getmicroblogs', {
+                params: {
+                    followingList : response.data.results
+                }
+            }).then((response) =>{
+                console.log("success");
+                // set the state of microblogs to be the response.data.posts
+                // then edit code in return/render to dynamically add divs based on posts
+            })
+        }).catch((err) => {
+                console.log('error getting info');
+        })
     }
 
     handleSearch = (ev) => {

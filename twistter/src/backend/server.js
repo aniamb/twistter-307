@@ -339,7 +339,7 @@ app.get('/followLogic', function(req, res){
                             }else{
                                 console.log("Successfully updated genericUser's followers list when unfollowing");
                                 res.status(200).send();
-                                res.end(); // WHY THE FUCK DOES THIS NOT WORK
+                                res.end();
                             }
                         }
                     )
@@ -348,4 +348,27 @@ app.get('/followLogic', function(req, res){
         );
     }
 });
+
+// return list of users currUser follows
+app.get('/getfollowing', function(req, res){
+    User.findOne({
+        'handle': req.query.currUser}, function(err, user) {
+        if (user) {
+            // user exists
+            let following = user.following;
+            res.status(200).json({results: following});
+            res.end();
+        } else {
+            // user does not exist
+            console.log('user not in base');
+            res.status(400).send('Email or Password does not exist');
+            res.end();
+        }
+    })
+});
+
+// get microblogs based on list of users currUser follows
+app.get('/getmicroblogs', function(req, res){
+    // hardcoded for now. Search database in step 2
+})
 
