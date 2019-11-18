@@ -376,7 +376,7 @@ app.get('/getmicroblogs', function(req, res){
             "uniqueID" : "1", // necessary for dynamic allocation. Set this to the object ID from mongo
             "user": "albert",
             "microblog": "asdflkjasdf",
-            "topics": "ball",
+            "topics": ["ball", "class"],
             "likeCount": "5",
             "quotes" : "1"
         }
@@ -387,7 +387,7 @@ app.get('/getmicroblogs', function(req, res){
             "uniqueID" : "2",
             "user" : "murugan",
             "microblog" :"fdasfasf",
-            "topics" : "ball",
+            "topics" : ["ball"],
             "likeCount": "3", // every value has to be a string
             "quotes" : "2"
         }
@@ -396,6 +396,7 @@ app.get('/getmicroblogs', function(req, res){
     let blogList = [];
     blogList.push(microblogs);
     blogList.push(microblogs2);
+    console.log(blogList);
     res.status(200).json({results: blogList});
     res.end();
 })

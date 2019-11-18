@@ -36,6 +36,7 @@ class Timeline extends Component{
                     followingList : response.data.results
                 }
             }).then((response) =>{
+                console.log(response.data.results[0].blogs.topics);
                 this.setState({microblogs : response.data.results});
             })
         }).catch((err) => {
@@ -100,10 +101,11 @@ class Timeline extends Component{
         let microblogHolder = this.state.microblogs;
         console.log(microblogHolder.length);
         for(let i = 0; i<microblogHolder.length; i++){
+            let topicString = microblogHolder[i].blogs.topics.join(', ');
             posts.push(
                 <div key={microblogHolder[i].blogs.uniqueID} className="microblogs">
                     <h2>@{microblogHolder[i].blogs.user}: {microblogHolder[i].blogs.microblog}</h2>
-                    <h3>Topics: {microblogHolder[i].blogs.topics}</h3> {/* Check if it still works if topics is a list */}
+                    <h3>Topics: {topicString}</h3> {/* Check if it still works if topics is a list */}
                     <div>
                         <button>Favorite</button>
                         <button>Unfavorite</button>
