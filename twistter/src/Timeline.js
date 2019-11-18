@@ -15,11 +15,7 @@ class Timeline extends Component{
             clicks: 0,
             show: true,
             searchTerm: '',
-            username:'',
-            likes: 0,
             postBody: '',
-            quoteCount: 0,
-            topics:[], // this is the post that the user make
             data:[], // list of strings that hyperlinks to profile
             navigate: false,
             errorMessage: false
@@ -46,14 +42,14 @@ class Timeline extends Component{
 
             this.setState({navigate: true});
         }).catch((err)=>{
-                console.log("Search function failed");
-                this.setState({navigate: false});
+            console.log("Search function failed");
+            this.setState({navigate: false});
         })
     };
 
     handleBlogPosting(event){ // handles blog posting
         event.preventDefault(); // should actually stay in default no redirection happens
-        axios.post('http://localhost:5000/addmicroblogs', {username: window.localStorage.getItem('currentUser'), postBody: this.state.postBody, likes: 5, quoteCount: 5, topics:['nba','purdue']}).then(response=>{
+        axios.post('http://localhost:5000/addmicroblogs', {postBody: this.state.postBody}).then(response=>{
             console.log(response.data.results);
             this.setState({errorMessage: false});
             document.forms["blogID"].reset();
@@ -65,15 +61,15 @@ class Timeline extends Component{
     }
 
     IncrementItem = () => { // TODO: increment and decrement should both be changes to the database
-      this.setState({ clicks: this.state.clicks + 1 });
+        this.setState({ clicks: this.state.clicks + 1 });
     }
 
     DecreaseItem = () => {
-      this.setState({ clicks: this.state.clicks - 1 });
+        this.setState({ clicks: this.state.clicks - 1 });
     }
 
     ToggleClick = () => {
-      this.setState({ show: !this.state.show });
+        this.setState({ show: !this.state.show });
     }
 
 
@@ -81,73 +77,68 @@ class Timeline extends Component{
         return (
             <div className="Timeline">
                 <div className="row">
-                  <div className="sidebar" >
-                    <div className="links">
-                        <ul className="navLinks">
-                            <li><NavLink to="/timeline">Twistter</NavLink></li>
-                            <li><NavLink to="/userprofile">My Profile</NavLink></li>
-                            <li>
-                                <form onSubmit={this.handleClick.bind(this)}>
-                                    {/*Redirect to search in backend*/}
-                                    Search users: <br/>
-                                    <input type="text" placeholder="Search.." name="searchparam" onChange={this.handleSearch.bind(this)}></input>
+                    <div className="sidebar" >
+                        <div className="links">
+                            <ul className="navLinks">
+                                <li><NavLink to="/timeline">Twistter</NavLink></li>
+                                <li><NavLink to="/userprofile">My Profile</NavLink></li>
+                                <li>
+                                    <form onSubmit={this.handleClick.bind(this)}>
+                                        {/*Redirect to search in backend*/}
+                                        Search users: <br/>
+                                        <input type="text" placeholder="Search.." name="searchparam" onChange={this.handleSearch.bind(this)}></input>
+                                        <br/>
+                                        <input type="submit" value="Click to Search"/>
+                                    </form>
                                     <br/>
-                                    <input type="submit" value="Click to Search"/>
-                                </form>
+                                    {this.state.navigate && <Redirect to={{
+                                        pathname: '/search',
+                                        state: {"list": this.state.data}
+                                    }}/>}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="microOrder">
+                        <div className="microblogs">
+                            <form id="blogID" onSubmit={this.handleBlogPosting.bind(this)}>
+                                Create a new microblog: <br/>
+                                <input type="text" placeholder="Text goes here.." maxLength="280" name="microblog" onChange={this.handlePostBody.bind(this)}></input>
                                 <br/>
-                                {this.state.navigate && <Redirect to={{
-                                    pathname: '/search',
-                                    state: {"list": this.state.data}
-                                }}/>}
-                            </li>
-                        </ul>
-                    </div>
-                  </div>
-                  <div className="microOrder">
-                    <div className="microblogs">
-                    <form id="blogID" onSubmit={this.handleBlogPosting.bind(this)}>
-                        Create a new microblog: <br/>
-                        <input type="text" placeholder="Text goes here.." maxLength="280" name="microblog" onChange={this.handlePostBody.bind(this)}></input>
-                        <br/>
-                        <input type="submit" value = "Post!"/>
-                    </form>
-                        {this.state.navigate && <Redirect to={{
-                          pathname: '/timeline',
-                          state: {"list": this.state.data}
-                        }}/>}
-                    </div>
+                                <input type="submit" value = "Post!"/>
+                                {this.state.errorMessage ? <p> Post must be less than 280 characters: </p> : '' }
+                            </form>
+                        </div>
+                        <div className="microblogs">
+                            <h3> @User: I really like tennis. </h3>
+                            <div>
 
-                    <div className="microblogs">
+                                <button onClick={this.IncrementItem}>Favorite</button>
+                                <button onClick={this.DecreaseItem}>Unfavorite</button>
+                                { this.state.show ? <p>Likes: { this.state.clicks }</p> : '' }
+                            </div>
+                            <p> repost </p>
+                        </div>
+                        <div className="microblogs">
+                            <h3> @User: CS 307 is a interesting course. </h3>
+                            <div>
+                                <button onClick={this.IncrementItem}>Favorite</button>
+                                <button onClick={this.DecreaseItem}>Unfavorite</button>
+                                { this.state.show ? <p>Likes: { this.state.clicks }</p> : '' }
+                            </div>
+                            <p> repost </p>
+                        </div>
+                        <div className="microblogs">
+                            <h3> @User: Boiler Up! </h3>
+                            <div>
+                                <button onClick={this.IncrementItem}>Favorite</button>
+                                <button onClick={this.DecreaseItem}>Unfavorite</button>
+                                { this.state.show ? <p>Likes: { this.state.clicks }</p> : '' }
+                            </div>
+                            <p> repost </p>
+                        </div>
 
-                      <h3> @User: I really like tennis. </h3>
-                      <div>
-
-                        <button onClick={this.IncrementItem}>Favorite</button>
-                        <button onClick={this.DecreaseItem}>Unfavorite</button>
-                        { this.state.show ? <p>Likes: { this.state.clicks }</p> : '' }
-                      </div>
-                      <p> repost </p>
                     </div>
-                    <div className="microblogs">
-                      <h3> @User: CS 307 is a interesting course. </h3>
-                      <div>
-                        <button onClick={this.IncrementItem}>Favorite</button>
-                        <button onClick={this.DecreaseItem}>Unfavorite</button>
-                        { this.state.show ? <p>Likes: { this.state.clicks }</p> : '' }
-                      </div>
-                      <p> repost </p>
-                    </div>
-                    <div className="microblogs">
-                      <h3> @User: Boiler Up! </h3>
-                      <div>
-                        <button onClick={this.IncrementItem}>Favorite</button>
-                        <button onClick={this.DecreaseItem}>Unfavorite</button>
-                        { this.state.show ? <p>Likes: { this.state.clicks }</p> : '' }
-                      </div>
-                      <p> repost </p>
-                    </div>
-
-                  </div>
                 </div>
             </div>
 
