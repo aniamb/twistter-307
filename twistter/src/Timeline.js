@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Chips, { Chip } from 'react-chips'
 //import logo from './logo.svg';
 //import Search from './Search'
 import './App.css';
@@ -18,7 +19,8 @@ class Timeline extends Component{
             postBody: '', // this is the post that the user make
             data:[], // list of strings that hyperlinks to profile
             navigate: false,
-            errorMessage: false
+            errorMessage: false,
+            chips:["Hello", "World","Computer Science"]
         }
     }
 
@@ -72,6 +74,10 @@ class Timeline extends Component{
       this.setState({ show: !this.state.show });
     }
 
+    onChange = chips => {
+      this.setState({chips});
+    }
+
 
     render() {
         return (
@@ -105,6 +111,14 @@ class Timeline extends Component{
                         Create a new microblog: <br/>
                         <input type="text" placeholder="Text goes here.." maxLength="280" name="microblog" onChange={this.handlePostBody.bind(this)}></input>
                         <br/>
+                          <div>
+                          <Chips
+                              value={this.state.chips}
+                              onChange={this.onChange}
+                              placeholder="Tag Relevant Topics"
+                              suggestions={["Your", "Data", "Here"]}
+                          />
+                          </div>
                         <input type="submit" value = "Post!"/>
                         {this.state.errorMessage ? <p> Post must be less than 280 characters: </p> : '' }
                     </form>
