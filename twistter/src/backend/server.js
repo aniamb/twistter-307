@@ -133,7 +133,7 @@ app.post('/login', function(req, res) {
 app.post('/searchserver', function(req, res){
     console.log(req.body); // outputs {searchTerm: (whatever the parameter was}
     var handle = req.body.searchTerm;
-    if (handle.charAt(0) == '@') {
+    if (handle.charAt(0) === '@') {
       handle = handle.substring(1);
     }
     console.log(handle);
@@ -153,12 +153,6 @@ app.post('/searchserver', function(req, res){
       res.status(200).json({results: userList});
       res.end();
     });
-    // send a post request with the list to search.js
-    // console.log("printing user list");
-    // console.log(userList);
-    // var squad = ["Albert", "Murugan", "Anita", "Netra", "Polymnia"];
-    // res.status(200).json({results: squad});
-    //res.end();
 });
 
 app.post('/addmicroblogs', function(req, res){
@@ -199,4 +193,98 @@ app.get('/userprofile', function(req, res){
    })
 });
 
-// get a request for generic profile
+// check if user follows the generic profile
+app.get('/searchFollowers', function(req, res){
+    User.findOne({
+        'handle': req.query.userHandle}, function(err, user) {
+        if (user) {
+            // user exists
+            let following = user.following;
+            let found = false;
+            for(let i = 0; i<following.length; i++){
+                if(following[i] === req.query.otherHandle){
+                    res.status(200).send({follow: true});
+                    res.end();
+                    found = true;
+                }
+            }
+            if(!found){
+                res.status(200).send({follow: false});
+                res.end();
+            }
+        } else {
+            // user does not exist
+            console.log('user not in base');
+            res.status(400).send('Email or Password does not exist');
+            res.end();
+        }
+    })
+});
+
+// handle follow/unfollow logic. Add/remove genericUser to currUser's following list. Add/remove currUser to genericUser's follower's list
+app.get('/followLogic', function(req, res){
+    // check request to see if follow or unfollow. have access to genericUser and currUser's handle
+    let genericUser = req.query.otherHandle;
+    let currUser = req.query.userHandle;
+    console.log("Generic user is " + genericUser);
+    console.log("Curr user is " + currUser);
+    console.log(typeof req.query.follow);
+    if(req.query.follow === "true"){ // logic for following a user
+        User.findOneAndUpdate(
+            {"handle" : currUser},
+            {$addToSet: {following : genericUser}}, // this adds the genericUser to the currUser's following list
+            function(err, items){
+                if(err){
+                    console.log("Failed to update currUser's following list");
+                    res.status(400).send("Error in following user");
+                    res.end();
+                }else {
+                    User.findOneAndUpdate(
+                        {"handle": genericUser},
+                        {$addToSet: {followers: currUser}},
+                        function (err, items) {
+                            if (err) {
+                                console.log("Failed to update genericUser's followers list");
+                                res.status(400).send("Error occurred when following user. User may not exist");
+                                res.end();
+                            } else {
+                                console.log("Successfully updated genericUser's followers list");
+                                res.status(200).send();
+                                res.end();
+                            }
+                        }
+                    )
+                }
+            }
+        );
+    }else{ // logic for unfollowing a user
+        User.updateOne(
+            {"handle" : currUser},
+            {$pull : {following : genericUser}},
+            function (err,result){
+                if(err){
+                    console.log("Failed to unfollow genericUser");
+                    res.status(400).send("Error in unfollowing user");
+                    res.end();
+                }else{
+                    User.updateOne(
+                        {"handle" : genericUser},
+                        {$pull : {followers : currUser}},
+                        function(err, results){
+                            if(err){
+                                console.log("Failed to update genericUser's followers list when unfolowing");
+                                res.status(400).send("Error occurred when following user. User may not exist");
+                                res.end();
+                            }else{
+                                console.log("Successfully updated genericUser's followers list when unfollowing");
+                                res.status(200).send();
+                                res.end(); // WHY THE FUCK DOES THIS NOT WORK
+                            }
+                        }
+                    )
+                }
+            }
+        );
+    }
+});
+
