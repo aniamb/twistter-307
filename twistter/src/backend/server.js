@@ -370,5 +370,33 @@ app.get('/getfollowing', function(req, res){
 // get microblogs based on list of users currUser follows
 app.get('/getmicroblogs', function(req, res){
     // hardcoded for now. Search database in step 2
+    console.log(req.query.followingList);
+    var microblogs = {
+        "blogs": {
+            "uniqueID" : "1", // necessary for dynamic allocation. Set this to the object ID from mongo
+            "user": "albert",
+            "microblog": "asdflkjasdf",
+            "topics": "ball",
+            "likeCount": "5",
+            "quotes" : "1"
+        }
+
+    };
+    var microblogs2 = {
+        "blogs":{
+            "uniqueID" : "2",
+            "user" : "murugan",
+            "microblog" :"fdasfasf",
+            "topics" : "ball",
+            "likeCount": "3", // every value has to be a string
+            "quotes" : "2"
+        }
+    }
+
+    let blogList = [];
+    blogList.push(microblogs);
+    blogList.push(microblogs2);
+    res.status(200).json({results: blogList});
+    res.end();
 })
 

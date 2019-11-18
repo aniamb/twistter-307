@@ -36,9 +36,7 @@ class Timeline extends Component{
                     followingList : response.data.results
                 }
             }).then((response) =>{
-                console.log("success");
-                // set the state of microblogs to be the response.data.posts
-                // then edit code in return/render to dynamically add divs based on posts
+                this.setState({microblogs : response.data.results});
             })
         }).catch((err) => {
                 console.log('error getting info');
@@ -84,6 +82,7 @@ class Timeline extends Component{
     }
 
     IncrementItem = () => { // TODO: increment and decrement should both be changes to the database
+        // TODO: PASS IN THE KEY AND EDIT THE LIKECOUNT THAT WAY SO IT SHOWS AS SOON AS SOMEONE CLICKS IT
         this.setState({ clicks: this.state.clicks + 1 });
     }
 
@@ -97,6 +96,24 @@ class Timeline extends Component{
 
 
     render() {
+        let posts = [];
+        let microblogHolder = this.state.microblogs;
+        console.log(microblogHolder.length);
+        for(let i = 0; i<microblogHolder.length; i++){
+            posts.push(
+                <div key={microblogHolder[i].blogs.uniqueID} className="microblogs">
+                    <h2>@{microblogHolder[i].blogs.user}: {microblogHolder[i].blogs.microblog}</h2>
+                    <h3>Topics: {microblogHolder[i].blogs.topics}</h3> {/* Check if it still works if topics is a list */}
+                    <div>
+                        <button>Favorite</button>
+                        <button>Unfavorite</button>
+                        <p>Likes: {microblogHolder[i].blogs.likeCount}</p>
+                        <p>Quotes: {microblogHolder[i].blogs.quotes}</p>
+                        <button>Quote</button>
+                    </div>
+                </div>
+            )
+        }
         return (
             <div className="Timeline">
                 <div className="row">
@@ -132,35 +149,7 @@ class Timeline extends Component{
                                 {this.state.errorMessage ? <p> Post must be less than 280 characters: </p> : '' }
                             </form>
                         </div>
-                        <div className="microblogs">
-                            <h3> @User: I really like tennis. </h3>
-                            <div>
-
-                                <button onClick={this.IncrementItem}>Favorite</button>
-                                <button onClick={this.DecreaseItem}>Unfavorite</button>
-                                { this.state.show ? <p>Likes: { this.state.clicks }</p> : '' }
-                            </div>
-                            <p> repost </p>
-                        </div>
-                        <div className="microblogs">
-                            <h3> @User: CS 307 is a interesting course. </h3>
-                            <div>
-                                <button onClick={this.IncrementItem}>Favorite</button>
-                                <button onClick={this.DecreaseItem}>Unfavorite</button>
-                                { this.state.show ? <p>Likes: { this.state.clicks }</p> : '' }
-                            </div>
-                            <p> repost </p>
-                        </div>
-                        <div className="microblogs">
-                            <h3> @User: Boiler Up! </h3>
-                            <div>
-                                <button onClick={this.IncrementItem}>Favorite</button>
-                                <button onClick={this.DecreaseItem}>Unfavorite</button>
-                                { this.state.show ? <p>Likes: { this.state.clicks }</p> : '' }
-                            </div>
-                            <p> repost </p>
-                        </div>
-
+                        {posts}
                     </div>
                 </div>
             </div>
