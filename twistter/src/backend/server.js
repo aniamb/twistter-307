@@ -339,7 +339,7 @@ app.get('/followLogic', function(req, res){
                             }else{
                                 console.log("Successfully updated genericUser's followers list when unfollowing");
                                 res.status(200).send();
-                                res.end(); // WHY THE FUCK DOES THIS NOT WORK
+                                res.end();
                             }
                         }
                     )
