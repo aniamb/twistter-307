@@ -81,7 +81,18 @@ class GenericProfile extends Component {
         } else { // user wants to unfollow the generic user
             // add axios call here
             let currHandle = localStorage.getItem('currentUser');
-            this.setState({status: "Follow"});
+            axios.get('http://localhost:5000/followLogic', {
+                params: {
+                    otherHandle: this.props.location.state.username,
+                    userHandle: currHandle,
+                    follow: false
+                }
+            }).then((response)=>{
+                this.setState({status: "Follow"});
+            }).catch((err)=>{
+                console.log("INVALID UNFOLLOW REQUEST");
+            })
+
         }
     };
 
