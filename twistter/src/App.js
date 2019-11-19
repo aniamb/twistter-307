@@ -28,7 +28,8 @@ function App() {
             <Route path="/genericprofile" component={GenericProfile}/>
             <Route render= {() =>
                 // <Timeline />
-                <CreateAccount />
+                //<CreateAccount />
+                <UserProfile/>
             }/>
         </Switch>
 
