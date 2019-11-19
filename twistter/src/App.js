@@ -11,6 +11,8 @@ import EditProfile from './EditProfile'
 import UserProfile from './UserProfile'
 import {Switch, NavLink, Route} from 'react-router-dom'
 import GenericProfile from "./GenericProfile";
+import Followers from "./Followers";
+import Following from "./Following";
 
 function App() {
   return (
@@ -26,6 +28,9 @@ function App() {
             <Route path="/search" component={Search}/>
             <Route path="/userprofile" component={UserProfile}/>
             <Route path="/genericprofile" component={GenericProfile}/>
+            <Route path="/followers" component={Followers}/>
+            <Route path="/following" component={Following}/>
+
             <Route render= {() =>
                 // <Timeline />
                 //<CreateAccount />
