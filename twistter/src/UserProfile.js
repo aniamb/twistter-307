@@ -4,6 +4,7 @@ import { Redirect} from 'react-router-dom'
 import axios from 'axios'
 
 
+
 import './UserProfile.css';
 
 class UserProfile extends Component {
@@ -14,7 +15,9 @@ class UserProfile extends Component {
             userDisplayName: null,
             userHandle: null,
             followerData: [],
-            followingData: []
+            followingData: [],
+            followerRedirect: false,
+            followingRedirect: false
         }
     }
 
@@ -51,9 +54,13 @@ class UserProfile extends Component {
           }).then((response) => {
             console.log('yeet' + response.data.results);
             this.setState({followerData: this.state.followerData.concat([response.data.results])})
+            this.setState({followerRedirect: true});
+            console.log(this.state.followerData);
           })
           .catch((err) => {
            console.log('error getting info');
+           this.setState({followerRedirect: false});
+
           })
     }
 
@@ -67,9 +74,13 @@ class UserProfile extends Component {
           }).then((response) => {
             console.log('yeet' + response.data.results);
             this.setState({followingData: this.state.followingData.concat([response.data.results])})
+            console.log(this.state.followingData);
+            this.setState({followingRedirect: true});
+
           })
           .catch((err) => {
            console.log('error getting info');
+           this.setState({followingRedirect: false});
           })
     }
  render(){
@@ -90,7 +101,15 @@ class UserProfile extends Component {
                         <p>Team 1 Squad</p>
                         <hr/>
                         <button onClick = {this.printFollowers}>Followers</button>
+                        {this.state.followerRedirect && <Redirect to={{
+                                    pathname: '/followers',
+                                    state: {"list": this.state.followerData}
+                                }}/>}
                         <button onClick = {this.printFollowing}>Following</button>
+                        {this.state.followingRedirect && <Redirect to={{
+                                    pathname: '/following',
+                                    state: {"list": this.state.followingData}
+                                }}/>}
                         <p>My Topics</p>
                             <p>
                                 <span id = "topics">CS</span>

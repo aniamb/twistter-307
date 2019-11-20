@@ -3,6 +3,7 @@ import './App.css';
 import './Search.css'
 import { Route, NavLink, Redirect, Link } from 'react-router-dom'
 import axios from 'axios'
+import { throwStatement } from '../node_modules/@babel/types';
 // import Form from 'react-bootstrap/Form'
 //import FormControl from 'react-bootstrap/FormControl'
 
@@ -11,7 +12,8 @@ class Followers extends Component{
         super(props);
         this.state = {
             navigate: false, // only navigates to /search again
-            username: ""
+            username: "",
+            currHandle: ""
         }
     }
 
@@ -27,6 +29,8 @@ class Followers extends Component{
 
     render() {
         let userNames = [];
+        //this.setState({currHandle: localStorage.getItem('currentUser')});
+
         for(let i = 0; i< this.props.location.state.list[0].length; i++){
             userNames.push(
                 <div key={this.props.location.state.list[0][i]} className="searchResults">
@@ -39,7 +43,7 @@ class Followers extends Component{
         return (
 
             <div className="Followers">
-              <h1> Search Results: </h1>
+              <h1> Followers!</h1>
                 <div className="row">
                   <div className="sidebar" >
                     <div className="links">

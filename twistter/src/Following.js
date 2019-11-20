@@ -39,7 +39,7 @@ class Following extends Component{
         return (
 
             <div className="Following">
-              <h1> Search Results: </h1>
+              <h1> Following! </h1>
                 <div className="row">
                   <div className="sidebar" >
                     <div className="links">

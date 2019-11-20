@@ -14,7 +14,12 @@ class GenericProfile extends Component {
             userDisplayName: null,
             userHandle: null,
             status: null,
-            following: false // determines whether or not current user follows the generic profile
+            following: false, // determines whether or not current user follows the generic profile
+            followerData: [],
+            followingData: [],
+            followerRedirect: false,
+            followingRedirect: false,
+            firstName: "",
         }
     }
 
@@ -26,6 +31,7 @@ class GenericProfile extends Component {
             }
         }).then((response) => {
             var first = response.data.firstname;
+            this.setState({firstName: first.charAt(0).toUpperCase() + first.substring(1)+"'s"});
             var last = response.data.lastname;
             var displayName = first.charAt(0).toUpperCase() + first.substring(1) + " " + last.charAt(0).toUpperCase() + last.substring(1);
             console.log(displayName);
@@ -96,6 +102,46 @@ class GenericProfile extends Component {
         }
     };
 
+    printFollowers = (ev)  => {
+        console.log("got into function")
+        var currHandle = this.props.location.state.username;
+        axios.get('http://localhost:5000/followers', {
+            params: {
+              userHandle: currHandle
+            }
+          }).then((response) => {
+            console.log(response.data.results);
+            this.setState({followerData: this.state.followerData.concat([response.data.results])})
+            this.setState({followerRedirect: true});
+            console.log(this.state.followerData);
+          })
+          .catch((err) => {
+           console.log('error getting info');
+           this.setState({followerRedirect: false});
+
+          })
+    }
+
+    printFollowing = (ev)  => {
+        console.log("got into function")
+        var currHandle = this.props.location.state.username;
+        axios.get('http://localhost:5000/following', {
+            params: {
+              userHandle: currHandle
+            }
+          }).then((response) => {
+            console.log('yeet' + response.data.results);
+            this.setState({followingData: this.state.followingData.concat([response.data.results])})
+            console.log(this.state.followingData);
+            this.setState({followingRedirect: true});
+
+          })
+          .catch((err) => {
+           console.log('error getting info');
+           this.setState({followingRedirect: false});
+          })
+    }
+
     render(){
         return (
             <div className="UserProfile">
@@ -114,8 +160,16 @@ class GenericProfile extends Component {
                             <p>Team 1 Squad</p>
                             <hr/>
                             <button onClick={this.updateFollowButton}>{this.state.status}</button>
-                            <p>+Followers</p>
-                            <p>+Following</p>
+                            <button onClick = {this.printFollowers}>{this.state.firstName} Followers</button>
+                        {this.state.followerRedirect && <Redirect to={{
+                                    pathname: '/followers',
+                                    state: {"list": this.state.followerData}
+                                }}/>}
+                        <button onClick = {this.printFollowing}>{this.state.firstName} Following</button>
+                        {this.state.followingRedirect && <Redirect to={{
+                                    pathname: '/following',
+                                    state: {"list": this.state.followingData}
+                                }}/>}
                             <p>My Topics</p>
                             <p>
                                 <span id = "topics">CS</span>
