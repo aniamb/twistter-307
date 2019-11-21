@@ -101,6 +101,12 @@ class Timeline extends Component{
       }
     };
 
+    handleDelete = (toBeRemoved) => {
+      this.setState({
+        topics: this.state.topics.filter(topic => topic !== toBeRemoved)
+      });
+    };
+
 
     render() {
         return (
@@ -131,15 +137,25 @@ class Timeline extends Component{
                   <div className="microOrder">
                     <div className="microblogs">
                       <form>
-                      <React.Fragment>
-                        {this.state.topics.map(topic => <div key={topic}>{topic}</div>)}
+                      {this.state.topics.map(topic => (
+                        <div key={topic}>
+                          {topic}
+
+                          <button
+                            type="button"
+                            onClick={() =>  this.handleDelete(topic)}
+                          >
+                            &times;
+                          </button>
+                        </div>
+                      ))}
                         <input
                           placeholder="Enter Topics:"
                           value={this.state.value}
                           onChange={this.handleChange}
                           onKeyDown={this.handleKeyDown}
                         />
-                      </React.Fragment>
+
                       </form>
                     <form id="blogID" onSubmit={this.handleBlogPosting.bind(this)}>
                         Create a new microblog: <br/>
