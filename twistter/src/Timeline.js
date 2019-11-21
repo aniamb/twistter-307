@@ -12,7 +12,6 @@ class Timeline extends Component{
     constructor(props){
         super(props);
         this.state = {
-            clicks: 0,
             show: true,
             searchTerm: '',
             postBody: '',
@@ -82,36 +81,89 @@ class Timeline extends Component{
 
     }
 
-    IncrementItem = () => { // TODO: increment and decrement should both be changes to the database
-        // TODO: PASS IN THE KEY AND EDIT THE LIKECOUNT THAT WAY SO IT SHOWS AS SOON AS SOMEONE CLICKS IT
-        this.setState({ clicks: this.state.clicks + 1 });
+    handleLikes(uniqueKey){
+        let currUser = localStorage.getItem('currentUser');
+        let likeCountString = document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeCount")[0].textContent;
+        let status = document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeButton")[0].textContent;
+        let intCountString = parseInt(likeCountString.charAt(likeCountString.length -1));
+        if(status === "Like"){
+            axios.post('http://localhost:5000/updatelikes', {
+                currUser: currUser,
+                likeCount: intCountString + 1,
+                status: "like"
+            }).then((response)=>{
+                intCountString+=1;
+                document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeCount")[0].textContent = "Likes: " + intCountString;
+                document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeButton")[0].textContent = "Unlike";
+            }).catch((err)=>{
+                console.log("Failed to update like count");
+            })
+        }else{
+            axios.post('http://localhost:5000/updatelikes', {
+                currUser: currUser,
+                likeCount: intCountString - 1,
+                status: "unlike"
+            }).then((response)=>{
+                intCountString-=1;
+                document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeCount")[0].textContent = "Likes: " + intCountString;
+                document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeButton")[0].textContent = "Like";
+            }).catch((err)=>{
+                console.log("Failed to update like count");
+            })
+        }
+
+
     }
 
-    DecreaseItem = () => {
-        this.setState({ clicks: this.state.clicks - 1 });
-    }
+    handleQuotes(uniqueKey){
+        let currUser = localStorage.getItem('currentUser');
+        let quoteString = document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("quoteCount")[0].textContent;
+        let status = document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("quoteButton")[0].textContent;
+        let intCountString = parseInt(quoteString.charAt(quoteString.length -1));
+        if(status === "Quote"){ // user wants to quote post
+            axios.post('http://localhost:5000/updateQuotes',{
+                currUser: currUser,
+                quoteCount: intCountString +1,
+                microblogID: uniqueKey
+            }).then((response)=>{
+                intCountString += 1;
+                document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("quoteCount")[0].textContent = "Quotes: " + intCountString;
+                document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("quoteButton")[0].textContent = "Quoted";
+            }).catch((err)=>{
+                console.log("Failed to quote");
+            })
+        } // User not allowed to unquote
 
-    ToggleClick = () => {
-        this.setState({ show: !this.state.show });
     }
 
 
     render() {
         let posts = [];
         let microblogHolder = this.state.microblogs;
-        console.log(microblogHolder.length);
+        let currHandle = localStorage.getItem('currentUser');
         for(let i = 0; i<microblogHolder.length; i++){
             let topicString = microblogHolder[i].blogs.topics.join(', ');
+            let likeStatus;
+            let quoteStatus;
+            if(microblogHolder[i].blogs.likedUsers.includes(currHandle)){
+                likeStatus = "Unlike"; // user already liked the post
+            }else{
+                likeStatus = "Like";
+            }
+            if(microblogHolder[i].blogs.quotedUsers.includes(currHandle)){
+                quoteStatus = "Quoted"; // user already quoted the post and can't unquote
+            }else{
+                quoteStatus = "Quote";
+            }
             posts.push(
-                <div key={microblogHolder[i].blogs.uniqueID} className="microblogs">
+                <div id={microblogHolder[i].blogs.uniqueID} key={microblogHolder[i].blogs.uniqueID} className="microblogs">
                     <h2>@{microblogHolder[i].blogs.user}: {microblogHolder[i].blogs.microblog}</h2>
                     <h3>Topics: {topicString}</h3> {/* Check if it still works if topics is a list */}
-                    <div>
-                        <button>Favorite</button>
-                        <button>Unfavorite</button>
-                        <p>Likes: {microblogHolder[i].blogs.likeCount}</p>
-                        <p>Quotes: {microblogHolder[i].blogs.quotes}</p>
-                        <button>Quote</button>
+                    <div className="postInfo">
+                        <button onClick={() => this.handleLikes(microblogHolder[i].blogs.uniqueID)} className="likeButton">{likeStatus}</button>
+                        <p className="likeCount">Likes: {microblogHolder[i].blogs.likeCount}</p>
+                        <p className="quoteCount">Quotes: {microblogHolder[i].blogs.quotes}</p>
+                        <button onClick={() => this.handleQuotes(microblogHolder[i].blogs.uniqueID)} className="quoteButton">{quoteStatus}</button>
                     </div>
                 </div>
             )

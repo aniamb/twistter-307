@@ -430,7 +430,9 @@ app.get('/getmicroblogs', function(req, res){
             "microblog": "asdflkjasdf",
             "topics": ["ball", "class"],
             "likeCount": "5",
-            "quotes" : "1"
+            "quotes" : "1",
+            "likedUsers" : ["test"],
+            "quotedUsers" : []
         }
 
     };
@@ -441,7 +443,9 @@ app.get('/getmicroblogs', function(req, res){
             "microblog" :"fdasfasf",
             "topics" : ["ball"],
             "likeCount": "3", // every value has to be a string
-            "quotes" : "2"
+            "quotes" : "2",
+            "likedUsers" : [],
+            "quotedUsers" : ["test"]
         }
     }
 
@@ -450,6 +454,25 @@ app.get('/getmicroblogs', function(req, res){
     blogList.push(microblogs2);
     console.log(blogList);
     res.status(200).json({results: blogList});
+    res.end();
+});
+
+app.post('/updatelikes', function(req, res){
+    console.log(req.body.likeCount);
+    // if(req.query.status === "like"){ // increment likecount
+    // add user to the liked list
+    // }else{ // decrement likecount
+    // remove user from the liked list
+    // }
+    res.status(200).send("testing");
+    res.end();
+});
+
+app.post('/updateQuotes', function(req, res){
+    console.log(req.body.quoteCount);
+    // add user to quotedUsers array
+    // add microblog id to user's id
+    res.status(200).send();
     res.end();
 })
 
