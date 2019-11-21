@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Chips, { Chip } from 'react-chips'
+
 //import logo from './logo.svg';
 //import Search from './Search'
 import './App.css';
@@ -20,7 +21,8 @@ class Timeline extends Component{
             data:[], // list of strings that hyperlinks to profile
             navigate: false,
             errorMessage: false,
-            chips:["Hello", "World","Computer Science"]
+            value:"",
+            topics:[]
         }
     }
 
@@ -78,6 +80,27 @@ class Timeline extends Component{
       this.setState({chips});
     }
 
+    handleChange = (evt) => {
+      this.setState({
+    value: evt.target.value
+      });
+    };
+
+    handleKeyDown = (evt) => {
+      if (['Enter', 'Tab', ','].includes(evt.key)) {
+        evt.preventDefault();
+
+        var topic = this.state.value.trim();
+
+        if (topic) {
+          this.setState({
+            topics: [...this.state.topics, topic],
+            value: ''
+          });
+        }
+      }
+    };
+
 
     render() {
         return (
@@ -107,18 +130,21 @@ class Timeline extends Component{
                   </div>
                   <div className="microOrder">
                     <div className="microblogs">
+                      <form>
+                      <React.Fragment>
+                        {this.state.topics.map(topic => <div key={topic}>{topic}</div>)}
+                        <input
+                          placeholder="Enter Topics:"
+                          value={this.state.value}
+                          onChange={this.handleChange}
+                          onKeyDown={this.handleKeyDown}
+                        />
+                      </React.Fragment>
+                      </form>
                     <form id="blogID" onSubmit={this.handleBlogPosting.bind(this)}>
                         Create a new microblog: <br/>
-                        <input type="text" placeholder="Text goes here.." maxLength="280" name="microblog" onChange={this.handlePostBody.bind(this)}></input>
+                        <input type="text" placeholder="Text goes here.." maxLength="280" name="microblog" onChange={this.handlePostBody.bind(this)}/>
                         <br/>
-                          <div>
-                          <Chips
-                              value={this.state.chips}
-                              onChange={this.onChange}
-                              placeholder="Tag Relevant Topics"
-                              suggestions={["Your", "Data", "Here"]}
-                          />
-                          </div>
                         <input type="submit" value = "Post!"/>
                         {this.state.errorMessage ? <p> Post must be less than 280 characters: </p> : '' }
                     </form>
