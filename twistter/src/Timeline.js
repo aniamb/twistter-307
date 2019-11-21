@@ -5,6 +5,7 @@ import Chips, { Chip } from 'react-chips'
 //import Search from './Search'
 import './App.css';
 import './Timeline.css';
+import './Topics.css';
 
 // import { Route, NavLink, Redirect, Link } from 'react-router-dom'
 import { NavLink, Redirect} from 'react-router-dom'
@@ -136,13 +137,15 @@ class Timeline extends Component{
                   </div>
                   <div className="microOrder">
                     <div className="microblogs">
+                    <div className="topics">
                       <form>
                       {this.state.topics.map(topic => (
-                        <div key={topic}>
+                        <div className="tag-topic" key={topic}>
                           {topic}
 
                           <button
                             type="button"
+                            className="button"
                             onClick={() =>  this.handleDelete(topic)}
                           >
                             &times;
@@ -155,8 +158,8 @@ class Timeline extends Component{
                           onChange={this.handleChange}
                           onKeyDown={this.handleKeyDown}
                         />
-
                       </form>
+                    </div>
                     <form id="blogID" onSubmit={this.handleBlogPosting.bind(this)}>
                         Create a new microblog: <br/>
                         <input type="text" placeholder="Text goes here.." maxLength="280" name="microblog" onChange={this.handlePostBody.bind(this)}/>
