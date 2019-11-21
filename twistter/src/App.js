@@ -33,8 +33,7 @@ function App() {
 
             <Route render= {() =>
                 // <Timeline />
-                //<CreateAccount />
-                <UserProfile/>
+                <CreateAccount />
             }/>
         </Switch>
 
