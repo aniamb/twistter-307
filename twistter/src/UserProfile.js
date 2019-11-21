@@ -45,17 +45,17 @@ class UserProfile extends Component {
     };
 
     printFollowers = (ev)  => {
-        console.log("got into function")
+        // console.log("got into function")
         var currHandle = localStorage.getItem('currentUser');
         axios.get('http://localhost:5000/followers', {
             params: {
               userHandle: currHandle
             }
           }).then((response) => {
-            console.log('yeet' + response.data.results);
+            // console.log('yeet' + response.data.results);
             this.setState({followerData: this.state.followerData.concat([response.data.results])})
             this.setState({followerRedirect: true});
-            console.log(this.state.followerData);
+            // console.log(this.state.followerData);
           })
           .catch((err) => {
            console.log('error getting info');
@@ -65,16 +65,16 @@ class UserProfile extends Component {
     }
 
     printFollowing = (ev)  => {
-        console.log("got into function")
+        // console.log("got into function")
         var currHandle = localStorage.getItem('currentUser');
         axios.get('http://localhost:5000/following', {
             params: {
               userHandle: currHandle
             }
           }).then((response) => {
-            console.log('yeet' + response.data.results);
+            // console.log('yeet' + response.data.results);
             this.setState({followingData: this.state.followingData.concat([response.data.results])})
-            console.log(this.state.followingData);
+            // console.log(this.state.followingData);
             this.setState({followingRedirect: true});
 
           })
