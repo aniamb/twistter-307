@@ -254,6 +254,58 @@ app.get('/userprofile', function(req, res){
    })
 });
 
+//GETTING FOLLWERS OF CURRENT USER
+app.get('/followers', function(req, res){
+    console.log(req.query.userHandle);
+    var userfollowers = [];
+    User.findOne({ 
+      'handle': req.query.userHandle}, function(err, user) {
+        if (user) {
+          // user exists 
+          for (var i = 0; i < user.followers.length; i++) {
+      //  userList.push(users[i].handle.repeat(1));
+            userfollowers.push(user.followers[i]);      
+          }
+          console.log(userfollowers);
+          res.status(200).json({results: userfollowers});
+          res.end();
+    
+        } else {
+          // user does not exist
+          console.log('error getting followers');
+          res.status(400).send('error getting followers');
+          res.end();
+        }
+     })
+  });
+
+  //GETTING CURRENT USERS FOLLOWINGS
+app.get('/following', function(req, res){
+    console.log(req.query.userHandle);
+    var userfollowing = [];
+    User.findOne({ 
+      'handle': req.query.userHandle}, function(err, user) {
+        if (user) {
+          // user exists 
+          for (var i = 0; i < user.following.length; i++) {
+      //  userList.push(users[i].handle.repeat(1));
+            userfollowing.push(user.following[i]);      
+          }
+          console.log(userfollowing);
+          res.status(200).json({results: userfollowing});
+          res.end();
+    
+        } else {
+          // user does not exist
+          console.log('error getting following');
+          res.status(400).send('error getting following');
+          res.end();
+        }
+     })
+  });
+
+
+
 // check if user follows the generic profile
 app.get('/searchFollowers', function(req, res){
     User.findOne({
