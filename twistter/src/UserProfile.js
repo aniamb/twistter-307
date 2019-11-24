@@ -17,7 +17,8 @@ class UserProfile extends Component {
             followerData: [],
             followingData: [],
             followerRedirect: false,
-            followingRedirect: false
+            followingRedirect: false,
+            bio: ""
         }
     }
 
@@ -34,6 +35,7 @@ class UserProfile extends Component {
             console.log(displayName);
             this.setState({userDisplayName: displayName});
             this.setState({userHandle: '@'+currHandle});
+            this.setState({bio: response.data.bio});
           })
           .catch((err) => {
            console.log('error getting info');
@@ -98,7 +100,7 @@ class UserProfile extends Component {
                         <br/>
                         <h3>{this.state.userDisplayName}</h3>
                         <h6>{this.state.userHandle}</h6>
-                        <p>Team 1 Squad</p>
+                        <p>{this.state.bio}</p>
                         <hr/>
                         <button onClick = {this.printFollowers}>Followers</button>
                         {this.state.followerRedirect && <Redirect to={{

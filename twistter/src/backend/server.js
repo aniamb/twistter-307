@@ -179,7 +179,8 @@ app.get('/userprofile', function(req, res){
         // user exists 
         var userInfo = {
           firstname: user.firstname,
-          lastname: user.lastname
+          lastname: user.lastname,
+          bio: user.bio
         }
         res.status(200).send(userInfo);
         res.end();
