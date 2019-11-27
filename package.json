@@ -20,11 +20,10 @@
     "react-scripts": "3.1.1"
   },
   "scripts": {
-    "dev": "react-scripts start",
-    "start": "cd twistter/src/backend && node server.js",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "dev": "run-p dev:**",
+    "dev:server": "nodemon twistter/src/backend/server.js",
+    "dev:app": "cd twistter/src/ && npm start",
+    "start": "node twistter/src/backend/server.js",
     "heroku-postbuild":  "cd twistter && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "eslintConfig": {
