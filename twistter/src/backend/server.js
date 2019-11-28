@@ -7,6 +7,7 @@ const app = express();
 const port = process.env.PORT || 5000; // if a process env exists choose that port otherwise go 5000
 const dbConnectionString = 'mongodb+srv://user:lebronjames@twistter-4gumf.mongodb.net/test?retryWrites=true&w=majority';
 const mongoose = require('mongoose');
+const logger = require('heroku-logger');
 
 let User = require('./models/user');
 app.use(cors());
@@ -183,7 +184,8 @@ app.post('/server/addmicroblogs', function(req, res){
 
 //LOADING INFO INTO USER PROFILE CODE
 app.get('/server/userprofile', function(req, res){
-  console.log(req.query.userHandle);
+    logger.info('message', {key : req.query.userHandle}, {message: "in server/userprofile"});
+    console.log(req.query.userHandle);
   User.findOne({ 
     'handle': req.query.userHandle}, function(err, user) {
       if (user) {
@@ -206,6 +208,7 @@ app.get('/server/userprofile', function(req, res){
 
 //GETTING FOLLWERS OF CURRENT USER
 app.get('/server/followers', function(req, res){
+    logger.info('message', {key: req.query.userHandle}, {message: "in server/followers"});
     console.log(req.query.userHandle);
     var userfollowers = [];
     User.findOne({ 
@@ -231,6 +234,7 @@ app.get('/server/followers', function(req, res){
 
   //GETTING CURRENT USERS FOLLOWINGS
 app.get('/server/following', function(req, res){
+    logger.info('message', {key: req.query.userHandle}, {message: "in server/following"});
     console.log(req.query.userHandle);
     var userfollowing = [];
     User.findOne({ 
@@ -258,6 +262,7 @@ app.get('/server/following', function(req, res){
 
 // check if user follows the generic profile
 app.get('/server/searchFollowers', function(req, res){
+    logger.info('message', {key: req.query.userHandle}, {message: "in server/searchFollowers"});
     User.findOne({
         'handle': req.query.userHandle}, function(err, user) {
         if (user) {

@@ -57,6 +57,7 @@ class GenericProfile extends Component {
                 userHandle: currHandle // this is the current user looking at the profile
             }
         }).then((response)=>{
+            console.log("MADE IT HERE");
             // response will return a boolean. true will represent that currUser does follow
             if(response.data.follow){
                 this.setState({following: true});
