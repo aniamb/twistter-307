@@ -209,12 +209,13 @@ app.post('/server/userprofile', function(req, res){
 });
 
 //GETTING FOLLWERS OF CURRENT USER
-app.get('/server/followers', function(req, res){
+app.post('/server/followers', function(req, res){
     // logger.info('message', {key: req.query.userHandle}, {message: "in server/followers"});
-    console.log(req.query.userHandle);
+    // console.log(req.query.userHandle);
+    let handle = req.query.userHandle;
     var userfollowers = [];
     User.findOne({ 
-      'handle': req.query.userHandle}, function(err, user) {
+      'handle': handle}, function(err, user) {
         if (user) {
           // user exists 
           for (var i = 0; i < user.followers.length; i++) {
@@ -235,12 +236,13 @@ app.get('/server/followers', function(req, res){
   });
 
   //GETTING CURRENT USERS FOLLOWINGS
-app.get('/server/following', function(req, res){
+app.post('/server/following', function(req, res){
     // logger.info('message', {key: req.query.userHandle}, {message: "in server/following"});
-    console.log(req.query.userHandle);
+    // console.log(req.query.userHandle);
+    let handle = req.body.userHandle;
     var userfollowing = [];
     User.findOne({ 
-      'handle': req.query.userHandle}, function(err, user) {
+      'handle': handle}, function(err, user) {
         if (user) {
           // user exists 
           for (var i = 0; i < user.following.length; i++) {
@@ -263,16 +265,16 @@ app.get('/server/following', function(req, res){
 
 
 // check if user follows the generic profile
-app.get('/server/searchFollowers', function(req, res){
+app.post('/server/searchFollowers', function(req, res){
     // logger.info('message', {key: req.query.userHandle}, {message: "in server/searchFollowers"});
     User.findOne({
-        'handle': req.query.userHandle}, function(err, user) {
+        'handle': req.body.userHandle}, function(err, user) {
         if (user) {
             // user exists
             let following = user.following;
             let found = false;
             for(let i = 0; i<following.length; i++){
-                if(following[i] === req.query.otherHandle){
+                if(following[i] === req.body.otherHandle){
                     res.status(200).send({follow: true});
                     res.end();
                     found = true;
@@ -292,14 +294,14 @@ app.get('/server/searchFollowers', function(req, res){
 });
 
 // handle follow/unfollow logic. Add/remove genericUser to currUser's following list. Add/remove currUser to genericUser's follower's list
-app.get('/server/followLogic', function(req, res){
+app.post('/server/followLogic', function(req, res){
     // check request to see if follow or unfollow. have access to genericUser and currUser's handle
-    let genericUser = req.query.otherHandle;
-    let currUser = req.query.userHandle;
+    let genericUser = req.body.otherHandle;
+    let currUser = req.body.userHandle;
     console.log("Generic user is " + genericUser);
     console.log("Curr user is " + currUser);
     console.log(typeof req.query.follow);
-    if(req.query.follow === "true"){ // logic for following a user
+    if(req.body.follow === "true"){ // logic for following a user
         User.findOneAndUpdate(
             {"handle" : currUser},
             {$addToSet: {following : genericUser}}, // this adds the genericUser to the currUser's following list
@@ -348,7 +350,7 @@ app.get('/server/followLogic', function(req, res){
                             }else{
                                 console.log("Successfully updated genericUser's followers list when unfollowing");
                                 res.status(200).send();
-                                res.end(); // WHY THE FUCK DOES THIS NOT WORK
+                                res.end();
                             }
                         }
                     )

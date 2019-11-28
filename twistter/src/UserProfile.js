@@ -44,11 +44,8 @@ class UserProfile extends Component {
     printFollowers = (ev)  => {
         // console.log("got into function")
         var currHandle = localStorage.getItem('currentUser');
-        axios.get('/server/followers', {
-            params: {
-              userHandle: currHandle
-            }
-          }).then((response) => {
+        let params = {userHandle: currHandle};
+        axios.post('/server/followers', params).then((response) => {
             // console.log('yeet' + response.data.results);
             this.setState({followerData: this.state.followerData.concat([response.data.results])})
             this.setState({followerRedirect: true});
@@ -64,11 +61,8 @@ class UserProfile extends Component {
     printFollowing = (ev)  => {
         // console.log("got into function")
         var currHandle = localStorage.getItem('currentUser');
-        axios.get('/server/following', {
-            params: {
-              userHandle: currHandle
-            }
-          }).then((response) => {
+        let params = {userHandle: currHandle};
+        axios.post('/server/following', params).then((response) => {
             // console.log('yeet' + response.data.results);
             this.setState({followingData: this.state.followingData.concat([response.data.results])})
             // console.log(this.state.followingData);

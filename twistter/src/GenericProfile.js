@@ -25,11 +25,8 @@ class GenericProfile extends Component {
 
     componentDidMount(){
         // var currHandle = localStorage.getItem('currentUser'); receive username
-        axios.get('/server/userprofile', {
-            params: {
-                userHandle: this.props.location.state.username
-            }
-        }).then((response) => {
+        let data = {userHandle: this.props.location.state.username};
+        axios.post('/server/userprofile', data).then((response) => {
             var first = response.data.firstname;
             this.setState({firstName: first.charAt(0).toUpperCase() + first.substring(1)+"'s"});
             var last = response.data.lastname;
@@ -51,13 +48,8 @@ class GenericProfile extends Component {
     checkFollowingStatus = (handle) => { // updates the following variable
         // axios post to check if user is following this generic profile.
         var currHandle = localStorage.getItem('currentUser');
-        axios.get('/server/searchFollowers',{
-            params: {
-                otherHandle: handle, // this is the user of the generic profile
-                userHandle: currHandle // this is the current user looking at the profile
-            }
-        }).then((response)=>{
-            console.log("MADE IT HERE");
+        let params = {otherHandle: handle, currHandle: currHandle};
+        axios.post('/server/searchFollowers',params).then((response)=>{
             // response will return a boolean. true will represent that currUser does follow
             if(response.data.follow){
                 this.setState({following: true});
@@ -73,13 +65,8 @@ class GenericProfile extends Component {
         if (this.state.status==="Follow") { // user wants to follow the generic user
             // add axios call here
             let currHandle = localStorage.getItem('currentUser');
-            axios.get('/server/followLogic', {
-                params: {
-                    otherHandle: this.props.location.state.username,
-                    userHandle: currHandle,
-                    follow: true
-                }
-            }).then((response)=>{
+            let paramsFollow = {otherHandle: this.props.location.state.username, userHandle: currHandle, follow: true};
+            axios.post('/server/followLogic', paramsFollow).then((response)=>{
                 this.setState({status: "Following"});
             }).catch((err)=>{
                 console.log("INVALID FOLLOW REQUEST");
@@ -88,13 +75,8 @@ class GenericProfile extends Component {
         } else { // user wants to unfollow the generic user
             // add axios call here
             let currHandle = localStorage.getItem('currentUser');
-            axios.get('/server/followLogic', {
-                params: {
-                    otherHandle: this.props.location.state.username,
-                    userHandle: currHandle,
-                    follow: false
-                }
-            }).then((response)=>{
+            let paramsUnfollow = {otherHandle: this.props.location.state.username, userHandle: currHandle, follow: false};
+            axios.post('/server/followLogic', paramsUnfollow).then((response)=>{
                 this.setState({status: "Follow"});
             }).catch((err)=>{
                 console.log("INVALID UNFOLLOW REQUEST");
@@ -106,11 +88,8 @@ class GenericProfile extends Component {
     printFollowers = (ev)  => {
         console.log("got into function")
         var currHandle = this.props.location.state.username;
-        axios.get('/followers', {
-            params: {
-              userHandle: currHandle
-            }
-          }).then((response) => {
+        let params = {userHandle : currHandle};
+        axios.post('/followers', params).then((response) => {
             console.log(response.data.results);
             this.setState({followerData: this.state.followerData.concat([response.data.results])})
             this.setState({followerRedirect: true});
@@ -126,11 +105,8 @@ class GenericProfile extends Component {
     printFollowing = (ev)  => {
         console.log("got into function")
         var currHandle = this.props.location.state.username;
-        axios.get('/server/following', {
-            params: {
-              userHandle: currHandle
-            }
-          }).then((response) => {
+        let params = {userHandle: currHandle};
+        axios.get('/server/following', params).then((response) => {
             console.log('yeet' + response.data.results);
             this.setState({followingData: this.state.followingData.concat([response.data.results])})
             console.log(this.state.followingData);
