@@ -30,7 +30,7 @@ class Login extends Component {
         event.target.reset();
         this.setState({receivedRequest: true});
         const loginInfo = {email: this.state.email, password:this.state.password};
-        axios.post('/login', loginInfo).then(response=> {
+        axios.post('/server/login', loginInfo).then(response=> {
                 localStorage.setItem("currentUser", response.data);
                 this.setState({isRedirect: true});
             })

@@ -41,7 +41,7 @@ app.get('/home', (req, res) => res.send("I'm home"));
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
-app.post('/register', function(req, res) {
+app.post('/server/register', function(req, res) {
      //password hash
      bcrypt.hash(req.body.password, 10, function(err, hash){
       console.log(req.body);
@@ -71,7 +71,7 @@ app.post('/register', function(req, res) {
         });
   });
 
-app.post('/delete', function(req, res) {
+app.post('/server/delete', function(req, res) {
   console.log(req.body.currUser);
   User.find({'handle':req.body.currUser}).remove().exec();
   // User.findOne({
@@ -87,7 +87,7 @@ app.post('/delete', function(req, res) {
   // })
 });
 
-app.post('/editprofile', function(req, res) {
+app.post('/server/editprofile', function(req, res) {
   console.log(req.body)
   // get global variable of userID, and update with bio
   // req.body should be bio
@@ -113,7 +113,7 @@ app.post('/editprofile', function(req, res) {
 });
 
 //LOGIN PAGE CODE 
-app.post('/login', function(req, res) {
+app.post('/server/login', function(req, res) {
   console.log('overall body ' + req.body); 
   User.findOne({ 
   'email': req.body.email }, function(err, user) {
@@ -141,7 +141,7 @@ app.post('/login', function(req, res) {
  })
 });
 
-app.post('/searchserver', function(req, res){
+app.post('/server/searchserver', function(req, res){
     console.log(req.body); // outputs {searchTerm: (whatever the parameter was}
     var handle = req.body.searchTerm;
     if (handle.charAt(0) === '@') {
@@ -166,7 +166,7 @@ app.post('/searchserver', function(req, res){
     });
 });
 
-app.post('/addmicroblogs', function(req, res){
+app.post('/server/addmicroblogs', function(req, res){
     console.log(req.body); // outputs {searchTerm: (whatever the parameter was}
     console.log(req.body.postBody);
     var post = req.body.postBody;
@@ -182,7 +182,7 @@ app.post('/addmicroblogs', function(req, res){
 });
 
 //LOADING INFO INTO USER PROFILE CODE
-app.get('/userprofile', function(req, res){
+app.get('/server/userprofile', function(req, res){
   console.log(req.query.userHandle);
   User.findOne({ 
     'handle': req.query.userHandle}, function(err, user) {
@@ -205,7 +205,7 @@ app.get('/userprofile', function(req, res){
 });
 
 //GETTING FOLLWERS OF CURRENT USER
-app.get('/followers', function(req, res){
+app.get('/server/followers', function(req, res){
     console.log(req.query.userHandle);
     var userfollowers = [];
     User.findOne({ 
@@ -230,7 +230,7 @@ app.get('/followers', function(req, res){
   });
 
   //GETTING CURRENT USERS FOLLOWINGS
-app.get('/following', function(req, res){
+app.get('/server/following', function(req, res){
     console.log(req.query.userHandle);
     var userfollowing = [];
     User.findOne({ 
@@ -257,7 +257,7 @@ app.get('/following', function(req, res){
 
 
 // check if user follows the generic profile
-app.get('/searchFollowers', function(req, res){
+app.get('/server/searchFollowers', function(req, res){
     User.findOne({
         'handle': req.query.userHandle}, function(err, user) {
         if (user) {
@@ -285,7 +285,7 @@ app.get('/searchFollowers', function(req, res){
 });
 
 // handle follow/unfollow logic. Add/remove genericUser to currUser's following list. Add/remove currUser to genericUser's follower's list
-app.get('/followLogic', function(req, res){
+app.get('/server/followLogic', function(req, res){
     // check request to see if follow or unfollow. have access to genericUser and currUser's handle
     let genericUser = req.query.otherHandle;
     let currUser = req.query.userHandle;

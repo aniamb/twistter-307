@@ -58,7 +58,7 @@ class CreateAccount extends Component {
         if(password != passwordConfirm){
             alert("Passwords don't match");
         }else{
-            axios.post('http://localhost:5000/register', registerInfo).then(response=> {
+            axios.post('/server/register', registerInfo).then(response=> {
                 localStorage.setItem("currentUser", response.data);
                  console.log('create account success');
                  this.setState({isRedirect: true})

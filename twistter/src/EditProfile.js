@@ -22,7 +22,7 @@ class EditProfile extends Component{
     handleDelete(event) {
         event.preventDefault();
         const delAccount = {currUser: localStorage.getItem('currentUser')};
-        axios.post('http://localhost:5000/delete', delAccount).then(response=> {
+        axios.post('/server/delete', delAccount).then(response=> {
             console.log("Bio is updated");
             this.setState({deleteRedirect: true});
         })
@@ -38,7 +38,7 @@ class EditProfile extends Component{
         this.setState({receivedRequest: true});
         const updateBio = {bio: this.state.bio, currUser: localStorage.getItem('currentUser')};
 
-        axios.post('http://localhost:5000/editprofile', updateBio).then(response=> {
+        axios.post('/server/editprofile', updateBio).then(response=> {
                 console.log('bio updated')
                 this.setState({timelineRedirect: true});
             })

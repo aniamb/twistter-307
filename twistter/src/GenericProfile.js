@@ -25,7 +25,7 @@ class GenericProfile extends Component {
 
     componentDidMount(){
         // var currHandle = localStorage.getItem('currentUser'); receive username
-        axios.get('http://localhost:5000/userprofile', {
+        axios.get('/server/userprofile', {
             params: {
                 userHandle: this.props.location.state.username
             }
@@ -51,7 +51,7 @@ class GenericProfile extends Component {
     checkFollowingStatus = (handle) => { // updates the following variable
         // axios post to check if user is following this generic profile.
         var currHandle = localStorage.getItem('currentUser');
-        axios.get('http://localhost:5000/searchFollowers',{
+        axios.get('/server/searchFollowers',{
             params: {
                 otherHandle: handle, // this is the user of the generic profile
                 userHandle: currHandle // this is the current user looking at the profile
@@ -72,7 +72,7 @@ class GenericProfile extends Component {
         if (this.state.status==="Follow") { // user wants to follow the generic user
             // add axios call here
             let currHandle = localStorage.getItem('currentUser');
-            axios.get('http://localhost:5000/followLogic', {
+            axios.get('/server/followLogic', {
                 params: {
                     otherHandle: this.props.location.state.username,
                     userHandle: currHandle,
@@ -87,7 +87,7 @@ class GenericProfile extends Component {
         } else { // user wants to unfollow the generic user
             // add axios call here
             let currHandle = localStorage.getItem('currentUser');
-            axios.get('http://localhost:5000/followLogic', {
+            axios.get('/server/followLogic', {
                 params: {
                     otherHandle: this.props.location.state.username,
                     userHandle: currHandle,
@@ -105,7 +105,7 @@ class GenericProfile extends Component {
     printFollowers = (ev)  => {
         console.log("got into function")
         var currHandle = this.props.location.state.username;
-        axios.get('http://localhost:5000/followers', {
+        axios.get('/followers', {
             params: {
               userHandle: currHandle
             }
@@ -125,7 +125,7 @@ class GenericProfile extends Component {
     printFollowing = (ev)  => {
         console.log("got into function")
         var currHandle = this.props.location.state.username;
-        axios.get('http://localhost:5000/following', {
+        axios.get('/server/following', {
             params: {
               userHandle: currHandle
             }

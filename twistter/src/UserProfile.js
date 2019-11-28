@@ -23,7 +23,7 @@ class UserProfile extends Component {
 
     componentDidMount(){
         var currHandle = localStorage.getItem('currentUser');
-        axios.get('http://localhost:5000/userprofile', {
+        axios.get('/server/userprofile', {
             params: {
               userHandle: currHandle
             }
@@ -47,7 +47,7 @@ class UserProfile extends Component {
     printFollowers = (ev)  => {
         // console.log("got into function")
         var currHandle = localStorage.getItem('currentUser');
-        axios.get('http://localhost:5000/followers', {
+        axios.get('/server/followers', {
             params: {
               userHandle: currHandle
             }
@@ -67,7 +67,7 @@ class UserProfile extends Component {
     printFollowing = (ev)  => {
         // console.log("got into function")
         var currHandle = localStorage.getItem('currentUser');
-        axios.get('http://localhost:5000/following', {
+        axios.get('/server/following', {
             params: {
               userHandle: currHandle
             }

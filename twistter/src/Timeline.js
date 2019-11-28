@@ -33,7 +33,7 @@ class Timeline extends Component{
     handleClick(event){ // handles search transition
         event.preventDefault();
         console.log("This is the state:" + this.state.navigate);
-        axios.post('http://localhost:5000/searchserver', {searchTerm : this.state.searchTerm}).then(response=>{
+        axios.post('/server/searchserver', {searchTerm : this.state.searchTerm}).then(response=>{
             console.log('Search is complete')
 
             // fetch for response here
@@ -49,7 +49,7 @@ class Timeline extends Component{
 
     handleBlogPosting(event){ // handles blog posting
         event.preventDefault(); // should actually stay in default no redirection happens
-        axios.post('http://localhost:5000/addmicroblogs', {postBody: this.state.postBody}).then(response=>{
+        axios.post('/server/addmicroblogs', {postBody: this.state.postBody}).then(response=>{
             console.log("Posted from front end");
             this.setState({errorMessage: false});
             document.forms["blogID"].reset();
