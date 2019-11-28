@@ -7,7 +7,6 @@ const app = express();
 const port = process.env.PORT || 5000; // if a process env exists choose that port otherwise go 5000
 const dbConnectionString = 'mongodb+srv://user:lebronjames@twistter-4gumf.mongodb.net/test?retryWrites=true&w=majority';
 const mongoose = require('mongoose');
-const logger = require('heroku-logger');
 
 let User = require('./models/user');
 app.use(cors());
