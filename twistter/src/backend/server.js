@@ -184,7 +184,7 @@ app.post('/server/addmicroblogs', function(req, res){
 
 //LOADING INFO INTO USER PROFILE CODE
 app.get('/server/userprofile', function(req, res){
-    logger.info('message', {key : req.query.userHandle}, {message: "in server/userprofile"});
+    // logger.info('message', {key : req.query.userHandle}, {message: "in server/userprofile"});
     console.log(req.query.userHandle);
   User.findOne({ 
     'handle': req.query.userHandle}, function(err, user) {
@@ -208,7 +208,7 @@ app.get('/server/userprofile', function(req, res){
 
 //GETTING FOLLWERS OF CURRENT USER
 app.get('/server/followers', function(req, res){
-    logger.info('message', {key: req.query.userHandle}, {message: "in server/followers"});
+    // logger.info('message', {key: req.query.userHandle}, {message: "in server/followers"});
     console.log(req.query.userHandle);
     var userfollowers = [];
     User.findOne({ 
@@ -234,7 +234,7 @@ app.get('/server/followers', function(req, res){
 
   //GETTING CURRENT USERS FOLLOWINGS
 app.get('/server/following', function(req, res){
-    logger.info('message', {key: req.query.userHandle}, {message: "in server/following"});
+    // logger.info('message', {key: req.query.userHandle}, {message: "in server/following"});
     console.log(req.query.userHandle);
     var userfollowing = [];
     User.findOne({ 
@@ -262,7 +262,7 @@ app.get('/server/following', function(req, res){
 
 // check if user follows the generic profile
 app.get('/server/searchFollowers', function(req, res){
-    logger.info('message', {key: req.query.userHandle}, {message: "in server/searchFollowers"});
+    // logger.info('message', {key: req.query.userHandle}, {message: "in server/searchFollowers"});
     User.findOne({
         'handle': req.query.userHandle}, function(err, user) {
         if (user) {
