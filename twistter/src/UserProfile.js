@@ -23,11 +23,8 @@ class UserProfile extends Component {
 
     componentDidMount(){
         var currHandle = localStorage.getItem('currentUser');
-        axios.get('/server/userprofile', {
-            params: {
-              userHandle: currHandle
-            }
-          }).then((response) => {
+        let info = {userHandle: currHandle};
+        axios.post('/server/userprofile', info).then((response) => {
             var first = response.data.firstname;
             var last = response.data.lastname;
             var displayName = first.charAt(0).toUpperCase() + first.substring(1) + " " + last.charAt(0).toUpperCase() + last.substring(1);

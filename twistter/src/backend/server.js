@@ -18,6 +18,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.urlencoded());
 
 if (process.env.NODE_ENV === 'production') {
+    console.log("Made it into production");
     // Serve static files
     app.use(express.static(path.join(__dirname, '../../build')));
 
@@ -182,27 +183,29 @@ app.post('/server/addmicroblogs', function(req, res){
 });
 
 //LOADING INFO INTO USER PROFILE CODE
-app.get('/server/userprofile', function(req, res){
+app.post('/server/userprofile', function(req, res){
     // logger.info('message', {key : req.query.userHandle}, {message: "in server/userprofile"});
-    console.log(req.query.userHandle);
-  User.findOne({ 
-    'handle': req.query.userHandle}, function(err, user) {
+    //console.log(req.query.userHandle);
+    console.log(req.body.userHandle);
+    let handle = req.body.userHandle;
+    User.findOne({
+    'handle': handle}, function(err, user) {
       if (user) {
-        // user exists 
+        // user exists
         var userInfo = {
           firstname: user.firstname,
           lastname: user.lastname
         }
         res.status(200).send(userInfo);
         res.end();
-  
+
       } else {
         // user does not exist
         console.log('user not in base');
         res.status(400).send('Email or Password does not exist');
         res.end();
       }
-   })
+    })
 });
 
 //GETTING FOLLWERS OF CURRENT USER
