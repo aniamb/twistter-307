@@ -94,7 +94,8 @@ class UserProfile extends Component {
             <div className="row">
                 {/* User Profile */}
                 <div className="column">
-                    <button className = "redirect"><img id="settings" onClick = {this.editProfileRedirect}/></button>
+                    {/* <button className = "redirect"><img id="settings" onClick = {this.editProfileRedirect}/></button> */}
+                    <button className = "redirect" id="settings" onClick = {this.editProfileRedirect}>Edit Profile</button>
                     {this.state.editRedirect ? <Redirect to='/editprofile'/> : null}
                         <div className="circle"/>
                         <br/>
