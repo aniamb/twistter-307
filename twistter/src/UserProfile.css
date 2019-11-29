@@ -60,13 +60,14 @@ row {
     height:20px;
     margin-left: 5px;
 }
- #topics{
+ .topics{
     border-radius: 15%;
     border-style: solid;
     margin-right: 3px;
     color: white;
-    background-color: rgb(64, 163, 158);
-    border-color: rgb(64, 163, 158);
+    font-weight: bold;
+    background-color: rgb(13, 92, 115);
+    border-color: rgb(13, 92, 115);
     display: inline-block !important;
  }
   @media screen and (min-width: 800px) {
