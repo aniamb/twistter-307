@@ -173,10 +173,10 @@ class GenericProfile extends Component {
                                 }}/>}
                             <p>My Topics</p>
                             <p>
-                                <span id = "topics">CS</span>
-                                <span id = "topics">Math</span>
-                                <span id = "topics">English</span>
-                                <span id = "topics">History</span>
+                                <span className = "topics">CS</span>
+                                <span className = "topics">Math</span>
+                                <span className = "topics">English</span>
+                                <span className = "topics">History</span>
                             </p>
                         </div>
                         <div className='double-column'>
