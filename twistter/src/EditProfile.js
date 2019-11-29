@@ -55,9 +55,11 @@ class EditProfile extends Component{
                 <h3> Edit Profile </h3>
                 <form onSubmit = {this.handleSubmit.bind(this)}>
                     {/*Make a text area instead of a text box*/}
-                    Bio: <br/>
-                    <input type="text" name="bio" value={this.state.bio}
-                    onChange={this.handleChange.bind(this)}/><br></br>
+                    <label for="bio">Bio: 
+                        <br></br>
+                        <input type="text" name="bio" value={this.state.bio}
+                            onChange={this.handleChange.bind(this)}/><br></br>
+                    </label>
                     <input type="submit" value="Save Changes"/>
                     <br></br>
                     <input type="button" value="Delete" onClick={this.handleDelete.bind(this)}/>
