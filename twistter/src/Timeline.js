@@ -85,9 +85,12 @@ class Timeline extends Component{
                             <li>
                                 <form onSubmit={this.handleClick.bind(this)}>
                                     {/*Redirect to search in backend*/}
-                                    Search users: <br/>
-                                    <input type="text" placeholder="Search.." name="searchparam" onChange={this.handleSearch.bind(this)}></input>
-                                    <br/>
+                                    <label for="searchparam">Search users: 
+                                        <br></br>
+                                        <input type="text" placeholder="Search.." name="searchparam" 
+                                        onChange={this.handleSearch.bind(this)}></input>
+                                        <br/>
+                                    </label>
                                     <input type="submit" value="Click to Search"/>
                                 </form>
                                 <br/>
@@ -102,8 +105,10 @@ class Timeline extends Component{
                   <div className="microOrder">
                     <div className="microblogs">
                     <form id="blogID" onSubmit={this.handleBlogPosting.bind(this)}>
-                        Create a new microblog: <br/>
-                        <input type="text" placeholder="Text goes here.." maxLength="280" name="microblog" onChange={this.handlePostBody.bind(this)}></input>
+                        <label for="microblog">Create a new microblog: 
+                            <br></br>
+                            <input type="text" placeholder="Text goes here.." maxLength="280" name="microblog" onChange={this.handlePostBody.bind(this)}></input>
+                        </label>
                         <br/>
                         <input type="submit" value = "Post!"/>
                         {this.state.errorMessage ? <p> Post must be less than 280 characters: </p> : '' }
