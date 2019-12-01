@@ -89,7 +89,7 @@ class GenericProfile extends Component {
         console.log("got into function")
         var currHandle = this.props.location.state.username;
         let params = {userHandle : currHandle};
-        axios.post('/followers', params).then((response) => {
+        axios.post('/server/followers', params).then((response) => {
             console.log(response.data.results);
             this.setState({followerData: this.state.followerData.concat([response.data.results])})
             this.setState({followerRedirect: true});
@@ -106,7 +106,7 @@ class GenericProfile extends Component {
         console.log("got into function")
         var currHandle = this.props.location.state.username;
         let params = {userHandle: currHandle};
-        axios.get('/server/following', params).then((response) => {
+        axios.post('/server/following', params).then((response) => {
             console.log('yeet' + response.data.results);
             this.setState({followingData: this.state.followingData.concat([response.data.results])})
             console.log(this.state.followingData);

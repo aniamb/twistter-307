@@ -212,7 +212,7 @@ app.post('/server/userprofile', function(req, res){
 app.post('/server/followers', function(req, res){
     // logger.info('message', {key: req.query.userHandle}, {message: "in server/followers"});
     // console.log(req.query.userHandle);
-    let handle = req.query.userHandle;
+    let handle = req.body.userHandle;
     var userfollowers = [];
     User.findOne({ 
       'handle': handle}, function(err, user) {
@@ -267,14 +267,16 @@ app.post('/server/following', function(req, res){
 // check if user follows the generic profile
 app.post('/server/searchFollowers', function(req, res){
     // logger.info('message', {key: req.query.userHandle}, {message: "in server/searchFollowers"});
+   // console.log("Other handle is: " + req.body.otherHandle);
     User.findOne({
-        'handle': req.body.userHandle}, function(err, user) {
+        'handle': req.body.currHandle}, function(err, user) {
         if (user) {
             // user exists
             let following = user.following;
             let found = false;
             for(let i = 0; i<following.length; i++){
                 if(following[i] === req.body.otherHandle){
+                    // console.log("Looking at user: " + following[i]);
                     res.status(200).send({follow: true});
                     res.end();
                     found = true;
@@ -300,8 +302,8 @@ app.post('/server/followLogic', function(req, res){
     let currUser = req.body.userHandle;
     console.log("Generic user is " + genericUser);
     console.log("Curr user is " + currUser);
-    console.log(typeof req.query.follow);
-    if(req.body.follow === "true"){ // logic for following a user
+    console.log(typeof req.body.follow);
+    if(req.body.follow){ // logic for following a user
         User.findOneAndUpdate(
             {"handle" : currUser},
             {$addToSet: {following : genericUser}}, // this adds the genericUser to the currUser's following list
