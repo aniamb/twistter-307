@@ -32,6 +32,7 @@ class Timeline extends Component{
             // console.log(response.data.results); // pass the results into
             axios.get('http://localhost:5000/getmicroblogs', {
                 params: {
+                    currUser: currHandle,
                     followingList : response.data.results
                 }
             }).then((response) =>{
@@ -70,7 +71,8 @@ class Timeline extends Component{
 
     handleBlogPosting(event){ // handles blog posting
         event.preventDefault(); // should actually stay in default no redirection happens
-        axios.post('http://localhost:5000/addmicroblogs', {postBody: this.state.postBody}).then(response=>{
+        var currHandle = localStorage.getItem('currentUser');
+        axios.post('http://localhost:5000/addmicroblogs', {postBody: this.state.postBody, user: currHandle}).then(response=>{
             console.log(response.data.results);
             this.setState({errorMessage: false});
             document.forms["blogID"].reset();
