@@ -151,8 +151,8 @@ class GenericProfile extends Component {
                         {/* User Profile */}
                         <div className="column">
                             {/* <button className = "redirect"><img id="settings" onClick = {this.timelineRedirect}/></button> */}
-                            <button className = "redirect" id="settings" onClick = {this.timelineRedirect}>Timeline</button>
-                            {this.state.timelineRedirect ? <Redirect to='/timeline'/> : null}
+                            {/* <button className = "redirect" id="settings" onClick = {this.timelineRedirect}>Timeline</button>
+                            {this.state.timelineRedirect ? <Redirect to='/timeline'/> : null} */}
                             <div className="circle"/>
 
                             <br/>

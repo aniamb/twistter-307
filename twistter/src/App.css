@@ -72,11 +72,21 @@ margin-bottom: 2px;
        height: 40px;
   }
 
-
-
 .App-link {
 color: white;
 }
+
+#homeLink {
+  cursor: pointer;
+  text-decoration: none;
+  color: white;
+}
+
+a:hover{
+  text-decoration-style: solid;
+}
+
+
 
 
 

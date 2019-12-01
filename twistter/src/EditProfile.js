@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Switch, Route, NavLink, Redirect} from 'react-router-dom'
+import {Redirect} from 'react-router-dom'
 import './EditProfile.css';
 import axios from 'axios'
 
@@ -10,7 +10,7 @@ class EditProfile extends Component{
             bio: '',
             isSubmitted: false,
             currUser: null,
-            timelineRedirect: false,
+            profileRedirect: false,
             deleteRedirect: false
         }
     }
@@ -40,11 +40,11 @@ class EditProfile extends Component{
 
         axios.post('http://localhost:5000/editprofile', updateBio).then(response=> {
                 console.log('bio updated')
-                this.setState({timelineRedirect: true});
+                this.setState({profileRedirect: true});
             })
             .catch((err)=> {
                 console.log('bio not updated');
-                this.setState({timelineRedirect: false});
+                this.setState({profileRedirect: false});
             })
 
     };
@@ -61,12 +61,18 @@ class EditProfile extends Component{
                             onChange={this.handleChange.bind(this)}/><br></br>
                     </label>
                     <input type="submit" value="Save Changes"/>
+                    {this.state.profileRedirect && <Redirect to={{
+                    pathname: '/userprofile'
+                    }}/>}
                     <br></br>
                     <input type="button" value="Delete" onClick={this.handleDelete.bind(this)}/>
+                    {this.state.deleteRedirect && <Redirect to={{
+                    pathname: '/createaccount'
+                    }}/>}
                 </form>
-                {this.state.timelineRedirect && <Redirect to={{
-                    pathname: '/timeline'
-                }}/>}
+                {/* {this.state.profileRedirect && <Redirect to={{
+                    pathname: '/userprofile'
+                }}/>} */}
             </div>
 
 

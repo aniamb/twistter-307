@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-import {Switch, Route, NavLink,Redirect} from 'react-router-dom'
-import Login from './Login'
-import EditProfile from './EditProfile'
+import { NavLink,Redirect} from 'react-router-dom'
 import './CreateAccount.css';
 import axios from 'axios'
-import { thisExpression } from '@babel/types';
-import { timingSafeEqual } from 'crypto';
 
 class CreateAccount extends Component {
     constructor(props) {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Switch, Route, NavLink, Redirect} from 'react-router-dom'
+import {NavLink, Redirect} from 'react-router-dom'
 import axios from 'axios'
 //import { Alert } from 'react-alert'
 

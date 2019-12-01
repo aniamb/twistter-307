@@ -63,6 +63,7 @@ app.post('/register', function(req, res) {
 app.post('/delete', function(req, res) {
   console.log(req.body.currUser);
   User.find({'handle':req.body.currUser}).remove().exec();
+  res.status(200).send('DELETION WORKED');
   // User.findOne({
   //   'handle': req.body.currUser }, function(err, user) {
   //     if(user){
