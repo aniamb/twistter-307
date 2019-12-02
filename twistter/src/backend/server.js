@@ -101,6 +101,22 @@ app.post('/editprofile', function(req, res) {
    // res.end();
 });
 
+app.post('/topic', function(req, res) {
+  console.log(req.body)
+  User.findOneAndUpdate(
+    {$set: {topics : req.body.topics} },
+    function(err, items){
+        if(err){
+            res.status(400).send('Error happened storing topics')
+        }else{
+            console.log("Successfully updated stored topics");
+            res.status(200).send('topics stored');
+        }
+        res.end();
+    }
+);
+});
+
 //LOGIN PAGE CODE 
 app.post('/login', function(req, res) {
   console.log('overall body ' + req.body); 

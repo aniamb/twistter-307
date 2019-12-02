@@ -77,10 +77,6 @@ class Timeline extends Component{
       this.setState({ show: !this.state.show });
     }
 
-    onChange = chips => {
-      this.setState({chips});
-    }
-
     handleChange = (evt) => {
       this.setState({
     value: evt.target.value
@@ -92,6 +88,16 @@ class Timeline extends Component{
         evt.preventDefault();
 
         var topic = this.state.value.trim();
+  
+        const top = {topics: [...this.state.topics, topic]}
+        
+
+        axios.post('http://localhost:5000/topic', top).then(response=> {
+                console.log('sent');
+            })
+            .catch((err)=> {
+                console.log('failed');
+            })
 
         if (topic) {
           this.setState({
@@ -106,6 +112,16 @@ class Timeline extends Component{
       this.setState({
         topics: this.state.topics.filter(topic => topic !== toBeRemoved)
       });
+
+      const top = {topics: this.state.topics.filter(topic => topic !== toBeRemoved)}
+        
+
+      axios.post('http://localhost:5000/topic', top).then(response=> {
+              console.log('sent');
+          })
+          .catch((err)=> {
+              console.log('failed');
+          })
     };
 
 
@@ -137,30 +153,30 @@ class Timeline extends Component{
                   </div>
                   <div className="microOrder">
                     <div className="microblogs">
-                    <div className="topics">
-                      <form>
-                      Create a new microblog: <br/>
-                      {this.state.topics.map(topic => (
-                        <div className="tag-topic" key={topic}>
-                          {topic}
+                      <div className="topics">
+                        <form>
+                        Create a new microblog: <br/>
+                        {this.state.topics.map(topic => (
+                          <div className="tag-topic" key={topic}>
+                            {topic}
 
-                          <button
-                            type="button"
-                            className="button"
-                            onClick={() =>  this.handleDelete(topic)}
-                          >
-                            &times;
-                          </button>
-                        </div>
-                      ))}
-                        <input
-                          placeholder="Enter Topics:"
-                          value={this.state.value}
-                          onChange={this.handleChange}
-                          onKeyDown={this.handleKeyDown}
-                        />
-                      </form>
-                    </div>
+                            <button
+                              type="button"
+                              className="button"
+                              onClick={() =>  this.handleDelete(topic)}
+                            >
+                              &times;
+                            </button>
+                          </div>
+                        ))}
+                          <input
+                            placeholder="Enter Topics:"
+                            value={this.state.value}
+                            onChange={this.handleChange}
+                            onKeyDown={this.handleKeyDown}
+                          />
+                        </form>
+                      </div>
                     <form id="blogID" onSubmit={this.handleBlogPosting.bind(this)}>
                         <input type="text" placeholder="Text goes here.." maxLength="280" name="microblog" onChange={this.handlePostBody.bind(this)}/>
                         <br/>
@@ -171,7 +187,7 @@ class Timeline extends Component{
                     <div className="microblogs">
                       <h3> @User: I really like tennis. </h3>
                       <div>
-
+                          <p>Topics: Sports, Tennis, Nadal</p>
                         <button onClick={this.IncrementItem}>Favorite</button>
                         <button onClick={this.DecreaseItem}>Unfavorite</button>
                         { this.state.show ? <p>Likes: { this.state.clicks }</p> : '' }
@@ -180,6 +196,7 @@ class Timeline extends Component{
                     </div>
                     <div className="microblogs">
                       <h3> @User: CS 307 is a interesting course. </h3>
+                      <p>Topics: College, Purdue, Computer Science</p>
                       <div>
                         <button onClick={this.IncrementItem}>Favorite</button>
                         <button onClick={this.DecreaseItem}>Unfavorite</button>
@@ -189,6 +206,7 @@ class Timeline extends Component{
                     </div>
                     <div className="microblogs">
                       <h3> @User: Boiler Up! </h3>
+                      <p>Topics: Purdue University</p>
                       <div>
                         <button onClick={this.IncrementItem}>Favorite</button>
                         <button onClick={this.DecreaseItem}>Unfavorite</button>
