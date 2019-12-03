@@ -37,6 +37,12 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: var(--font-color);
+ 
+}
+
+.App-header a {
+  color: white;
+  text-decoration: none;
 }
 .navLinks{
 list-style:none;

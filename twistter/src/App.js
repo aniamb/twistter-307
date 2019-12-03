@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import Search from './Search'
 import Profile from './Profile'
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 import CreateAccount from './CreateAccount'
 import Timeline from './Timeline'
 import Login from './Login'
@@ -61,6 +61,7 @@ render() {
   return (
     <div className="App">
       <div className="App-header">
+
           <h1>Twistter</h1>  
             <div className="topright"> 
             {this.state.userHandle} 
@@ -69,6 +70,11 @@ render() {
             Dark Mode: <input type="checkbox" id="toggle" className="checkbox" onChange={this.handleTheme.bind(this)}/>
             <label htmlFor="toggle" className="switch" ></label> 
             </div>
+
+      <div style={{ textDecoration: "none", fontSize: "70px" }}>
+         <Link to="/timeline"> Twistter</Link>
+      </div>
+
       </div>
         <Switch>
             <Route path="/createaccount" component={CreateAccount}/>
