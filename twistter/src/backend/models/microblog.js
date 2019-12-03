@@ -5,7 +5,9 @@ let Microblog = new mongoose.Schema({
   postBody: String,
   likes: Number,
   quoteCount: Number,
-  topics: [String]
+  topics: [String],
+  likedUsers: [String],
+  quotedUsers: [String]
 });
 
 var microblogModel = mongoose.model('Microblog', Microblog);

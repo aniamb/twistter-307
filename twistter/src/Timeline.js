@@ -36,7 +36,7 @@ class Timeline extends Component{
                     followingList : response.data.results
                 }
             }).then((response) =>{
-                console.log(response.data.results[0].blogs.topics);
+                console.log(response.data.results);
                 this.setState({microblogs : response.data.results});
             })
         }).catch((err) => {
@@ -144,28 +144,28 @@ class Timeline extends Component{
         let microblogHolder = this.state.microblogs;
         let currHandle = localStorage.getItem('currentUser');
         for(let i = 0; i<microblogHolder.length; i++){
-            let topicString = microblogHolder[i].blogs.topics.join(', ');
+            let topicString = microblogHolder[i].topics.join(', ');
             let likeStatus;
             let quoteStatus;
-            if(microblogHolder[i].blogs.likedUsers.includes(currHandle)){
+            if(microblogHolder[i].likedUsers.includes(currHandle)){
                 likeStatus = "Unlike"; // user already liked the post
             }else{
                 likeStatus = "Like";
             }
-            if(microblogHolder[i].blogs.quotedUsers.includes(currHandle)){
+            if(microblogHolder[i].quotedUsers.includes(currHandle)){
                 quoteStatus = "Quoted"; // user already quoted the post and can't unquote
             }else{
                 quoteStatus = "Quote";
             }
             posts.push(
-                <div id={microblogHolder[i].blogs.uniqueID} key={microblogHolder[i].blogs.uniqueID} className="microblogs">
-                    <h2>@{microblogHolder[i].blogs.user}: {microblogHolder[i].blogs.microblog}</h2>
+                <div id={microblogHolder[i]._id} key={microblogHolder[i]._id} className="microblogs">
+                    <h2>@{microblogHolder[i].username}: {microblogHolder[i].postBody}</h2>
                     <h3>Topics: {topicString}</h3> {/* Check if it still works if topics is a list */}
                     <div className="postInfo">
-                        <button onClick={() => this.handleLikes(microblogHolder[i].blogs.uniqueID)} className="likeButton">{likeStatus}</button>
-                        <p className="likeCount">Likes: {microblogHolder[i].blogs.likeCount}</p>
-                        <p className="quoteCount">Quotes: {microblogHolder[i].blogs.quotes}</p>
-                        <button onClick={() => this.handleQuotes(microblogHolder[i].blogs.uniqueID)} className="quoteButton">{quoteStatus}</button>
+                        <button onClick={() => this.handleLikes(microblogHolder[i]._id)} className="likeButton">{likeStatus}</button>
+                        <p className="likeCount">Likes: {microblogHolder[i].likes}</p>
+                        <p className="quoteCount">Quotes: {microblogHolder[i].quoteCount}</p>
+                        <button onClick={() => this.handleQuotes(microblogHolder[i]._id)} className="quoteButton">{quoteStatus}</button>
                     </div>
                 </div>
             )
