@@ -18,6 +18,7 @@ class Timeline extends Component{
             data:[], // list of strings that hyperlinks to profile
             navigate: false,
             errorMessage: false,
+            emptyList: false,
             microblogs: [] // list of microblogs to show
         }
     }
@@ -30,15 +31,22 @@ class Timeline extends Component{
             }
         }).then((response) => {
             // console.log(response.data.results); // pass the results into
-            axios.get('http://localhost:5000/getmicroblogs', {
-                params: {
-                    currUser: currHandle,
-                    followingList : response.data.results
-                }
-            }).then((response) =>{
-                console.log(response.data.results);
-                this.setState({microblogs : response.data.results});
-            })
+            console.log(typeof response.data.results);
+            console.log(response.data.results.length);
+            if(response.data.results.length !== 0) {
+                axios.get('http://localhost:5000/getmicroblogs', {
+                    params: {
+                        currUser: currHandle,
+                        followingList: response.data.results
+                    }
+                }).then((response) => {
+                    console.log("Status is: " + response.status);
+                    console.log(response.data.results);
+                    this.setState({microblogs: response.data.results});
+                })
+            }else{
+                this.setState({emptyList: true})
+            }
         }).catch((err) => {
                 console.log('error getting info');
         })
@@ -143,32 +151,42 @@ class Timeline extends Component{
         let posts = [];
         let microblogHolder = this.state.microblogs;
         let currHandle = localStorage.getItem('currentUser');
-        for(let i = 0; i<microblogHolder.length; i++){
-            let topicString = microblogHolder[i].topics.join(', ');
-            let likeStatus;
-            let quoteStatus;
-            if(microblogHolder[i].likedUsers.includes(currHandle)){
-                likeStatus = "Unlike"; // user already liked the post
-            }else{
-                likeStatus = "Like";
-            }
-            if(microblogHolder[i].quotedUsers.includes(currHandle)){
-                quoteStatus = "Quoted"; // user already quoted the post and can't unquote
-            }else{
-                quoteStatus = "Quote";
-            }
+        if(this.state.emptyList){
             posts.push(
-                <div id={microblogHolder[i]._id} key={microblogHolder[i]._id} className="microblogs">
-                    <h2>@{microblogHolder[i].username}: {microblogHolder[i].postBody}</h2>
-                    <h3>Topics: {topicString}</h3> {/* Check if it still works if topics is a list */}
-                    <div className="postInfo">
-                        <button onClick={() => this.handleLikes(microblogHolder[i]._id)} className="likeButton">{likeStatus}</button>
-                        <p className="likeCount">Likes: {microblogHolder[i].likes}</p>
-                        <p className="quoteCount">Quotes: {microblogHolder[i].quoteCount}</p>
-                        <button onClick={() => this.handleQuotes(microblogHolder[i]._id)} className="quoteButton">{quoteStatus}</button>
-                    </div>
+                <div key={"empty list"} className="microblogs">
+                    You are currently following no one. To see posts please search for users and follow them.
                 </div>
             )
+        }else {
+            for (let i = 0; i < microblogHolder.length; i++) {
+                let topicString = microblogHolder[i].topics.join(', ');
+                let likeStatus;
+                let quoteStatus;
+                if (microblogHolder[i].likedUsers.includes(currHandle)) {
+                    likeStatus = "Unlike"; // user already liked the post
+                } else {
+                    likeStatus = "Like";
+                }
+                if (microblogHolder[i].quotedUsers.includes(currHandle)) {
+                    quoteStatus = "Quoted"; // user already quoted the post and can't unquote
+                } else {
+                    quoteStatus = "Quote";
+                }
+                posts.push(
+                    <div id={microblogHolder[i]._id} key={microblogHolder[i]._id} className="microblogs">
+                        <h2>@{microblogHolder[i].username}: {microblogHolder[i].postBody}</h2>
+                        <h3>Topics: {topicString}</h3> {/* Check if it still works if topics is a list */}
+                        <div className="postInfo">
+                            <button onClick={() => this.handleLikes(microblogHolder[i]._id)}
+                                    className="likeButton">{likeStatus}</button>
+                            <p className="likeCount">Likes: {microblogHolder[i].likes}</p>
+                            <p className="quoteCount">Quotes: {microblogHolder[i].quoteCount}</p>
+                            <button onClick={() => this.handleQuotes(microblogHolder[i]._id)}
+                                    className="quoteButton">{quoteStatus}</button>
+                        </div>
+                    </div>
+                )
+            }
         }
         return (
             <div className="Timeline">

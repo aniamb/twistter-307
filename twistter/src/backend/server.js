@@ -373,6 +373,7 @@ app.get('/followLogic', function(req, res){
 
 // return list of users currUser follows
 app.get('/getfollowing', function(req, res){
+    console.log("made it into get following");
     User.findOne({
         'handle': req.query.currUser}, function(err, user) {
         if (user) {
@@ -396,90 +397,60 @@ app.get('/getmicroblogs', function(req, res){
     console.log(req.query.currUser);
     let followersList = req.query.followingList;
     let blogList = [];
-    var promises = [];
-    promises.push();
+    let promises = [];
+    let promisesInternal = [];
     for(let i = 0; i < followersList.length; i++){
         let username = followersList[i];
-        promises.push(
-            new Promise((resolve, reject) => {
-                User.findOne({
-                    'handle': username
-                }, function (err, user) {
-                    if (user) {
-
-                        // console.log("wtf is this: " + user);
-                        var userInfo = user.microblog;
-                        console.log("USER info: " + userInfo);
+        let promise =
+            User.findOne({
+                'handle': username
+            }, function (err, user) {
+                if (user) {
+                    var userInfo = user.microblog;
+                    console.log("USER info: " + userInfo);
+                    if(userInfo.length > 0) {
                         for (let i = 0; i < userInfo.length; i++) {
-
                             console.log('User Info: ' + userInfo[i]);
                             console.log(typeof (userInfo[i]));
                             var id = JSON.stringify(userInfo[i]);
-                            console.log("printing id");
-
-                            Microblog.findById({'_id': mongoose.Types.ObjectId(userInfo[i])}, function (err, microblog) {
-                                if (err) {
-                                    console.log(err);
-                                }
-                                if (microblog) {
-                                    console.log("microblog exists");
-                                    console.log(microblog);
-                                    // blogList.splice(blogList.length -1, 0, microblog);
-                                    blogList.push(microblog);
-                                }
-                            })
+                            let internalPromise =
+                                Microblog.findById({'_id': mongoose.Types.ObjectId(userInfo[i])}, function (err, microblog) {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                    if (microblog) {
+                                        blogList.splice(blogList.length - 1, 0, microblog);
+                                        // blogList.push(microblog);
+                                    }
+                                }).exec();
+                            promisesInternal.push(internalPromise);
                         }
-                    } else {
-                        console.log("user not in db");
                     }
-                })
-            })
-        )
+                } else {
+                    console.log("user not in db");
+                }
+            }).exec();
 
+        promises.push(promise);
+        console.log("testing");
     }
     Promise.all(promises)
         .then((data) => {
-            console.log(blogList);
-            res.status(200).json({results: blogList})
-            res.end();
+            Promise.all(promisesInternal)
+                .then((data) =>{
+                    console.log("this is the appearence in then: " + blogList);
+                    res.status(200).json({results: blogList})
+                    res.end();
+                }).catch((error) => {
+                res.status(400).send();
+                res.end();
+            })
+
         })
         .catch((error) => {
-            res.status(400).send();
-            res.end();
+            console.log(error);
         });
 
-
-    //
-    // var microblogs = {
-    //     "blogs": {
-    //         "uniqueID" : "1", // necessary for dynamic allocation. Set this to the object ID from mongo
-    //         "user": "albert",
-    //         "microblog": "testmessage",
-    //         "topics": ["ball", "class"],
-    //         "likeCount": "5",
-    //         "quotes" : "1",
-    //         "likedUsers" : ["test"],
-    //         "quotedUsers" : []
-    //     }
-    //
-    // };
-    // var microblogs2 = {
-    //     "blogs":{
-    //         "uniqueID" : "2",
-    //         "user" : "murugan",
-    //         "microblog" :"fdasfasf",
-    //         "topics" : ["ball"],
-    //         "likeCount": "3", // every value has to be a string
-    //         "quotes" : "2",
-    //         "likedUsers" : [],
-    //         "quotedUsers" : ["test"]
-    //     }
-    // }
-    //
-    //
-    // blogList.push(microblogs);
-    // blogList.push(microblogs2);
-    // console.log(blogList);
 });
 
 app.post('/updatelikes', function(req, res){
