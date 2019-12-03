@@ -161,7 +161,7 @@ app.post('/addmicroblogs', function(req, res){
     console.log("Request body is")
     console.log(req.body); // outputs {searchTerm: (whatever the parameter was}
     console.log("********************")
-    console.log(req.body.user)
+    console.log(req.body.username)
     console.log(req.body.postBody);
     var post = req.body.postBody;
     console.log(post.length);
@@ -177,7 +177,7 @@ app.post('/addmicroblogs', function(req, res){
 	// with the option to return the review data
 
       User.findOneAndUpdate(
-		      {handle: req.body.user},
+		      {handle: req.body.username},
 		     {"$push":{"microblog":microblog._id}},
 		      {upsert:true, select:'microblog'}
 	// populate and return the review data
@@ -186,7 +186,7 @@ app.post('/addmicroblogs', function(req, res){
                 console.log(data);
 
                 User.findOne({
-                'handle': req.body.user}, function(err, user) {
+                'handle': req.body.username}, function(err, user) {
                   if (user) {
 
                     // console.log("wtf is this: " + user);
@@ -224,41 +224,6 @@ app.post('/addmicroblogs', function(req, res){
 
 
       });
-
-//       User.findOne({
-//       'handle': req.body.user}, function(err, user) {
-//         if (user) {
-//
-//           console.log("wtf is this: " + user);
-//           var userInfo = user.microblog;
-//           microblogList = [];
-//           console.log("USER info: " + userInfo);
-//           for (let i = 0; i < userInfo.length; i++) {
-//
-//             console.log('User Info: ' + userInfo[i]);
-//             console.log(typeof(userInfo[i]));
-//             var id = JSON.stringify(userInfo[i]);
-//             console.log("printing id");
-//
-//             Microblog.findById({'_id': ObjectId(userInfo[i])}, function(err, microblog) {
-//               if (err) {
-//                 console.log(err);
-//               }
-//               if(microblog) {
-//                 console.log("yyet");
-//                 console.log(microblog[0]);
-//               }
-//                 console.log("pbjghfhgfh");
-//             })
-//
-//           }
-//           console.log(microblogList);
-//       //    res.status(200).json({microblog: userInfo});
-//     //        res.status(200).send("yeeHAWWWW");
-//         } else {
-//           console.log("user not in db");
-//         }
-//     })
 
     // microblogs = ['test', 'lol', 'hi']
     var microblogs = {

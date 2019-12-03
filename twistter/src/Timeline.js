@@ -72,7 +72,7 @@ class Timeline extends Component{
     handleBlogPosting(event){ // handles blog posting
         event.preventDefault(); // should actually stay in default no redirection happens
         var currHandle = localStorage.getItem('currentUser');
-        axios.post('http://localhost:5000/addmicroblogs', {postBody: this.state.postBody, user: currHandle}).then(response=>{
+        axios.post('http://localhost:5000/addmicroblogs', {username: currHandle, postBody: this.state.postBody, likes: 0, quoteCount: 0}).then(response=>{
             console.log(response.data.results);
             this.setState({errorMessage: false});
             document.forms["blogID"].reset();
