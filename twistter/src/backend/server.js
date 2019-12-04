@@ -628,8 +628,6 @@ app.post('/server/updateQuotes', function(req, res){
     // update quote count
     // add user to quotedUsers array
     // add microblog id to user's id
-    res.status(200).send();
-    res.end();
 });
 
 app.post('/server/addtopics', function(req, res){
