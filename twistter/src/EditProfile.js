@@ -58,8 +58,6 @@ class EditProfile extends Component{
                     {/*Make a text area instead of a text box*/}
                     <label for="bio">Bio: 
                         <br></br>
-//                         <input type="text" name="bio" value={this.state.bio}
-//                             onChange={this.handleChange.bind(this)}/>
                         <textarea rows="4" cols="20" name="bio" value={this.state.bio}
                             onChange={this.handleChange.bind(this)}>
                             </textarea><br></br>
