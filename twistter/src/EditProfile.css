@@ -1,13 +1,72 @@
+:root{
+/*     --text-color: rgb(64, 163, 158); */
+    --text-color: rgb(13, 92, 115);
+    --border-color: orange;
+    --toggle-bg: #eee;
+    --toggle-circle: white;
+    --toggle-other: orange;
+}
+[data-theme="light"] {
+/*     --text-color: rgb(64, 163, 158); */
+    --text-color: rgb(13, 92, 115);
+    --border-color: orange;
+    --toggle-bg: #eee;
+    --toggle-circle: white;
+    --toggle-other: orange;
+}
+  
+[data-theme="dark"] {
+    --text-color: black;
+    --border-color: black;
+    --toggle-bg: purple;
+    --toggle-bg: black;
+    --toggle-other: #7983ff
+}
+
+
 .EditProfile{
     max-width: 100%;
     height: 100%;
-    color: rgb(64, 163, 158);
+/*     color: rgb(13, 92, 115); */
+    color: var(--text-color);
 }
 .EditingBox{
     margin: 0 auto;
     border-style: solid;
-    border-color: orange;
+    border-color: var(--border-color);
     width: 50%;
     margin-top: 50px;
     text-align: center;
 }
+
+.switch { 
+    position : relative ;
+    display : inline-block;
+    width : 40px;
+    height : 20px;
+    background-color: var(--toggle-bg);
+    border-radius: 20px;
+  }
+
+  .switch::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: var(--toggle-circle);
+    top: 1px; 
+    left: 1px;
+    transition: all 0.3s;
+  }
+
+  .checkbox:checked + .switch::after {
+    left : 20px; 
+  }
+  .checkbox:checked + .switch {
+    background-color: var(--toggle-other);
+  }
+
+ .checkbox { 
+    display : none;
+ } 

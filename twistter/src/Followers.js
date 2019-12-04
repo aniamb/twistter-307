@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import './App.css';
 import './Search.css'
-import { Route, NavLink, Redirect, Link } from 'react-router-dom'
-import axios from 'axios'
-import { throwStatement } from '../node_modules/@babel/types';
+import {NavLink, Redirect } from 'react-router-dom'
+
 // import Form from 'react-bootstrap/Form'
 //import FormControl from 'react-bootstrap/FormControl'
 

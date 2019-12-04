@@ -160,7 +160,8 @@ class UserProfile extends Component {
             <div className="row">
                 {/* User Profile */}
                 <div className="column">
-                    <button className = "redirect"><img id="settings" onClick = {this.editProfileRedirect}/></button>
+                    {/* <button className = "redirect"><img id="settings" onClick = {this.editProfileRedirect}/></button> */}
+                    <button className = "redirect" id="settings" onClick = {this.editProfileRedirect}>Edit Profile</button>
                     {this.state.editRedirect ? <Redirect to='/editprofile'/> : null}
                         <div className="circle"/>
                         <br/>
@@ -180,10 +181,10 @@ class UserProfile extends Component {
                                 }}/>}
                         <p>My Topics</p>
                             <p>
-                                <span id = "topics">CS</span>
-                                <span id = "topics">Math</span>
-                                <span id = "topics">English</span>
-                                <span id = "topics">History</span>
+                                <span className = "topics">CS</span>
+                                <span className = "topics">Math</span>
+                                <span className = "topics">English</span>
+                                <span className = "topics">History</span>
                             </p>
                 </div>
                 <div className='double-column'>
