@@ -203,10 +203,6 @@ class UserProfile extends Component {
                                 }}/>}
                         <p>My Topics</p>
                             <p>
-                                {/* <span className = "topics">CS</span>
-                                <span className = "topics">Math</span>
-                                <span className = "topics">English</span>
-                                <span className = "topics">History</span> */}
                                 {topicsToPost}
                             </p>
                 </div>
