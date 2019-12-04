@@ -163,9 +163,7 @@ class UserProfile extends Component {
                     {/* <button className = "redirect"><img id="settings" onClick = {this.editProfileRedirect}/></button> */}
                     <button className = "redirect" id="settings" onClick = {this.editProfileRedirect}>Edit Profile</button>
                     {this.state.editRedirect ? <Redirect to='/editprofile'/> : null}
-                    
                         <div className="circle"/>
-                        
                         <br/>
                         <h3>{this.state.userDisplayName}</h3>
                         <h6>{this.state.userHandle}</h6>
