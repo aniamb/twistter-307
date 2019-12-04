@@ -20,6 +20,7 @@ class GenericProfile extends Component {
             followerRedirect: false,
             followingRedirect: false,
             firstName: "",
+            bio:""
         }
     }
 
@@ -37,6 +38,7 @@ class GenericProfile extends Component {
             console.log(displayName);
             this.setState({userDisplayName: displayName});
             this.setState({userHandle: '@'+this.props.location.state.username});
+            this.setState({bio:response.data.bio});
             this.checkFollowingStatus(this.props.location.state.username);
         })
             .catch((err) => {
@@ -158,7 +160,7 @@ class GenericProfile extends Component {
                             <br/>
                             <h3>{this.state.userDisplayName}</h3>
                             <h6>{this.state.userHandle}</h6>
-                            <p>Team 1 Squad</p>
+                            <p>{this.state.bio}</p>
                             <hr/>
                             <button onClick={this.updateFollowButton}>{this.state.status}</button>
                             <button onClick = {this.printFollowers}>{this.state.firstName} Followers</button>
