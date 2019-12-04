@@ -1,5 +1,5 @@
 :root {
-  --background-color: rgb(64, 163, 158);
+  --background-color: rgb(13, 92, 115);;
   --font-color: white;
   --column-color:rgb(243, 243, 243);
   --prof-color:rgb(33, 75, 73);
@@ -9,7 +9,7 @@
   
 }
 [data-theme="light"] {
-  --background-color: rgb(64, 163, 158);
+  --background-color: rgb(13, 92, 115);
   --font-color: white;
   --column-color:rgb(243, 243, 243);
   --prof-color:rgb(33, 75, 73);
