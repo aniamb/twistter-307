@@ -187,17 +187,7 @@ app.post('/addmicroblogs', function(req, res){
 
 
       });
-
-    // microblogs = ['test', 'lol', 'hi']
-    var microblogs = {
-      "blogs": {
-        "user": "albert",
-        "microblog": "asdflkjasdf",
-        "topics": "ball"
-      }
-
-    };
-    res.status(200).json({results: microblogs});
+    res.status(200).send();
     res.end();
 });
 
@@ -455,17 +445,85 @@ app.get('/getmicroblogs', function(req, res){
 
 app.post('/updatelikes', function(req, res){
     console.log(req.body.likeCount);
-    // if(req.query.status === "like"){ // increment likecount
-    // add user to the liked list
-    // }else{ // decrement likecount
-    // remove user from the liked list
-    // }
-    res.status(200).send("testing");
-    res.end();
+    console.log(typeof req.body.likeCount);
+    let likeCount = req.body.likeCount;
+    let currUser = req.body.currUser;
+    let id = req.body.microblogID;
+
+
+    Microblog.findOneAndUpdate(
+        {_id: mongoose.Types.ObjectId(id)},
+        {$set:{"likes":likeCount}},
+        function(err, data){
+            if(err){
+                console.log("Error in finding microblog when updating likecount");
+                console.log("Error is: " + err);
+                console.log("ID is: " + id);
+            }else{
+                if(req.body.status === "like"){
+                    Microblog.findOneAndUpdate(
+                        {_id: mongoose.Types.ObjectId(id)},
+                        {"$push":{"likedUsers":currUser}},
+                        {upsert:true, select:'likedUsers'}
+                    ).populate('likedUsers').exec(function(err, data){
+                        res.status(200).send();
+                        res.end();
+                    });
+                }else{
+                    Microblog.findOneAndUpdate(
+                        {_id: mongoose.Types.ObjectId(id)},
+                        {$pull:{"likedUsers":currUser}},
+                        {upsert:true, select:'likedUsers'}
+                    ).populate('likedUsers').exec(function(err, data){
+                        res.status(200).send();
+                        res.end();
+                    });
+                }
+            }
+        }
+    );
+
 });
 
 app.post('/updateQuotes', function(req, res){
     console.log(req.body.quoteCount);
+    console.log(req.body.microblogID);
+    console.log(req.body.currUser);
+
+    let id = req.body.microblogID;
+    let quoteCount = req.body.quoteCount;
+    let currUser = req.body.currUser;
+
+    Microblog.findOneAndUpdate(
+        {_id: mongoose.Types.ObjectId(id)},
+        {$set:{"quoteCount":quoteCount}},
+        function(err, data){
+            if(err){
+                console.log("Error in finding microblog when updating quotec ount");
+                console.log("Error is: " + err);
+                console.log("ID is: " + id);
+            }else{
+                Microblog.findOneAndUpdate(
+                    {_id: mongoose.Types.ObjectId(id)},
+                    {"$push":{"quotedUsers":currUser}},
+                    {upsert:true, select:'quotedUsers'}
+                ).populate('quotedUsers').exec(function(err, data){
+                    User.findOneAndUpdate(
+                        {handle: currUser},
+                        {"$push":{"microblog":id}},
+                        {upsert:true, select:'microblog'}
+                        // populate and return the review data
+                    ).populate('microblog').exec(function(err, data) {
+                        res.status(200).send();
+                        res.end();
+                    });
+
+                });
+            }
+        }
+    );
+
+    // update quote count
     // add user to quotedUsers array
     // add microblog id to user's id
     res.status(200).send();

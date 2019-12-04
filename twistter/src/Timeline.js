@@ -80,7 +80,7 @@ class Timeline extends Component{
     handleBlogPosting(event){ // handles blog posting
         event.preventDefault(); // should actually stay in default no redirection happens
         var currHandle = localStorage.getItem('currentUser');
-        axios.post('http://localhost:5000/addmicroblogs', {username: currHandle, postBody: this.state.postBody, likes: 0, quoteCount: 0}).then(response=>{
+        axios.post('http://localhost:5000/addmicroblogs', {username: currHandle, postBody: this.state.postBody, likes: 0, quoteCount: 0, likedUsers: [], quotedUsers: []}).then(response=>{
             console.log(response.data.results);
             this.setState({errorMessage: false});
             document.forms["blogID"].reset();
@@ -100,6 +100,7 @@ class Timeline extends Component{
             axios.post('http://localhost:5000/updatelikes', {
                 currUser: currUser,
                 likeCount: intCountString + 1,
+                microblogID: uniqueKey,
                 status: "like"
             }).then((response)=>{
                 intCountString+=1;
@@ -112,6 +113,7 @@ class Timeline extends Component{
             axios.post('http://localhost:5000/updatelikes', {
                 currUser: currUser,
                 likeCount: intCountString - 1,
+                microblogID: uniqueKey,
                 status: "unlike"
             }).then((response)=>{
                 intCountString-=1;
