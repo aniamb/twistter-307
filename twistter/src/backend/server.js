@@ -383,10 +383,10 @@ app.post('/server/followLogic', function(req, res){
 });
 
 // return list of users currUser follows
-app.get('/getfollowing', function(req, res){
+app.post('/getfollowing', function(req, res){
     console.log("made it into get following");
     User.findOne({
-        'handle': req.query.currUser}, function(err, user) {
+        'handle': req.body.currUser}, function(err, user) {
         if (user) {
             // user exists
             let following = user.following;
@@ -402,11 +402,11 @@ app.get('/getfollowing', function(req, res){
 });
 
 // get microblogs based on list of users currUser follows
-app.get('/getmicroblogs', function(req, res){
+app.post('/server/getmicroblogs', function(req, res){
     // hardcoded for now. Search database in step 2
-    console.log(req.query.followingList);
-    console.log(req.query.currUser);
-    let followersList = req.query.followingList;
+    console.log(req.body.followingList);
+    console.log(req.body.currUser);
+    let followersList = req.body.followingList;
     let blogList = [];
     let promises = [];
     let promisesInternal = [];
@@ -464,7 +464,7 @@ app.get('/getmicroblogs', function(req, res){
 
 });
 
-app.post('/updatelikes', function(req, res){
+app.post('/server/updatelikes', function(req, res){
     console.log(req.body.likeCount);
     console.log(typeof req.body.likeCount);
     let likeCount = req.body.likeCount;
@@ -506,7 +506,7 @@ app.post('/updatelikes', function(req, res){
 
 });
 
-app.post('/updateQuotes', function(req, res){
+app.post('/server/updateQuotes', function(req, res){
     console.log(req.body.quoteCount);
     console.log(req.body.microblogID);
     console.log(req.body.currUser);

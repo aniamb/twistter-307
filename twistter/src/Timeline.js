@@ -25,21 +25,14 @@ class Timeline extends Component{
 
     componentDidMount(){
         var currHandle = localStorage.getItem('currentUser');
-        axios.get('http://localhost:5000/getfollowing', {
-            params: {
-                currUser: currHandle
-            }
-        }).then((response) => {
+        let followParams = {currUser: currHandle};
+        axios.post('/server/getfollowing', followParams).then((response) => {
             // console.log(response.data.results); // pass the results into
             console.log(typeof response.data.results);
             console.log(response.data.results.length);
+            let params = {currUser: currHandle, followingList: response.data.results};
             if(response.data.results.length !== 0) {
-                axios.get('http://localhost:5000/getmicroblogs', {
-                    params: {
-                        currUser: currHandle,
-                        followingList: response.data.results
-                    }
-                }).then((response) => {
+                axios.post('/server/getmicroblogs', params).then((response) => {
                     console.log("Status is: " + response.status);
                     console.log(response.data.results);
                     this.setState({microblogs: response.data.results});
@@ -97,7 +90,7 @@ class Timeline extends Component{
         let status = document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeButton")[0].textContent;
         let intCountString = parseInt(likeCountString.charAt(likeCountString.length -1));
         if(status === "Like"){
-            axios.post('http://localhost:5000/updatelikes', {
+            axios.post('/server/updatelikes', {
                 currUser: currUser,
                 likeCount: intCountString + 1,
                 microblogID: uniqueKey,
@@ -110,7 +103,7 @@ class Timeline extends Component{
                 console.log("Failed to update like count");
             })
         }else{
-            axios.post('http://localhost:5000/updatelikes', {
+            axios.post('/server/updatelikes', {
                 currUser: currUser,
                 likeCount: intCountString - 1,
                 microblogID: uniqueKey,
@@ -133,7 +126,7 @@ class Timeline extends Component{
         let status = document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("quoteButton")[0].textContent;
         let intCountString = parseInt(quoteString.charAt(quoteString.length -1));
         if(status === "Quote"){ // user wants to quote post
-            axios.post('http://localhost:5000/updateQuotes',{
+            axios.post('/server/updateQuotes',{
                 currUser: currUser,
                 quoteCount: intCountString +1,
                 microblogID: uniqueKey
