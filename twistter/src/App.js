@@ -1,6 +1,10 @@
 import React from 'react';
 import './App.css';
 import Search from './Search'
+
+import Profile from './Profile'
+import { Redirect, Link } from 'react-router-dom'
+
 import CreateAccount from './CreateAccount'
 import Timeline from './Timeline'
 import Login from './Login'
@@ -8,27 +12,71 @@ import EditProfile from './EditProfile'
 import UserProfile from './UserProfile'
 import {Switch, Route} from 'react-router-dom'
 import GenericProfile from "./GenericProfile";
+import axios from 'axios'
 import Followers from "./Followers";
 import Following from "./Following";
 
-function App() {
-    var showLink = false;
-    var noLink = false;
-    var loggedIn = localStorage.getItem("currentUser");
-    if(loggedIn){
-        console.log("here");
-        showLink = true;
-    }else{
-        console.log("here1")
-        noLink = true;
+class App extends React.Component{
+  constructor (props){
+    super(props);
+    this.state = {
+      userHandle:null
     }
- 
+  }
+
+componentDidMount(){
+  var currHandle = localStorage.getItem('currentUser');
+  axios.get('http://localhost:5000/userprofile', {
+      params: {
+        userHandle: currHandle
+      }
+    }).then((response) => {
+      console.log(currHandle);
+      if(currHandle!=null){
+        this.setState({userHandle: '@'+currHandle});
+      }else{
+        this.setState({userHandle: 'welcome'})
+      }
+    })
+    .catch((err) => {
+     console.log('error getting info');
+    })
+}
+handleTheme(event){
+  var checkeddd = document.getElementById("toggle").checked;
+  var currTheme="light";
+  console.log(checkeddd);
+  if(checkeddd==true){
+      document.documentElement.setAttribute('data-theme', 'dark');
+      //localStorage.setItem('theme', 'dark');
+      currTheme="dark";
+      console.log(currTheme);
+  }else if(checkeddd==false){
+      document.documentElement.setAttribute('data-theme', 'light');
+      //localStorage.setItem('theme', 'light');
+      currTheme="light";
+      console.log(currTheme);
+  }
+}
+render() {
   return (
     <div className="App">
       <div className="App-header">
-      {showLink && <a id="homeLink" href="/timeline"><h1 >Twistter</h1></a>}
-      {noLink && <h1>Twistter</h1>}
-       {/* <h1>Twistter</h1> */}
+
+
+          <div style={{ textDecoration: "none", fontSize: "70px" }}>
+            <Link to="/timeline"> Twistter</Link>
+              <div className="topright"> 
+              {this.state.userHandle} 
+              </div>
+              <div className="topright2">
+              Dark Mode: <input type="checkbox" id="toggle" className="checkbox" onChange={this.handleTheme.bind(this)}/>
+              <label htmlFor="toggle" className="switch" ></label> 
+              </div>
+            </div>
+
+      
+
       </div>
         <Switch>
             <Route path="/createaccount" component={CreateAccount}/>
@@ -68,4 +116,5 @@ function App() {
   );
 }
 
-export default App;
+}
+export default App

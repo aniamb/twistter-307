@@ -6,13 +6,15 @@ const app = express();
 const port = 5000;
 const dbConnectionString = 'mongodb+srv://user:lebronjames@twistter-4gumf.mongodb.net/test?retryWrites=true&w=majority';
 const mongoose = require('mongoose');
+var ObjectId = require('mongodb').ObjectID;
 
 let User = require('./models/user');
+let Microblog = require('./models/microblog');
 app.use(cors());
 const bcrypt = require('bcrypt');
 
 
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.urlencoded());
 
@@ -42,7 +44,7 @@ app.post('/register', function(req, res) {
               console.log('email or handle already in use');
               res.status(400).send('Email or handle already in use');
               res.end();
-            }else{  
+            }else{
               //user unique ->add to db
               User.create({
               firstname : req.body.firstname,
@@ -54,9 +56,9 @@ app.post('/register', function(req, res) {
               })
                res.status(200).send(req.body.handle);
                res.end();
-            } 
+            }
           });
-     
+
         });
   });
 
@@ -102,33 +104,33 @@ app.post('/editprofile', function(req, res) {
    // res.end();
 });
 
-//LOGIN PAGE CODE 
+//LOGIN PAGE CODE
 app.post('/login', function(req, res) {
-  console.log('overall body ' + req.body); 
-  User.findOne({ 
-  'email': req.body.email }, function(err, user) {
-    if (user) {
-      //email exists
-      if(bcrypt.compareSync(req.body.password, user.password)) {
-        // Passwords match
-        console.log('user found successfully');
-        res.status(200).send(user.handle);
-        res.end();
-        //res.redirect('http://localhost:3000/timeline');
-       } else {
-        // Passwords don't match
-        console.log('user not in base123');
-        res.status(400).send('Email or Password does not exist');
-        res.end();
-      } 
-    } else {
-        // user does not exist
-        console.log('user not in base');
-        res.status(400).send('Email or Password does not exist');
-        res.end();
-        //res.redirect('http://localhost:3000/login');
-    }
- })
+    console.log('overall body ' + req.body);
+    User.findOne({
+        'email': req.body.email }, function(err, user) {
+        if (user) {
+            //email exists
+            if(bcrypt.compareSync(req.body.password, user.password)) {
+                // Passwords match
+                console.log('user found successfully');
+                res.status(200).send(user.handle);
+                res.end();
+                //res.redirect('http://localhost:3000/timeline');
+            } else {
+                // Passwords don't match
+                console.log('user not in base123');
+                res.status(400).send('Email or Password does not exist');
+                res.end();
+            }
+        } else {
+            // user does not exist
+            console.log('user not in base');
+            res.status(400).send('Email or Password does not exist');
+            res.end();
+            //res.redirect('http://localhost:3000/login');
+        }
+    })
 });
 
 app.post('/searchserver', function(req, res){
@@ -157,27 +159,46 @@ app.post('/searchserver', function(req, res){
 });
 
 app.post('/addmicroblogs', function(req, res){
+    console.log("Request body is")
     console.log(req.body); // outputs {searchTerm: (whatever the parameter was}
+    console.log("********************")
+    console.log(req.body.username)
     console.log(req.body.postBody);
     var post = req.body.postBody;
     console.log(post.length);
-    if(post.length <= 280){
-        // valid post
-        res.status(200);
-        // store in database
-    }else{
-        res.status(400);
-    }
+    var microblog = new Microblog(req.body);
+    // microblog.save()
+
+    microblog.save(function (err) {
+      if (err) {
+        console.log("ERRR");
+        console.log(err);
+      }
+	// Next, find the User you want to leave the review for by ObjectId - mySpecifiedUserId and push the review ObjectId only
+	// with the option to return the review data
+
+      User.findOneAndUpdate(
+		      {handle: req.body.username},
+		     {"$push":{"microblog":microblog._id}},
+		      {upsert:true, select:'microblog'}
+	// populate and return the review data
+      ).populate('microblog').exec(function(err, data) {
+                console.log(data);
+        });
+
+
+      });
+    res.status(200).send();
     res.end();
 });
 
 //LOADING INFO INTO USER PROFILE CODE
 app.get('/userprofile', function(req, res){
   console.log(req.query.userHandle);
-  User.findOne({ 
+  User.findOne({
     'handle': req.query.userHandle}, function(err, user) {
       if (user) {
-        // user exists 
+        // user exists
         var userInfo = {
           firstname: user.firstname,
           lastname: user.lastname,
@@ -185,7 +206,7 @@ app.get('/userprofile', function(req, res){
         }
         res.status(200).send(userInfo);
         res.end();
-  
+
       } else {
         // user does not exist
         console.log('user not in base');
@@ -199,18 +220,18 @@ app.get('/userprofile', function(req, res){
 app.get('/followers', function(req, res){
     console.log(req.query.userHandle);
     var userfollowers = [];
-    User.findOne({ 
+    User.findOne({
       'handle': req.query.userHandle}, function(err, user) {
         if (user) {
-          // user exists 
+          // user exists
           for (var i = 0; i < user.followers.length; i++) {
       //  userList.push(users[i].handle.repeat(1));
-            userfollowers.push(user.followers[i]);      
+            userfollowers.push(user.followers[i]);
           }
           console.log(userfollowers);
           res.status(200).json({results: userfollowers});
           res.end();
-    
+
         } else {
           // user does not exist
           console.log('error getting followers');
@@ -224,18 +245,18 @@ app.get('/followers', function(req, res){
 app.get('/following', function(req, res){
     console.log(req.query.userHandle);
     var userfollowing = [];
-    User.findOne({ 
+    User.findOne({
       'handle': req.query.userHandle}, function(err, user) {
         if (user) {
-          // user exists 
+          // user exists
           for (var i = 0; i < user.following.length; i++) {
       //  userList.push(users[i].handle.repeat(1));
-            userfollowing.push(user.following[i]);      
+            userfollowing.push(user.following[i]);
           }
           console.log(userfollowing);
           res.status(200).json({results: userfollowing});
           res.end();
-    
+
         } else {
           // user does not exist
           console.log('error getting following');
@@ -332,7 +353,7 @@ app.get('/followLogic', function(req, res){
                             }else{
                                 console.log("Successfully updated genericUser's followers list when unfollowing");
                                 res.status(200).send();
-                                res.end(); // WHY THE FUCK DOES THIS NOT WORK
+                                res.end();
                             }
                         }
                     )
@@ -342,3 +363,171 @@ app.get('/followLogic', function(req, res){
     }
 });
 
+// return list of users currUser follows
+app.get('/getfollowing', function(req, res){
+    console.log("made it into get following");
+    User.findOne({
+        'handle': req.query.currUser}, function(err, user) {
+        if (user) {
+            // user exists
+            let following = user.following;
+            res.status(200).json({results: following});
+            res.end();
+        } else {
+            // user does not exist
+            console.log('user not in base');
+            res.status(400).send('Email or Password does not exist');
+            res.end();
+        }
+    })
+});
+
+// get microblogs based on list of users currUser follows
+app.get('/getmicroblogs', function(req, res){
+    // hardcoded for now. Search database in step 2
+    console.log(req.query.followingList);
+    console.log(req.query.currUser);
+    let followersList = req.query.followingList;
+    let blogList = [];
+    let promises = [];
+    let promisesInternal = [];
+    for(let i = 0; i < followersList.length; i++){
+        let username = followersList[i];
+        let promise =
+            User.findOne({
+                'handle': username
+            }, function (err, user) {
+                if (user) {
+                    var userInfo = user.microblog;
+                    console.log("USER info: " + userInfo);
+                    if(userInfo.length > 0) {
+                        for (let i = 0; i < userInfo.length; i++) {
+                            console.log('User Info: ' + userInfo[i]);
+                            console.log(typeof (userInfo[i]));
+                            var id = JSON.stringify(userInfo[i]);
+                            let internalPromise =
+                                Microblog.findById({'_id': mongoose.Types.ObjectId(userInfo[i])}, function (err, microblog) {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                    if (microblog) {
+                                        blogList.splice(blogList.length - 1, 0, microblog);
+                                        // blogList.push(microblog);
+                                    }
+                                }).exec();
+                            promisesInternal.push(internalPromise);
+                        }
+                    }
+                } else {
+                    console.log("user not in db");
+                }
+            }).exec();
+
+        promises.push(promise);
+        console.log("testing");
+    }
+    Promise.all(promises)
+        .then((data) => {
+            Promise.all(promisesInternal)
+                .then((data) =>{
+                    console.log("this is the appearence in then: " + blogList);
+                    res.status(200).json({results: blogList})
+                    res.end();
+                }).catch((error) => {
+                res.status(400).send();
+                res.end();
+            })
+
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+
+});
+
+app.post('/updatelikes', function(req, res){
+    console.log(req.body.likeCount);
+    console.log(typeof req.body.likeCount);
+    let likeCount = req.body.likeCount;
+    let currUser = req.body.currUser;
+    let id = req.body.microblogID;
+
+
+    Microblog.findOneAndUpdate(
+        {_id: mongoose.Types.ObjectId(id)},
+        {$set:{"likes":likeCount}},
+        function(err, data){
+            if(err){
+                console.log("Error in finding microblog when updating likecount");
+                console.log("Error is: " + err);
+                console.log("ID is: " + id);
+            }else{
+                if(req.body.status === "like"){
+                    Microblog.findOneAndUpdate(
+                        {_id: mongoose.Types.ObjectId(id)},
+                        {"$push":{"likedUsers":currUser}},
+                        {upsert:true, select:'likedUsers'}
+                    ).populate('likedUsers').exec(function(err, data){
+                        res.status(200).send();
+                        res.end();
+                    });
+                }else{
+                    Microblog.findOneAndUpdate(
+                        {_id: mongoose.Types.ObjectId(id)},
+                        {$pull:{"likedUsers":currUser}},
+                        {upsert:true, select:'likedUsers'}
+                    ).populate('likedUsers').exec(function(err, data){
+                        res.status(200).send();
+                        res.end();
+                    });
+                }
+            }
+        }
+    );
+
+});
+
+app.post('/updateQuotes', function(req, res){
+    console.log(req.body.quoteCount);
+    console.log(req.body.microblogID);
+    console.log(req.body.currUser);
+
+    let id = req.body.microblogID;
+    let quoteCount = req.body.quoteCount;
+    let currUser = req.body.currUser;
+
+    Microblog.findOneAndUpdate(
+        {_id: mongoose.Types.ObjectId(id)},
+        {$set:{"quoteCount":quoteCount}},
+        function(err, data){
+            if(err){
+                console.log("Error in finding microblog when updating quotec ount");
+                console.log("Error is: " + err);
+                console.log("ID is: " + id);
+            }else{
+                Microblog.findOneAndUpdate(
+                    {_id: mongoose.Types.ObjectId(id)},
+                    {"$push":{"quotedUsers":currUser}},
+                    {upsert:true, select:'quotedUsers'}
+                ).populate('quotedUsers').exec(function(err, data){
+                    User.findOneAndUpdate(
+                        {handle: currUser},
+                        {"$push":{"microblog":id}},
+                        {upsert:true, select:'microblog'}
+                        // populate and return the review data
+                    ).populate('microblog').exec(function(err, data) {
+                        res.status(200).send();
+                        res.end();
+                    });
+
+                });
+            }
+        }
+    );
+
+    // update quote count
+    // add user to quotedUsers array
+    // add microblog id to user's id
+    res.status(200).send();
+    res.end();
+})

@@ -1,16 +1,48 @@
+
+:root {
+  --background-color: rgb(64, 163, 158);
+  --font-color: white;
+  --toggle-bg: #eee;
+  --toggle-circle: white;
+  --toggle-other: orange;
+
+}
+[data-theme="light"] {
+  --background-color: rgb(64, 163, 158);
+  --font-color: white;
+  --toggle-bg: #eee;
+  --toggle-circle: white;
+  --toggle-other: orange;
+}
+
+[data-theme="dark"] {
+  --background-color: black;
+  --font-color: white;
+  --toggle-bg: purple;
+  --toggle-bg: black;
+  --toggle-other: #7983ff;
+}
+
+
 .App {
   text-align: left;
 }
 
 .App-header {
-  background-color: rgb(64, 163, 158);
+  background-color: var(--background-color);
   min-height: 15%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
+  color: var(--font-color);
+ 
+}
+
+.App-header a {
   color: white;
+  text-decoration: none;
 }
 .navLinks{
 list-style:none;
@@ -73,8 +105,16 @@ margin-bottom: 2px;
   }
 
 .App-link {
-color: white;
+color: var(--font-color);
 }
+
+.topright{
+  position:absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 18px;
+}
+
 
 #homeLink {
   cursor: pointer;
@@ -88,6 +128,13 @@ a:hover{
 
 
 
+.topright2{
+  position:absolute;
+  top:60px;
+  right:8px;
+  font-size: 16px;
+}
+
 
 
 @keyframes App-logo-spin {
@@ -98,3 +145,35 @@ a:hover{
     transform: rotate(360deg);
   }
 }
+
+.switch { 
+  position : relative ;
+  display : inline-block;
+  width : 40px;
+  height : 20px;
+  background-color: var(--toggle-bg);
+  border-radius: 20px;
+}
+
+.switch::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: var(--toggle-circle);
+  top: 1px; 
+  left: 1px;
+  transition: all 0.3s;
+}
+
+.checkbox:checked + .switch::after {
+  left : 20px; 
+}
+.checkbox:checked + .switch {
+  background-color: var(--toggle-other);
+}
+
+.checkbox { 
+  display : none;
+} 
