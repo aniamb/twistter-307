@@ -42,25 +42,15 @@ class UserProfile extends Component {
                 this.setState({emptyList: false})
             }else {
                 console.log("u got mail");
-                
-                axios.get('http://localhost:5000/userposts', {
-                    params: {
-                        userHandle: currHandle
-                      }
-                }).then((response) => {
+                let localParams = {userHandle: currHandle}
+                axios.post('/server/userposts', localParams).then((response) => {
                     var first = response.data.firstname;
                     var last = response.data.lastname;
                   //  console.log(response.data.results);
                     this.setState({userPosts: response.data.results});
                     this.setState({emptyList: true});
-
-
                 })
             }
-
-
-
-
             })
           .catch((err) => {
            console.log('error getting info');

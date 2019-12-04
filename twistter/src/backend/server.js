@@ -239,12 +239,12 @@ app.post('/server/userprofile', function(req, res){
     })
 });
 
-app.get('/userposts', function(req, res){
-  console.log(req.query.userHandle);
+app.post('/server/userposts', function(req, res){
+  console.log(req.body.userHandle);
   let promisesInternal = [];
   let blogList = [];
   User.findOne({ 
-    'handle': req.query.userHandle}, function(err, user) {
+    'handle': req.body.userHandle}, function(err, user) {
       console.log("hello");
       if (user) {
         // user exists 
