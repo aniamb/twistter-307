@@ -231,6 +231,7 @@ class Timeline extends Component{
                 <div className="row-timeline">
                   <div className="sidebar" >
                         <div className="links">
+                          <header>
                             <ul className="navLinks">
                                 <li><NavLink to="/timeline">Twistter</NavLink></li>
                                 <li><NavLink to="/userprofile">My Profile</NavLink></li>
@@ -251,6 +252,7 @@ class Timeline extends Component{
                                     }}/>}
                                 </li>
                             </ul>
+                            </header>
                         </div>
                     </div>
                     <div className="microOrder">
@@ -280,8 +282,10 @@ class Timeline extends Component{
                                 </form>
                             </div>
                             <form id="blogID" onSubmit={this.handleBlogPosting.bind(this)}>
-                                Create a new microblog: <br/>
-                                <input type="text" placeholder="Text goes here.." maxLength="280" name="microblog" onChange={this.handlePostBody.bind(this)}></input>
+                                <br/>
+                                <label for="microblog">Create a new microblog: <br></br>
+                                  <input type="text" placeholder="Text goes here.." maxLength="280" name="microblog" onChange={this.handlePostBody.bind(this)}></input>
+                                </label>
                                 <br/>
                                 <input type="submit" value = "Post!"/>
                                 {this.state.errorMessage ? <p> Post must be less than 280 characters: </p> : '' }
