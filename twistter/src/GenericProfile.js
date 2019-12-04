@@ -22,7 +22,9 @@ class GenericProfile extends Component {
             firstName: "",
             userPosts: [],
             bio: "",
-            emptyList: false
+            emptyList: false,
+            allTopics: [],
+            emptyTopics: false
         }
     }
 
@@ -42,8 +44,10 @@ class GenericProfile extends Component {
             this.setState({userHandle: '@'+this.props.location.state.username});
             this.setState({bio:response.data.bio});
             this.checkFollowingStatus(this.props.location.state.username);
-            //get bio
-
+            if(response.data.numTopics == true){
+                this.setState({emptyTopics: true});
+                this.setState({allTopics: response.data.userTopics});
+            }
         if (response.data.numPosts == false) {
                 console.log("User has no posts");
                 this.setState({emptyList: false})
@@ -228,6 +232,22 @@ class GenericProfile extends Component {
     }
 
     render(){
+        let topicsToPost = [];
+        let topicHolder = this.state.allTopics;
+        console.log("NUM TOPICS " + this.state.emptyTopics)
+        console.log(this.state.allTopics);
+        if(this.state.emptyTopics){
+            for(var i = 0; i < topicHolder.length; i++){
+                topicsToPost.push(
+                    <span id = {topicHolder[i]} key = {topicHolder[i]} className = "topics">{topicHolder[i]}</span>
+                )
+            }
+        } else {
+            topicsToPost.push(
+                <span id = {topicHolder[i]} key = {topicHolder[i]} className = "topics">No Topics</span>
+            )
+        }
+
         let posts = [];
     let microblogHolder = this.state.userPosts;
     let currHandle = localStorage.getItem('currentUser');
@@ -299,10 +319,7 @@ class GenericProfile extends Component {
                                 }}/>}
                             <p>My Topics</p>
                             <p>
-                                <span className = "topics">CS</span>
-                                <span className = "topics">Math</span>
-                                <span className = "topics">English</span>
-                                <span className = "topics">History</span>
+                                {topicsToPost}
                             </p>
                         </div>
                         <div className='double-column'>
