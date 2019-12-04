@@ -185,7 +185,7 @@ class Timeline extends Component{
         if(this.state.emptyList){
             posts.push(
                 <div key={"empty list"} className="microblogs">
-                    You are currently following no one. To see posts please search for users and follow them.
+                    You aren't following any users! To see posts in your timeline, search some users to follow. 
                 </div>
             )
         }else {
@@ -226,14 +226,14 @@ class Timeline extends Component{
                         <div className="links">
                           <header>
                             <ul className="navLinks">
-                                <li><NavLink to="/timeline">Twistter</NavLink></li>
+
                                 <li><NavLink to="/userprofile">My Profile</NavLink></li>
                                 <li>
                                     <form onSubmit={this.handleClick.bind(this)}>
                                         {/*Redirect to search in backend*/}
                                         <label htmlFor="searchparam">Search users:
                                         <br></br>
-                                        <input type="text" placeholder="Search.." name="searchparam" onChange={this.handleSearch.bind(this)}></input>
+                                        <input type="text"  name="searchparam" onChange={this.handleSearch.bind(this)}></input>
                                         </label>
                                         <br/>
                                         <input type="submit" value="Click to Search"/>
@@ -250,11 +250,11 @@ class Timeline extends Component{
                     </div>
                     <div className="microOrder">
                         <div className="microblogs">
-                            <div className="topics">
+                            <div className="topics-enter">
                                 <form >
-                                    Create a new microblog: <br/>
+                                    Tag your post with topics: <br/>
                                     {this.state.topics.map(topic => (
-                                        <div className="tag-topic" key={topic}>
+                                        <div className="tag-topic-list" key={topic}>
                                             {topic}
 
                                             <button
@@ -277,7 +277,7 @@ class Timeline extends Component{
                             <form id="blogID" onSubmit={this.handleBlogPosting.bind(this)}>
                                 <br/>
                                 <label for="microblog">Create a new microblog: <br></br>
-                                  <input type="text" placeholder="Text goes here.." maxLength="280" name="microblog" onChange={this.handlePostBody.bind(this)}></input>
+                                  <textarea rows="4" cols="20" placeholder="Text goes here.." maxLength="280" name="microblog" onChange={this.handlePostBody.bind(this)}></textarea>
                                 </label>
                                 <br/>
                                 <input type="submit" value = "Post!"/>

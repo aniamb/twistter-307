@@ -56,6 +56,11 @@
     border-style: solid;
     max-height: fit-content;
 }
+
+.column button {
+  width: 50%;
+  margin: 0 auto;
+}
 .double-column {
     display: flex;
     flex-direction: column;
