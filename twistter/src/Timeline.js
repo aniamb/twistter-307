@@ -193,7 +193,7 @@ class Timeline extends Component{
         return (
             <div className="Timeline">
                 <div className="row">
-                    <div className="sidebar" >
+                  <div className="sidebar" >
                         <div className="links">
                             <ul className="navLinks">
                                 <li><NavLink to="/timeline">Twistter</NavLink></li>
@@ -201,8 +201,10 @@ class Timeline extends Component{
                                 <li>
                                     <form onSubmit={this.handleClick.bind(this)}>
                                         {/*Redirect to search in backend*/}
-                                        Search users: <br/>
+                                        <label for="searchparam">Search users: 
+                                        <br></br>
                                         <input type="text" placeholder="Search.." name="searchparam" onChange={this.handleSearch.bind(this)}></input>
+                                        </label>
                                         <br/>
                                         <input type="submit" value="Click to Search"/>
                                     </form>

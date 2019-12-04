@@ -150,8 +150,9 @@ class GenericProfile extends Component {
                     <div className="row">
                         {/* User Profile */}
                         <div className="column">
-                            <button className = "redirect"><img id="settings" onClick = {this.timelineRedirect}/></button>
-                            {this.state.timelineRedirect ? <Redirect to='/timeline'/> : null}
+                            {/* <button className = "redirect"><img id="settings" onClick = {this.timelineRedirect}/></button> */}
+                            {/* <button className = "redirect" id="settings" onClick = {this.timelineRedirect}>Timeline</button>
+                            {this.state.timelineRedirect ? <Redirect to='/timeline'/> : null} */}
                             <div className="circle"/>
 
                             <br/>
@@ -172,10 +173,10 @@ class GenericProfile extends Component {
                                 }}/>}
                             <p>My Topics</p>
                             <p>
-                                <span id = "topics">CS</span>
-                                <span id = "topics">Math</span>
-                                <span id = "topics">English</span>
-                                <span id = "topics">History</span>
+                                <span className = "topics">CS</span>
+                                <span className = "topics">Math</span>
+                                <span className = "topics">English</span>
+                                <span className = "topics">History</span>
                             </p>
                         </div>
                         <div className='double-column'>

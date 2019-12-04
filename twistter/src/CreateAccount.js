@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-import {Switch, Route, NavLink,Redirect} from 'react-router-dom'
-import Login from './Login'
-import EditProfile from './EditProfile'
+import { NavLink,Redirect} from 'react-router-dom'
 import './CreateAccount.css';
 import axios from 'axios'
-import { thisExpression } from '@babel/types';
-import { timingSafeEqual } from 'crypto';
 
 class CreateAccount extends Component {
     constructor(props) {
@@ -77,24 +73,35 @@ class CreateAccount extends Component {
             <div className="inputBox">
                 <h3> Create Account </h3>
                 <form onSubmit={this.handleSubmit.bind(this)}>
-                    First Name: <br/>
-                    <input type="text" name="firstname"  value={this.state.firstname}
-                    onChange={this.handleFirstNameChange.bind(this)} required/><br></br>
-                    Last Name: <br/>
-                    <input type="text" name="lastname" value={this.state.lastname}
-                    onChange={this.handleLastNameChange.bind(this)} required/><br></br>
-                    Email:<br/>
-                    <input type="email" name="email" value={this.state.email}
-                    onChange={this.handleEmailChange.bind(this)} required/><br></br>
-                    Password: <br/>
-                    <input type="password" name="password" value={this.state.password}
-                    onChange={this.handlePasswordChange.bind(this)} required/><br></br>
-                    Confirm Password: <br/>
-                    <input type="password" name="passwordConfirm" value={this.state.passwordConfirm}
-                    onChange={this.handlePasswordConfirmChange.bind(this)} required/><br></br>
-                    @ <br/>
-                    <input type="text" name="handle" value={this.state.handle}
-                    onChange={this.handleHandleChange.bind(this)} required/>
+                    <label for="firstname">First Name: 
+                        <br></br>
+                        <input type="text" name="firstname"  value={this.state.firstname}
+                            onChange={this.handleFirstNameChange.bind(this)} required/><br></br>
+                    </label>
+                    <label for="lastname">Last Name: 
+                        <br></br>
+                        <input type="text" name="lastname" value={this.state.lastname}
+                            onChange={this.handleLastNameChange.bind(this)} required/><br></br>
+                    </label>
+                    <label for="email">Email: 
+                        <br></br>
+                        <input type="email" name="email" value={this.state.email}
+                            onChange={this.handleEmailChange.bind(this)} required/><br></br>
+                    </label>
+                    <label for="password">Password: 
+                        <br></br>
+                        <input type="password" name="password" value={this.state.password}
+                            onChange={this.handlePasswordChange.bind(this)} required/><br></br>
+                    </label>
+                    <label for="passwordConfirm">Confirm Password: 
+                        <br></br>
+                        <input type="password" name="passwordConfirm" value={this.state.passwordConfirm}
+                            onChange={this.handlePasswordConfirmChange.bind(this)} required/><br></br>
+                    </label>
+                    <label for="handle">@ 
+                        <input type="text" name="handle" value={this.state.handle}
+                            onChange={this.handleHandleChange.bind(this)} required/>
+                    </label>
                     <input type="submit" value="Submit"/><br></br>
                 </form>
                 <br/>

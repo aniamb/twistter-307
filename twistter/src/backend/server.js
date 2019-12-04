@@ -65,6 +65,7 @@ app.post('/register', function(req, res) {
 app.post('/delete', function(req, res) {
   console.log(req.body.currUser);
   User.find({'handle':req.body.currUser}).remove().exec();
+  res.status(200).send('DELETION WORKED');
   // User.findOne({
   //   'handle': req.body.currUser }, function(err, user) {
   //     if(user){
@@ -200,7 +201,8 @@ app.get('/userprofile', function(req, res){
         // user exists
         var userInfo = {
           firstname: user.firstname,
-          lastname: user.lastname
+          lastname: user.lastname,
+          bio: user.bio
         }
         res.status(200).send(userInfo);
         res.end();

@@ -1,15 +1,16 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Search from './Search'
+
 import Profile from './Profile'
 import { Redirect, Link } from 'react-router-dom'
+
 import CreateAccount from './CreateAccount'
 import Timeline from './Timeline'
 import Login from './Login'
 import EditProfile from './EditProfile'
 import UserProfile from './UserProfile'
-import {Switch, NavLink, Route} from 'react-router-dom'
+import {Switch, Route} from 'react-router-dom'
 import GenericProfile from "./GenericProfile";
 import axios from 'axios'
 import Followers from "./Followers";

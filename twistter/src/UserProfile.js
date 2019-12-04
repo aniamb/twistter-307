@@ -17,7 +17,8 @@ class UserProfile extends Component {
             followerData: [],
             followingData: [],
             followerRedirect: false,
-            followingRedirect: false
+            followingRedirect: false,
+            bio: ""
         }
     }
 
@@ -34,6 +35,7 @@ class UserProfile extends Component {
             console.log(displayName);
             this.setState({userDisplayName: displayName});
             this.setState({userHandle: '@'+currHandle});
+            this.setState({bio: response.data.bio});
           })
           .catch((err) => {
            console.log('error getting info');
@@ -92,14 +94,14 @@ class UserProfile extends Component {
             <div className="row">
                 {/* User Profile */}
                 <div className="column">
-                    
-                    <button className = "redirect">Edit:<img id="settings" onClick = {this.editProfileRedirect}/></button>
+                    {/* <button className = "redirect"><img id="settings" onClick = {this.editProfileRedirect}/></button> */}
+                    <button className = "redirect" id="settings" onClick = {this.editProfileRedirect}>Edit Profile</button>
                     {this.state.editRedirect ? <Redirect to='/editprofile'/> : null}
                         <div className="circle"/>
                         <br/>
                         <h3>{this.state.userDisplayName}</h3>
                         <h6>{this.state.userHandle}</h6>
-                        <p>Team 1 Squad</p>
+                        <p>{this.state.bio}</p>
                         <hr/>
                         <button onClick = {this.printFollowers}>Followers</button>
                         {this.state.followerRedirect && <Redirect to={{
@@ -113,10 +115,10 @@ class UserProfile extends Component {
                                 }}/>}
                         <p>My Topics</p>
                             <p>
-                                <span id = "topics">CS</span>
-                                <span id = "topics">Math</span>
-                                <span id = "topics">English</span>
-                                <span id = "topics">History</span>
+                                <span className = "topics">CS</span>
+                                <span className = "topics">Math</span>
+                                <span className = "topics">English</span>
+                                <span className = "topics">History</span>
                             </p>
                 </div>
                 <div className='double-column'>
