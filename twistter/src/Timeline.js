@@ -257,11 +257,11 @@ class Timeline extends Component{
                     </div>
                     <div className="microOrder">
                         <div className="microblogs">
-                            <div className="topics">
+                            <div className="topics-enter">
                                 <form >
-                                    Create a new microblog: <br/>
+                                    Tag your post with topics: <br/>
                                     {this.state.topics.map(topic => (
-                                        <div className="tag-topic" key={topic}>
+                                        <div className="tag-topic-list" key={topic}>
                                             {topic}
 
                                             <button
