@@ -1,6 +1,6 @@
 
 :root {
-  --background-color: rgb(64, 163, 158);
+  --background-color: rgb(13, 92, 115);
   --font-color: white;
   --toggle-bg: #eee;
   --toggle-circle: white;
@@ -8,7 +8,7 @@
 
 }
 [data-theme="light"] {
-  --background-color: rgb(64, 163, 158);
+  --background-color: rgb(13, 92, 115);
   --font-color: white;
   --toggle-bg: #eee;
   --toggle-circle: white;
@@ -104,8 +104,6 @@ margin-bottom: 2px;
        height: 40px;
   }
 
-
-
 .App-link {
 color: var(--font-color);
 }
@@ -115,14 +113,30 @@ color: var(--font-color);
   top: 10px;
   right: 10px;
   font-size: 18px;
+  font-style: bold;
 }
+
+
+#homeLink {
+  cursor: pointer;
+  text-decoration: none;
+  color: white;
+}
+
+a:hover{
+  text-decoration-style: solid;
+}
+
+
 
 .topright2{
   position:absolute;
   top:60px;
   right:8px;
   font-size: 16px;
+  font-style: bold;
 }
+
 
 
 @keyframes App-logo-spin {

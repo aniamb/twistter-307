@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
 import './Search.css'
-import { Route, NavLink, Redirect, Link } from 'react-router-dom'
-import axios from 'axios'
+import { NavLink, Redirect} from 'react-router-dom'
 // import Form from 'react-bootstrap/Form'
 //import FormControl from 'react-bootstrap/FormControl'
 
@@ -40,7 +39,7 @@ class Search extends Component{
 
             <div className="Search">
               <h1> Search Results: </h1>
-                <div className="row">
+                <div className="row-timeline">
                   <div className="sidebar" >
                     <div className="links">
                         <ul className="navLinks">

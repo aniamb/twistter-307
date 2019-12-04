@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Switch, Route, NavLink, Redirect} from 'react-router-dom'
+import {NavLink, Redirect} from 'react-router-dom'
 import axios from 'axios'
 //import { Alert } from 'react-alert'
 
@@ -48,11 +48,17 @@ class Login extends Component {
                 <h3> Existing User Login! </h3>
                 {/* <form action="http://localhost:5000/login" method="POST"> */}
                 <form onSubmit = {this.handleSubmit.bind(this)}>
-                    Email:<br/> 
-                    <input type="email" name="email" value={this.state.email} onChange={this.handleEmail.bind(this)} required /><br></br>
-                    Password: <br/>
-                    <input type="password" name="password" value={this.state.password} onChange={this.handlePassword.bind(this)} required/><br></br>
-                    <input type="submit" value="Submit"/>
+                <label for="email">Email: 
+                    <br></br>
+                    <input type="email" name="email" value={this.state.email} 
+                        onChange={this.handleEmail.bind(this)} required /><br></br>
+                </label>
+                <label for="firstname">Password:
+                    <br></br> 
+                    <input type="password" name="password" value={this.state.password} 
+                        onChange={this.handlePassword.bind(this)} required/><br></br>
+                </label>
+                <input type="submit" value="Submit"/>
                 </form>
                 <br/>
                 <NavLink to="/createaccount">New User?</NavLink>

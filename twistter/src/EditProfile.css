@@ -1,12 +1,14 @@
 :root{
-    --text-color: rgb(64, 163, 158);
+/*     --text-color: rgb(64, 163, 158); */
+    --text-color: rgb(13, 92, 115);
     --border-color: orange;
     --toggle-bg: #eee;
     --toggle-circle: white;
     --toggle-other: orange;
 }
 [data-theme="light"] {
-    --text-color: rgb(64, 163, 158);
+/*     --text-color: rgb(64, 163, 158); */
+    --text-color: rgb(13, 92, 115);
     --border-color: orange;
     --toggle-bg: #eee;
     --toggle-circle: white;
@@ -25,6 +27,7 @@
 .EditProfile{
     max-width: 100%;
     height: 100%;
+/*     color: rgb(13, 92, 115); */
     color: var(--text-color);
 }
 .EditingBox{

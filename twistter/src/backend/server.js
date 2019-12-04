@@ -77,6 +77,7 @@ app.post('/server/register', function(req, res) {
 app.post('/server/delete', function(req, res) {
   console.log(req.body.currUser);
   User.find({'handle':req.body.currUser}).remove().exec();
+  res.status(200).send('DELETION WORKED');
   // User.findOne({
   //   'handle': req.body.currUser }, function(err, user) {
   //     if(user){
@@ -211,13 +212,23 @@ app.post('/server/userprofile', function(req, res){
     User.findOne({
     'handle': handle}, function(err, user) {
       if (user) {
-        // user exists
+
+        // user exists 
+        var numPosts = false;
+        if(user.microblog.length > 0){
+          numPosts = true;
+        }
+
         var userInfo = {
           firstname: user.firstname,
-          lastname: user.lastname
+          lastname: user.lastname,
+          bio: user.bio,
+          numPosts: numPosts
         }
         res.status(200).send(userInfo);
-        res.end();
+
+         res.end();
+  
 
       } else {
         // user does not exist
@@ -227,6 +238,76 @@ app.post('/server/userprofile', function(req, res){
       }
     })
 });
+
+app.get('/userposts', function(req, res){
+  console.log(req.query.userHandle);
+  let promisesInternal = [];
+  let blogList = [];
+  User.findOne({ 
+    'handle': req.query.userHandle}, function(err, user) {
+      console.log("hello");
+      if (user) {
+        // user exists 
+        
+        console.log("!!!!!!!!!!LENGTH: " + user.microblog.length);
+        for (let i = 0; i < user.microblog.length; i++) {
+        //  var id = JSON.stringify(userInfo[i]);
+            let internalPromise =
+              Microblog.findById({'_id': mongoose.Types.ObjectId(user.microblog[i])}, function (err, microblog) {
+                  if (err) {
+                      console.log(err);
+                  }
+                  if (microblog) {
+                    console.log("microblog: " + microblog);
+                      blogList.splice(blogList.length - 1, 0, microblog);
+                      // blogList.push(microblog);
+                  }
+                  console.log("bloglist: "+ blogList[i]);
+              }).exec();
+             promisesInternal.push(internalPromise);
+
+        }
+        // var userInfo = {
+        //   firstname: user.firstname,
+        //   lastname: user.lastname,
+        //   bio: user.bio,
+        //   microblog: blogList
+        // }
+        // res.status(200).send(userInfo);
+        // res.end();
+        Promise.all(promisesInternal)
+          .then((data) =>{
+              console.log("entered")
+              console.log("this is the appearence in then: " + blogList);
+              //res.status(200).json({results: blogList})
+              //console.log(user.microblog);
+              res.status(200).json({results: blogList});
+              res.end();
+          }).catch((error) => {
+            res.status(400).send();
+            res.end();
+        })
+  
+      } else {
+        // user does not exist
+        console.log('user not in base');
+        res.status(400).send('Email or Password does not exist');
+        res.end();
+      }
+   })
+
+   
+
+
+
+
+
+
+})
+
+
+
+
 
 //GETTING FOLLWERS OF CURRENT USER
 app.post('/server/followers', function(req, res){
@@ -549,4 +630,22 @@ app.post('/server/updateQuotes', function(req, res){
     // add microblog id to user's id
     res.status(200).send();
     res.end();
+});
+
+app.post('/server/addtopics', function(req, res){
+    let currUser = req.body.username;
+    let topicArray = req.body.topics;
+    User.findOneAndUpdate(
+        {'handle': currUser},
+        {$addToSet: {topics: {$each: topicArray}}},
+        function(err,data){
+            if(err){
+                res.status(400).send();
+                res.end();
+            }else{
+                res.status(200).send();
+                res.end();
+            }
+        }
+    )
 })

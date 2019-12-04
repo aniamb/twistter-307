@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
+import Chips, { Chip } from 'react-chips'
+
 //import logo from './logo.svg';
 //import Search from './Search'
 import './App.css';
 import './Timeline.css';
+import './Topics.css';
 
 // import { Route, NavLink, Redirect, Link } from 'react-router-dom'
 import { NavLink, Redirect} from 'react-router-dom'
@@ -18,6 +21,8 @@ class Timeline extends Component{
             data:[], // list of strings that hyperlinks to profile
             navigate: false,
             errorMessage: false,
+            value:"",
+            topics:[],
             emptyList: false,
             microblogs: [] // list of microblogs to show
         }
@@ -73,10 +78,13 @@ class Timeline extends Component{
     handleBlogPosting(event){ // handles blog posting
         event.preventDefault(); // should actually stay in default no redirection happens
         var currHandle = localStorage.getItem('currentUser');
-        axios.post('/server/addmicroblogs', {username: currHandle, postBody: this.state.postBody, likes: 0, quoteCount: 0, likedUsers: [], quotedUsers: []}).then(response=>{
+        axios.post('/server/addmicroblogs', {username: currHandle, postBody: this.state.postBody, likes: 0, quoteCount: 0, likedUsers: [], quotedUsers: [], topics: this.state.topics}).then(response=>{
             console.log(response.data.results);
             this.setState({errorMessage: false});
             document.forms["blogID"].reset();
+            axios.post('/server/addtopics', {username: currHandle, topics: this.state.topics}).then(response=>{
+                console.log("Finished updating");
+            })
         }).catch((err)=>{
             this.setState({errorMessage: true});
             document.forms["blogID"].reset();
@@ -141,6 +149,34 @@ class Timeline extends Component{
 
     }
 
+    handleChange = (evt) => {
+      this.setState({
+    value: evt.target.value
+      });
+    };
+
+    handleKeyDown = (evt) => {
+
+        if (['Enter', 'Tab', ','].includes(evt.key)) {
+            evt.preventDefault();
+
+        var topic = this.state.value.trim();
+        if (topic) {
+            let tempTopics = this.state.topics;
+            tempTopics.push(topic);
+            this.setState({topics: tempTopics});
+            this.setState({value: ""});
+        }
+        console.log(this.state.topics);
+      }
+    };
+
+    handleDelete = (toBeRemoved) => {
+        let tempTopics = this.state.topics;
+        tempTopics.splice(tempTopics.indexOf(toBeRemoved),1);
+        this.setState({topics: tempTopics});
+    };
+
 
     render() {
         let posts = [];
@@ -185,17 +221,20 @@ class Timeline extends Component{
         }
         return (
             <div className="Timeline">
-                <div className="row">
-                    <div className="sidebar" >
+                <div className="row-timeline">
+                  <div className="sidebar" >
                         <div className="links">
+                          <header>
                             <ul className="navLinks">
                                 <li><NavLink to="/timeline">Twistter</NavLink></li>
                                 <li><NavLink to="/userprofile">My Profile</NavLink></li>
                                 <li>
                                     <form onSubmit={this.handleClick.bind(this)}>
                                         {/*Redirect to search in backend*/}
-                                        Search users: <br/>
+                                        <label htmlFor="searchparam">Search users:
+                                        <br></br>
                                         <input type="text" placeholder="Search.." name="searchparam" onChange={this.handleSearch.bind(this)}></input>
+                                        </label>
                                         <br/>
                                         <input type="submit" value="Click to Search"/>
                                     </form>
@@ -206,13 +245,40 @@ class Timeline extends Component{
                                     }}/>}
                                 </li>
                             </ul>
+                            </header>
                         </div>
                     </div>
                     <div className="microOrder">
                         <div className="microblogs">
+                            <div className="topics">
+                                <form >
+                                    Create a new microblog: <br/>
+                                    {this.state.topics.map(topic => (
+                                        <div className="tag-topic" key={topic}>
+                                            {topic}
+
+                                            <button
+                                                type="button"
+                                                className="button"
+                                                onClick={() =>  this.handleDelete(topic)}
+                                            >
+                                                &times;
+                                            </button>
+                                        </div>
+                                    ))}
+                                    <input
+                                        placeholder="Enter Topics:"
+                                        value={this.state.value}
+                                        onChange={this.handleChange}
+                                        onKeyDown={this.handleKeyDown}
+                                    />
+                                </form>
+                            </div>
                             <form id="blogID" onSubmit={this.handleBlogPosting.bind(this)}>
-                                Create a new microblog: <br/>
-                                <input type="text" placeholder="Text goes here.." maxLength="280" name="microblog" onChange={this.handlePostBody.bind(this)}></input>
+                                <br/>
+                                <label for="microblog">Create a new microblog: <br></br>
+                                  <input type="text" placeholder="Text goes here.." maxLength="280" name="microblog" onChange={this.handlePostBody.bind(this)}></input>
+                                </label>
                                 <br/>
                                 <input type="submit" value = "Post!"/>
                                 {this.state.errorMessage ? <p> Post must be less than 280 characters: </p> : '' }

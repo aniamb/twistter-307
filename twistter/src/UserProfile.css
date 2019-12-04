@@ -1,16 +1,21 @@
 :root {
-  --background-color: rgb(64, 163, 158);
+  --background-color: rgb(13, 92, 115);;
   --font-color: white;
   --column-color:rgb(243, 243, 243);
   --prof-color:rgb(33, 75, 73);
-  --bubbles-color:rgb(64, 163, 158);
+/*   --bubbles-color:rgb(64, 163, 158); */
+  --bubbles-color:rgb(13, 92, 115);
+  
+  
 }
 [data-theme="light"] {
-  --background-color: rgb(64, 163, 158);
+  --background-color: rgb(13, 92, 115);
   --font-color: white;
   --column-color:rgb(243, 243, 243);
   --prof-color:rgb(33, 75, 73);
-  --bubbles-color:rgb(64, 163, 158);
+/*   --bubbles-color:rgb(64, 163, 158); */
+  --bubbles-color:rgb(13, 92, 115);
+  
 }
 
 [data-theme="dark"] {
@@ -19,6 +24,7 @@
   --column-color: black;
   --prof-color:white;
   --bubbles-color:rgb(135, 108, 185);
+ 
 }
 
 
@@ -27,11 +33,15 @@
     height: 100%;
     color: var(--prof-color);
 }
-row {
+
+.row {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     width: 100%;
+    height: 100%;
+    border: none !important;
+    justify-content: flex-start; 
   }
 .column {
     text-align:center;
@@ -55,12 +65,14 @@ row {
   }
  
 .twist {
-    font-size: 20px;
+    font-size: 15px;
     margin-top: 10px;
-    height: 150px;
     width: 100%;
+    height: 100%;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     text-align: center;
+    word-wrap: break-word;
+    color: black;
   }
 .circle{
     width: 150px;
@@ -75,10 +87,11 @@ row {
     background-repeat:no-repeat;
     border: none;
     cursor:pointer;
-    overflow: hidden;
+    /* overflow: hidden; */
     outline:none;
     position: absolute;
     font-size: 12px;
+    color: var(--bubbles-color);
 }
 
 #settings{
@@ -86,10 +99,11 @@ row {
     height:20px;
     margin-left: 5px;
 }
- #topics{
+ .topics{
     border-radius: 15%;
     border-style: solid;
     margin-right: 3px;
+    font-weight: bold;
     color: var(--font-color);
     background-color: var(--bubbles-color);
     border-color:  var(--bubbles-color);
@@ -102,6 +116,16 @@ row {
   
     .double-column {
       flex: 2
+    }
+
+    .twist {
+      font-size: 15px;
+      margin-top: 10px;
+      height: 200px;
+      width: 100%;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      text-align: center;
+      word-wrap: break-word;
     }
   }
  

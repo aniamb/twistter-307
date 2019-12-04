@@ -17,7 +17,10 @@ class UserProfile extends Component {
             followerData: [],
             followingData: [],
             followerRedirect: false,
-            followingRedirect: false
+            followingRedirect: false,
+            userPosts: [],
+            bio: "",
+            emptyList: false
         }
     }
 
@@ -31,7 +34,34 @@ class UserProfile extends Component {
             console.log(displayName);
             this.setState({userDisplayName: displayName});
             this.setState({userHandle: '@'+currHandle});
-          })
+            this.setState({bio: response.data.bio});
+            console.log(response.data.numPosts);
+           
+            if (response.data.numPosts == false) {
+                console.log("User has no posts");
+                this.setState({emptyList: false})
+            }else {
+                console.log("u got mail");
+                
+                axios.get('http://localhost:5000/userposts', {
+                    params: {
+                        userHandle: currHandle
+                      }
+                }).then((response) => {
+                    var first = response.data.firstname;
+                    var last = response.data.lastname;
+                  //  console.log(response.data.results);
+                    this.setState({userPosts: response.data.results});
+                    this.setState({emptyList: true});
+
+
+                })
+            }
+
+
+
+
+            })
           .catch((err) => {
            console.log('error getting info');
           })
@@ -75,22 +105,60 @@ class UserProfile extends Component {
           })
     }
  render(){
-
+    let posts = [];
+    let microblogHolder = this.state.userPosts;
+    let currHandle = localStorage.getItem('currentUser');
+    if(!this.state.emptyList){
+        posts.push(
+            <div key={"empty list"} className="microblogs twist">
+                You haven't written any posts. Head over to timeline to write a blog!
+            </div>
+        )
+    }else {
+        for (let i = 0; i < microblogHolder.length; i++) {
+            let topicString = microblogHolder[i].topics.join(', ');
+            let likeStatus;
+            let quoteStatus;
+            if (microblogHolder[i].likedUsers.includes(currHandle)) {
+                likeStatus = "Unlike"; // user already liked the post
+            } else {
+                likeStatus = "Like";
+            }
+            if (microblogHolder[i].quotedUsers.includes(currHandle)) {
+                quoteStatus = "Quoted"; // user already quoted the post and can't unquote
+            } else {
+                quoteStatus = "Quote";
+            }
+            posts.push(
+                <div id={microblogHolder[i]._id} key={microblogHolder[i]._id} className="microblogs twist">
+                    <h2>@{microblogHolder[i].username}: {microblogHolder[i].postBody}</h2>
+                    <h3>Topics: {topicString}</h3> {/* Check if it still works if topics is a list */}
+                    <div className="postInfo">
+                        {/* <button onClick={() => this.handleLikes(microblogHolder[i]._id)}
+                                className="likeButton">{likeStatus}</button> */}
+                        <p className="likeCount">Likes: {microblogHolder[i].likes}</p>
+                        <p className="quoteCount">Quotes: {microblogHolder[i].quoteCount}</p>
+                        {/* <button onClick={() => this.handleQuotes(microblogHolder[i]._id)}
+                                className="quoteButton">{quoteStatus}</button> */}
+                    </div>
+                </div>
+            )
+        }
+    }
     return (
         <div className="UserProfile">
         <br/>
-         <div className="container">
             <div className="row">
                 {/* User Profile */}
                 <div className="column">
-                    
-                    <button className = "redirect">Edit:<img id="settings" onClick = {this.editProfileRedirect}/></button>
+                    {/* <button className = "redirect"><img id="settings" onClick = {this.editProfileRedirect}/></button> */}
+                    <button className = "redirect" id="settings" onClick = {this.editProfileRedirect}>Edit Profile</button>
                     {this.state.editRedirect ? <Redirect to='/editprofile'/> : null}
                         <div className="circle"/>
                         <br/>
                         <h3>{this.state.userDisplayName}</h3>
                         <h6>{this.state.userHandle}</h6>
-                        <p>Team 1 Squad</p>
+                        <p>{this.state.bio}</p>
                         <hr/>
                         <button onClick = {this.printFollowers}>Followers</button>
                         {this.state.followerRedirect && <Redirect to={{
@@ -104,14 +172,15 @@ class UserProfile extends Component {
                                 }}/>}
                         <p>My Topics</p>
                             <p>
-                                <span id = "topics">CS</span>
-                                <span id = "topics">Math</span>
-                                <span id = "topics">English</span>
-                                <span id = "topics">History</span>
+                                <span className = "topics">CS</span>
+                                <span className = "topics">Math</span>
+                                <span className = "topics">English</span>
+                                <span className = "topics">History</span>
                             </p>
                 </div>
                 <div className='double-column'>
-                    <div className='twist'>
+                    {posts}
+                    {/* <div className='twist'>
                         This is my first post
                     </div>
                     <div className='twist'>
@@ -125,11 +194,9 @@ class UserProfile extends Component {
                     </div>
                     <div className='twist'>
                         Fifth post
-                    </div>
+                    </div> */}
                 </div>
             </div>
-
-        </div>
 
     </div>
     )
