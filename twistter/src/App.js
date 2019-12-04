@@ -25,11 +25,8 @@ class App extends React.Component{
 
 componentDidMount(){
   var currHandle = localStorage.getItem('currentUser');
-  axios.get('http://localhost:5000/userprofile', {
-      params: {
-        userHandle: currHandle
-      }
-    }).then((response) => {
+  let params = {userHandle: currHandle}
+  axios.post('/server/userprofile', params).then((response) => {
       console.log(currHandle);
       if(currHandle!=null){
         this.setState({userHandle: '@'+currHandle});
