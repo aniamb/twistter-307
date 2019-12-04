@@ -1,4 +1,4 @@
-.tag-topic {
+.tag-topic-list {
   background-color: #d4d5d6;
   display: inline-block;
   font-size: 14px;
@@ -10,7 +10,7 @@
   margin: 0 0.3rem 0.3rem 0;
 }
 
-.tag-topic > .button {
+.tag-topic-list > .button {
   background-color: white;
   width: 22px;
   height: 22px;
