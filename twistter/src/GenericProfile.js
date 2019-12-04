@@ -50,12 +50,8 @@ class GenericProfile extends Component {
                 this.setState({emptyList: false})
             }else {
                 console.log("u got mail");
-                
-                axios.get('http://localhost:5000/userposts', {
-                    params: {
-                        userHandle: this.props.location.state.username
-                      }
-                }).then((response) => {
+                let params = {userHandle: this.props.location.state.username};
+                axios.post('/server/userposts', params).then((response) => {
                     var first = response.data.firstname;
                     var last = response.data.lastname;
                   //  console.log(response.data.results);
