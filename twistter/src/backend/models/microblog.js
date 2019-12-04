@@ -11,4 +11,6 @@ let Microblog = new mongoose.Schema({
 });
 
 var microblogModel = mongoose.model('Microblog', Microblog);
+
 module.exports = microblogModel;
+

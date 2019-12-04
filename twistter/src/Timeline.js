@@ -192,7 +192,7 @@ class Timeline extends Component{
         }
         return (
             <div className="Timeline">
-                <div className="row">
+                <div className="row-timeline">
                   <div className="sidebar" >
                         <div className="links">
                             <ul className="navLinks">

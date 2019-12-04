@@ -20,7 +20,9 @@ class GenericProfile extends Component {
             followerRedirect: false,
             followingRedirect: false,
             firstName: "",
-            bio:""
+            userPosts: [],
+            bio: "",
+            emptyList: false
         }
     }
 
@@ -40,10 +42,36 @@ class GenericProfile extends Component {
             this.setState({userHandle: '@'+this.props.location.state.username});
             this.setState({bio:response.data.bio});
             this.checkFollowingStatus(this.props.location.state.username);
-        })
-            .catch((err) => {
-                console.log('error getting info');
+            //get bio
+
+        if (response.data.numPosts == false) {
+                console.log("User has no posts");
+                this.setState({emptyList: false})
+            }else {
+                console.log("u got mail");
+                
+                axios.get('http://localhost:5000/userposts', {
+                    params: {
+                        userHandle: this.props.location.state.username
+                      }
+                }).then((response) => {
+                    var first = response.data.firstname;
+                    var last = response.data.lastname;
+                  //  console.log(response.data.results);
+                    this.setState({userPosts: response.data.results});
+                    this.setState({emptyList: true});
+
+
+                })
+            }
+
+
+
+
             })
+          .catch((err) => {
+           console.log('error getting info');
+          })
     }
 
     timelineRedirect = () => {
@@ -143,8 +171,104 @@ class GenericProfile extends Component {
            this.setState({followingRedirect: false});
           })
     }
+    handleLikes(uniqueKey){
+        let currUser = localStorage.getItem('currentUser');
+        let likeCountString = document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeCount")[0].textContent;
+        let status = document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeButton")[0].textContent;
+        let intCountString = parseInt(likeCountString.charAt(likeCountString.length -1));
+        if(status === "Like"){
+            axios.post('http://localhost:5000/updatelikes', {
+                currUser: currUser,
+                likeCount: intCountString + 1,
+                microblogID: uniqueKey,
+                status: "like"
+            }).then((response)=>{
+                intCountString+=1;
+                document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeCount")[0].textContent = "Likes: " + intCountString;
+                document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeButton")[0].textContent = "Unlike";
+            }).catch((err)=>{
+                console.log("Failed to update like count");
+            })
+        }else{
+            axios.post('http://localhost:5000/updatelikes', {
+                currUser: currUser,
+                likeCount: intCountString - 1,
+                microblogID: uniqueKey,
+                status: "unlike"
+            }).then((response)=>{
+                intCountString-=1;
+                document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeCount")[0].textContent = "Likes: " + intCountString;
+                document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeButton")[0].textContent = "Like";
+            }).catch((err)=>{
+                console.log("Failed to update like count");
+            })
+        }
+
+
+    }
+    handleQuotes(uniqueKey){
+        let currUser = localStorage.getItem('currentUser');
+        let quoteString = document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("quoteCount")[0].textContent;
+        let status = document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("quoteButton")[0].textContent;
+        let intCountString = parseInt(quoteString.charAt(quoteString.length -1));
+        if(status === "Quote"){ // user wants to quote post
+            axios.post('http://localhost:5000/updateQuotes',{
+                currUser: currUser,
+                quoteCount: intCountString +1,
+                microblogID: uniqueKey
+            }).then((response)=>{
+                intCountString += 1;
+                document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("quoteCount")[0].textContent = "Quotes: " + intCountString;
+                document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("quoteButton")[0].textContent = "Quoted";
+            }).catch((err)=>{
+                console.log("Failed to quote");
+            })
+        } // User not allowed to unquote
+
+    }
 
     render(){
+        let posts = [];
+    let microblogHolder = this.state.userPosts;
+    let currHandle = localStorage.getItem('currentUser');
+    if(!this.state.emptyList){
+        posts.push(
+            <div key={"empty list"} className="microblogs twist">
+                This user has no posts!
+            </div>
+        )
+    }else {
+        for (let i = 0; i < microblogHolder.length; i++) {
+            let topicString = microblogHolder[i].topics.join(', ');
+            let likeStatus;
+            let quoteStatus;
+            if (microblogHolder[i].likedUsers.includes(currHandle)) {
+                likeStatus = "Unlike"; // user already liked the post
+            } else {
+                likeStatus = "Like";
+            }
+            if (microblogHolder[i].quotedUsers.includes(currHandle)) {
+                quoteStatus = "Quoted"; // user already quoted the post and can't unquote
+            } else {
+                quoteStatus = "Quote";
+            }
+            posts.push(
+                <div id={microblogHolder[i]._id} key={microblogHolder[i]._id} className="microblogs twist">
+                    <h2>@{microblogHolder[i].username}: {microblogHolder[i].postBody}</h2>
+                    <h3>Topics: {topicString}</h3> {/* Check if it still works if topics is a list */}
+                    <div className="postInfo">
+                        <button onClick={() => this.handleLikes(microblogHolder[i]._id)}
+                                className="likeButton">{likeStatus}</button>
+                        <button onClick={() => this.handleQuotes(microblogHolder[i]._id)}
+                                className="quoteButton">{quoteStatus}</button>
+                        <p className="likeCount">Likes: {microblogHolder[i].likes}</p>
+                        <p className="quoteCount">Quotes: {microblogHolder[i].quoteCount}</p>
+                        
+                    </div>
+                </div>
+            )
+        }
+    }
         return (
             <div className="UserProfile">
                 <br/>
@@ -182,21 +306,7 @@ class GenericProfile extends Component {
                             </p>
                         </div>
                         <div className='double-column'>
-                            <div className='twist'>
-                                This is my first post
-                            </div>
-                            <div className='twist'>
-                                Woah this is my second post
-                            </div>
-                            <div className='twist'>
-                                Third post gang
-                            </div>
-                            <div className='twist'>
-                                Fourth post
-                            </div>
-                            <div className='twist'>
-                                Fifth post
-                            </div>
+                            {posts}
                         </div>
                     </div>
 
