@@ -195,6 +195,7 @@ app.post('/addmicroblogs', function(req, res){
 //LOADING INFO INTO USER PROFILE CODE
 app.get('/userprofile', function(req, res){
   console.log(req.query.userHandle);
+  var userTopics = [];
   User.findOne({
     'handle': req.query.userHandle}, function(err, user) {
       if (user) {
@@ -205,11 +206,21 @@ app.get('/userprofile', function(req, res){
           numPosts = true;
         }
 
+        var numTopics = false;
+        if(user.topics.length > 0){
+            numTopics = true;
+            for(var i = 0; i < user.topics.length; i++){
+                userTopics.push(user.topics[i]);
+            }
+        }
+
         var userInfo = {
           firstname: user.firstname,
           lastname: user.lastname,
           bio: user.bio,
-          numPosts: numPosts
+          numPosts: numPosts,
+          userTopics: userTopics,
+          numTopics: numTopics
         }
         res.status(200).send(userInfo);
 
