@@ -154,7 +154,7 @@ class GenericProfile extends Component {
         let status = document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeButton")[0].textContent;
         let intCountString = parseInt(likeCountString.charAt(likeCountString.length -1));
         if(status === "Like"){
-            axios.post('http://localhost:5000/updatelikes', {
+            axios.post('/server/updatelikes', {
                 currUser: currUser,
                 likeCount: intCountString + 1,
                 microblogID: uniqueKey,
@@ -167,7 +167,7 @@ class GenericProfile extends Component {
                 console.log("Failed to update like count");
             })
         }else{
-            axios.post('http://localhost:5000/updatelikes', {
+            axios.post('/server/updatelikes', {
                 currUser: currUser,
                 likeCount: intCountString - 1,
                 microblogID: uniqueKey,
@@ -189,7 +189,7 @@ class GenericProfile extends Component {
         let status = document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("quoteButton")[0].textContent;
         let intCountString = parseInt(quoteString.charAt(quoteString.length -1));
         if(status === "Quote"){ // user wants to quote post
-            axios.post('http://localhost:5000/updateQuotes',{
+            axios.post('/server/updateQuotes',{
                 currUser: currUser,
                 quoteCount: intCountString +1,
                 microblogID: uniqueKey
