@@ -44,6 +44,20 @@ app.get('/home', (req, res) => res.send("I'm home"));
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
+function compare(a, b) {
+    // Use toUpperCase() to ignore character casing
+    const idA = a._id;
+    const idB = b._id;
+
+    let comparison = 0;
+    if (idA < idB) {
+        comparison = 1;
+    } else if (idA > idB) {
+        comparison = -1;
+    }
+    return comparison;
+}
+
 app.post('/server/register', function(req, res) {
      //password hash
      bcrypt.hash(req.body.password, 10, function(err, hash){
@@ -292,6 +306,7 @@ app.post('/server/userposts', function(req, res){
               console.log("this is the appearence in then: " + blogList);
               //res.status(200).json({results: blogList})
               //console.log(user.microblog);
+              blogList.sort(compare);
               res.status(200).json({results: blogList});
               res.end();
           }).catch((error) => {
@@ -542,6 +557,7 @@ app.post('/server/getmicroblogs', function(req, res){
             Promise.all(promisesInternal)
                 .then((data) =>{
                     console.log("this is the appearence in then: " + blogList);
+                    blogList.sort(compare);
                     res.status(200).json({results: blogList})
                     res.end();
                 }).catch((error) => {
