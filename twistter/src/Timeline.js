@@ -12,14 +12,44 @@ class Timeline extends Component{
     constructor(props){
         super(props);
         this.state = {
-            clicks: 0,
             show: true,
             searchTerm: '',
-            postBody: '', // this is the post that the user make
+            postBody: '',
             data:[], // list of strings that hyperlinks to profile
             navigate: false,
-            errorMessage: false
+            errorMessage: false,
+            emptyList: false,
+            microblogs: [] // list of microblogs to show
         }
+    }
+
+    componentDidMount(){
+        var currHandle = localStorage.getItem('currentUser');
+        axios.get('http://localhost:5000/getfollowing', {
+            params: {
+                currUser: currHandle
+            }
+        }).then((response) => {
+            // console.log(response.data.results); // pass the results into
+            console.log(typeof response.data.results);
+            console.log(response.data.results.length);
+            if(response.data.results.length !== 0) {
+                axios.get('http://localhost:5000/getmicroblogs', {
+                    params: {
+                        currUser: currHandle,
+                        followingList: response.data.results
+                    }
+                }).then((response) => {
+                    console.log("Status is: " + response.status);
+                    console.log(response.data.results);
+                    this.setState({microblogs: response.data.results});
+                })
+            }else{
+                this.setState({emptyList: true})
+            }
+        }).catch((err) => {
+                console.log('error getting info');
+        })
     }
 
     handleSearch = (ev) => {
@@ -42,15 +72,16 @@ class Timeline extends Component{
 
             this.setState({navigate: true});
         }).catch((err)=>{
-                console.log("Search function failed");
-                this.setState({navigate: false});
+            console.log("Search function failed");
+            this.setState({navigate: false});
         })
     };
 
     handleBlogPosting(event){ // handles blog posting
         event.preventDefault(); // should actually stay in default no redirection happens
-        axios.post('/server/addmicroblogs', {postBody: this.state.postBody}).then(response=>{
-            console.log("Posted from front end");
+        var currHandle = localStorage.getItem('currentUser');
+        axios.post('/server/addmicroblogs', {username: currHandle, postBody: this.state.postBody, likes: 0, quoteCount: 0, likedUsers: [], quotedUsers: []}).then(response=>{
+            console.log(response.data.results);
             this.setState({errorMessage: false});
             document.forms["blogID"].reset();
         }).catch((err)=>{
@@ -60,84 +91,142 @@ class Timeline extends Component{
 
     }
 
-    IncrementItem = () => { // TODO: increment and decrement should both be changes to the database
-      this.setState({ clicks: this.state.clicks + 1 });
+    handleLikes(uniqueKey){
+        let currUser = localStorage.getItem('currentUser');
+        let likeCountString = document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeCount")[0].textContent;
+        let status = document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeButton")[0].textContent;
+        let intCountString = parseInt(likeCountString.charAt(likeCountString.length -1));
+        if(status === "Like"){
+            axios.post('http://localhost:5000/updatelikes', {
+                currUser: currUser,
+                likeCount: intCountString + 1,
+                microblogID: uniqueKey,
+                status: "like"
+            }).then((response)=>{
+                intCountString+=1;
+                document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeCount")[0].textContent = "Likes: " + intCountString;
+                document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeButton")[0].textContent = "Unlike";
+            }).catch((err)=>{
+                console.log("Failed to update like count");
+            })
+        }else{
+            axios.post('http://localhost:5000/updatelikes', {
+                currUser: currUser,
+                likeCount: intCountString - 1,
+                microblogID: uniqueKey,
+                status: "unlike"
+            }).then((response)=>{
+                intCountString-=1;
+                document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeCount")[0].textContent = "Likes: " + intCountString;
+                document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeButton")[0].textContent = "Like";
+            }).catch((err)=>{
+                console.log("Failed to update like count");
+            })
+        }
+
+
     }
 
-    DecreaseItem = () => {
-      this.setState({ clicks: this.state.clicks - 1 });
-    }
+    handleQuotes(uniqueKey){
+        let currUser = localStorage.getItem('currentUser');
+        let quoteString = document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("quoteCount")[0].textContent;
+        let status = document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("quoteButton")[0].textContent;
+        let intCountString = parseInt(quoteString.charAt(quoteString.length -1));
+        if(status === "Quote"){ // user wants to quote post
+            axios.post('http://localhost:5000/updateQuotes',{
+                currUser: currUser,
+                quoteCount: intCountString +1,
+                microblogID: uniqueKey
+            }).then((response)=>{
+                intCountString += 1;
+                document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("quoteCount")[0].textContent = "Quotes: " + intCountString;
+                document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("quoteButton")[0].textContent = "Quoted";
+            }).catch((err)=>{
+                console.log("Failed to quote");
+            })
+        } // User not allowed to unquote
 
-    ToggleClick = () => {
-      this.setState({ show: !this.state.show });
     }
 
 
     render() {
+        let posts = [];
+        let microblogHolder = this.state.microblogs;
+        let currHandle = localStorage.getItem('currentUser');
+        if(this.state.emptyList){
+            posts.push(
+                <div key={"empty list"} className="microblogs">
+                    You are currently following no one. To see posts please search for users and follow them.
+                </div>
+            )
+        }else {
+            for (let i = 0; i < microblogHolder.length; i++) {
+                let topicString = microblogHolder[i].topics.join(', ');
+                let likeStatus;
+                let quoteStatus;
+                if (microblogHolder[i].likedUsers.includes(currHandle)) {
+                    likeStatus = "Unlike"; // user already liked the post
+                } else {
+                    likeStatus = "Like";
+                }
+                if (microblogHolder[i].quotedUsers.includes(currHandle)) {
+                    quoteStatus = "Quoted"; // user already quoted the post and can't unquote
+                } else {
+                    quoteStatus = "Quote";
+                }
+                posts.push(
+                    <div id={microblogHolder[i]._id} key={microblogHolder[i]._id} className="microblogs">
+                        <h2>@{microblogHolder[i].username}: {microblogHolder[i].postBody}</h2>
+                        <h3>Topics: {topicString}</h3> {/* Check if it still works if topics is a list */}
+                        <div className="postInfo">
+                            <button onClick={() => this.handleLikes(microblogHolder[i]._id)}
+                                    className="likeButton">{likeStatus}</button>
+                            <p className="likeCount">Likes: {microblogHolder[i].likes}</p>
+                            <p className="quoteCount">Quotes: {microblogHolder[i].quoteCount}</p>
+                            <button onClick={() => this.handleQuotes(microblogHolder[i]._id)}
+                                    className="quoteButton">{quoteStatus}</button>
+                        </div>
+                    </div>
+                )
+            }
+        }
         return (
             <div className="Timeline">
                 <div className="row">
-                  <div className="sidebar" >
-                    <div className="links">
-                        <ul className="navLinks">
-                            <li><NavLink to="/timeline">Twistter</NavLink></li>
-                            <li><NavLink to="/userprofile">My Profile</NavLink></li>
-                            <li>
-                                <form onSubmit={this.handleClick.bind(this)}>
-                                    {/*Redirect to search in backend*/}
-                                    Search users: <br/>
-                                    <input type="text" placeholder="Search.." name="searchparam" onChange={this.handleSearch.bind(this)}></input>
+                    <div className="sidebar" >
+                        <div className="links">
+                            <ul className="navLinks">
+                                <li><NavLink to="/timeline">Twistter</NavLink></li>
+                                <li><NavLink to="/userprofile">My Profile</NavLink></li>
+                                <li>
+                                    <form onSubmit={this.handleClick.bind(this)}>
+                                        {/*Redirect to search in backend*/}
+                                        Search users: <br/>
+                                        <input type="text" placeholder="Search.." name="searchparam" onChange={this.handleSearch.bind(this)}></input>
+                                        <br/>
+                                        <input type="submit" value="Click to Search"/>
+                                    </form>
                                     <br/>
-                                    <input type="submit" value="Click to Search"/>
-                                </form>
+                                    {this.state.navigate && <Redirect to={{
+                                        pathname: '/search',
+                                        state: {"list": this.state.data}
+                                    }}/>}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="microOrder">
+                        <div className="microblogs">
+                            <form id="blogID" onSubmit={this.handleBlogPosting.bind(this)}>
+                                Create a new microblog: <br/>
+                                <input type="text" placeholder="Text goes here.." maxLength="280" name="microblog" onChange={this.handlePostBody.bind(this)}></input>
                                 <br/>
-                                {this.state.navigate && <Redirect to={{
-                                    pathname: '/search',
-                                    state: {"list": this.state.data}
-                                }}/>}
-                            </li>
-                        </ul>
+                                <input type="submit" value = "Post!"/>
+                                {this.state.errorMessage ? <p> Post must be less than 280 characters: </p> : '' }
+                            </form>
+                        </div>
+                        {posts}
                     </div>
-                  </div>
-                  <div className="microOrder">
-                    <div className="microblogs">
-                    <form id="blogID" onSubmit={this.handleBlogPosting.bind(this)}>
-                        Create a new microblog: <br/>
-                        <input type="text" placeholder="Text goes here.." maxLength="280" name="microblog" onChange={this.handlePostBody.bind(this)}></input>
-                        <br/>
-                        <input type="submit" value = "Post!"/>
-                        {this.state.errorMessage ? <p> Post must be less than 280 characters: </p> : '' }
-                    </form>
-                    </div>
-                    <div className="microblogs">
-                      <h3> @User: I really like tennis. </h3>
-                      <div>
-
-                        <button onClick={this.IncrementItem}>Favorite</button>
-                        <button onClick={this.DecreaseItem}>Unfavorite</button>
-                        { this.state.show ? <p>Likes: { this.state.clicks }</p> : '' }
-                      </div>
-                      <p> repost </p>
-                    </div>
-                    <div className="microblogs">
-                      <h3> @User: CS 307 is a interesting course. </h3>
-                      <div>
-                        <button onClick={this.IncrementItem}>Favorite</button>
-                        <button onClick={this.DecreaseItem}>Unfavorite</button>
-                        { this.state.show ? <p>Likes: { this.state.clicks }</p> : '' }
-                      </div>
-                      <p> repost </p>
-                    </div>
-                    <div className="microblogs">
-                      <h3> @User: Boiler Up! </h3>
-                      <div>
-                        <button onClick={this.IncrementItem}>Favorite</button>
-                        <button onClick={this.DecreaseItem}>Unfavorite</button>
-                        { this.state.show ? <p>Likes: { this.state.clicks }</p> : '' }
-                      </div>
-                      <p> repost </p>
-                    </div>
-                  </div>
                 </div>
             </div>
 

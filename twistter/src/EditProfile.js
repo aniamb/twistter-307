@@ -15,6 +15,7 @@ class EditProfile extends Component{
         }
     }
 
+
     handleChange(event) {
         this.setState({bio: event.target.value})
     }
@@ -56,11 +57,13 @@ class EditProfile extends Component{
                 <form onSubmit = {this.handleSubmit.bind(this)}>
                     {/*Make a text area instead of a text box*/}
                     Bio: <br/>
-                    <input type="text" name="bio" value={this.state.bio}
-                    onChange={this.handleChange.bind(this)}/><br></br>
-                    <input type="submit" value="Save Changes"/>
+                    <textarea rows="4" cols="20" name="bio" value={this.state.bio}
+                    onChange={this.handleChange.bind(this)}>
+                    </textarea>
                     <br></br>
-                    <input type="button" value="Delete" onClick={this.handleDelete.bind(this)}/>
+                    <input type="submit" value="Save Changes"/> 
+                    <br></br>
+                    <input type="button" value="Delete Account" onClick={this.handleDelete.bind(this)}/>
                 </form>
                 {this.state.timelineRedirect && <Redirect to={{
                     pathname: '/timeline'
