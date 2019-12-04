@@ -224,7 +224,7 @@ class Timeline extends Component{
                             <form id="blogID" onSubmit={this.handleBlogPosting.bind(this)}>
                                 <br/>
                                 <label for="microblog">Create a new microblog: <br></br>
-                                  <input type="text" placeholder="Text goes here.." maxLength="280" name="microblog" onChange={this.handlePostBody.bind(this)}></input>
+                                  <textarea rows="4" cols="20" placeholder="Text goes here.." maxLength="280" name="microblog" onChange={this.handlePostBody.bind(this)}></textarea>
                                 </label>
                                 <br/>
                                 <input type="submit" value = "Post!"/>

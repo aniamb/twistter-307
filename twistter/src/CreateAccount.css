@@ -1,12 +1,29 @@
+:root {
+    --background-color: rgb(13, 92, 115);
+    --border-color: orange;
+  
+  }
+  [data-theme="light"] {
+    --background-color: rgb(13, 92, 115);
+    --border-color: orange;
+  
+  }
+  
+  [data-theme="dark"] {
+    --background-color: black;
+    --border-color: black;
+    
+  }
+
 .CreateAccount{
     max-width: 100%;
     height: 100%;
-    color: rgb(13, 92, 115);
+    color: var(--background-color);
 }
 .inputBox{
     margin: 0 auto;
     border-style: solid;
-    border-color: orange;
+    border-color: var(--border-color);
     width: 50%;
     margin-top: 50px;
     text-align: center;
