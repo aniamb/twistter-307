@@ -609,4 +609,22 @@ app.post('/updateQuotes', function(req, res){
     // add microblog id to user's id
     res.status(200).send();
     res.end();
+});
+
+app.post('/addtopics', function(req, res){
+    let currUser = req.body.username;
+    let topicArray = req.body.topics;
+    User.findOneAndUpdate(
+        {'handle': currUser},
+        {$addToSet: {topics: {$each: topicArray}}},
+        function(err,data){
+            if(err){
+                res.status(400).send();
+                res.end();
+            }else{
+                res.status(200).send();
+                res.end();
+            }
+        }
+    )
 })
