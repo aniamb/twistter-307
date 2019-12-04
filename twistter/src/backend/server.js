@@ -611,18 +611,20 @@ app.post('/updateQuotes', function(req, res){
     res.end();
 });
 
-app.post('/topic', function(req, res) {
-    console.log(req.body)
+app.post('/addtopics', function(req, res){
+    let currUser = req.body.username;
+    let topicArray = req.body.topics;
     User.findOneAndUpdate(
-        {$set: {topics : req.body.topics} },
-        function(err, items){
+        {'handle': currUser},
+        {$addToSet: {topics: {$each: topicArray}}},
+        function(err,data){
             if(err){
-                res.status(400).send('Error happened storing topics')
+                res.status(400).send();
+                res.end();
             }else{
-                console.log("Successfully updated stored topics");
-                res.status(200).send('topics stored');
+                res.status(200).send();
+                res.end();
             }
-            res.end();
         }
-    );
-});
+    )
+})

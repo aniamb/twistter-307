@@ -85,10 +85,13 @@ class Timeline extends Component{
     handleBlogPosting(event){ // handles blog posting
         event.preventDefault(); // should actually stay in default no redirection happens
         var currHandle = localStorage.getItem('currentUser');
-        axios.post('http://localhost:5000/addmicroblogs', {username: currHandle, postBody: this.state.postBody, likes: 0, quoteCount: 0, likedUsers: [], quotedUsers: []}).then(response=>{
+        axios.post('http://localhost:5000/addmicroblogs', {username: currHandle, postBody: this.state.postBody, likes: 0, quoteCount: 0, likedUsers: [], quotedUsers: [], topics: this.state.topics}).then(response=>{
             console.log(response.data.results);
             this.setState({errorMessage: false});
             document.forms["blogID"].reset();
+            axios.post('http://localhost:5000/addtopics', {username: currHandle, topics: this.state.topics}).then(response=>{
+                console.log("Finished updating");
+            })
         }).catch((err)=>{
             this.setState({errorMessage: true});
             document.forms["blogID"].reset();
@@ -160,44 +163,25 @@ class Timeline extends Component{
     };
 
     handleKeyDown = (evt) => {
-      if (['Enter', 'Tab', ','].includes(evt.key)) {
-        evt.preventDefault();
+
+        if (['Enter', 'Tab', ','].includes(evt.key)) {
+            evt.preventDefault();
 
         var topic = this.state.value.trim();
-  
-        const top = {topics: [...this.state.topics, topic]}
-        
-
-        axios.post('http://localhost:5000/topic', top).then(response=> {
-                console.log('sent');
-            })
-            .catch((err)=> {
-                console.log('failed');
-            })
-
         if (topic) {
-          this.setState({
-            topics: [...this.state.topics, topic],
-            value: ''
-          });
+            let tempTopics = this.state.topics;
+            tempTopics.push(topic);
+            this.setState({topics: tempTopics});
+            this.setState({value: ""});
         }
+        console.log(this.state.topics);
       }
     };
 
     handleDelete = (toBeRemoved) => {
-      this.setState({
-        topics: this.state.topics.filter(topic => topic !== toBeRemoved)
-      });
-
-      const top = {topics: this.state.topics.filter(topic => topic !== toBeRemoved)}
-        
-
-      axios.post('http://localhost:5000/topic', top).then(response=> {
-              console.log('sent');
-          })
-          .catch((err)=> {
-              console.log('failed');
-          })
+        let tempTopics = this.state.topics;
+        tempTopics.splice(tempTopics.indexOf(toBeRemoved),1);
+        this.setState({topics: tempTopics});
     };
 
 
@@ -253,7 +237,7 @@ class Timeline extends Component{
                                 <li>
                                     <form onSubmit={this.handleClick.bind(this)}>
                                         {/*Redirect to search in backend*/}
-                                        <label for="searchparam">Search users: 
+                                        <label htmlFor="searchparam">Search users:
                                         <br></br>
                                         <input type="text" placeholder="Search.." name="searchparam" onChange={this.handleSearch.bind(this)}></input>
                                         </label>
@@ -272,7 +256,7 @@ class Timeline extends Component{
                     <div className="microOrder">
                         <div className="microblogs">
                             <div className="topics">
-                                <form>
+                                <form >
                                     Create a new microblog: <br/>
                                     {this.state.topics.map(topic => (
                                         <div className="tag-topic" key={topic}>
