@@ -156,7 +156,7 @@ class Timeline extends Component{
         if(this.state.emptyList){
             posts.push(
                 <div key={"empty list"} className="microblogs">
-                    You are currently following no one. To see posts please search for users and follow them.
+                    You aren't following any users! To see posts in your timeline, search some users to follow. 
                 </div>
             )
         }else {
@@ -197,14 +197,14 @@ class Timeline extends Component{
                         <div className="links">
                           <header>
                             <ul className="navLinks">
-                                <li><NavLink to="/timeline">Twistter</NavLink></li>
+
                                 <li><NavLink to="/userprofile">My Profile</NavLink></li>
                                 <li>
                                     <form onSubmit={this.handleClick.bind(this)}>
                                         {/*Redirect to search in backend*/}
                                         <label for="searchparam">Search users: 
                                         <br></br>
-                                        <input type="text" placeholder="Search.." name="searchparam" onChange={this.handleSearch.bind(this)}></input>
+                                        <input type="text"  name="searchparam" onChange={this.handleSearch.bind(this)}></input>
                                         </label>
                                         <br/>
                                         <input type="submit" value="Click to Search"/>
