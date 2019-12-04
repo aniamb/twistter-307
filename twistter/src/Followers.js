@@ -1,16 +1,18 @@
 import React, {Component} from 'react';
 import './App.css';
 import './Search.css'
-import { NavLink, Redirect} from 'react-router-dom'
+import {NavLink, Redirect } from 'react-router-dom'
+
 // import Form from 'react-bootstrap/Form'
 //import FormControl from 'react-bootstrap/FormControl'
 
-class Search extends Component{
+class Followers extends Component{
     constructor(props){
         super(props);
         this.state = {
             navigate: false, // only navigates to /search again
-            username: ""
+            username: "",
+            currHandle: ""
         }
     }
 
@@ -26,6 +28,8 @@ class Search extends Component{
 
     render() {
         let userNames = [];
+        //this.setState({currHandle: localStorage.getItem('currentUser')});
+
         for(let i = 0; i< this.props.location.state.list[0].length; i++){
             userNames.push(
                 <div key={this.props.location.state.list[0][i]} className="searchResults">
@@ -37,9 +41,9 @@ class Search extends Component{
         }
         return (
 
-            <div className="Search">
-              <h1> Search Results: </h1>
-                <div className="row-timeline">
+            <div className="Followers">
+              <h1> Followers!</h1>
+                <div className="row">
                   <div className="sidebar" >
                     <div className="links">
                         <ul className="navLinks">
@@ -61,4 +65,4 @@ class Search extends Component{
         );
     }
 }
-export default Search;
+export default Followers;

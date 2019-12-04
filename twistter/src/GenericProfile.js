@@ -13,6 +13,16 @@ class GenericProfile extends Component {
             timelineRedirect: false,
             userDisplayName: null,
             userHandle: null,
+            status: null,
+            following: false, // determines whether or not current user follows the generic profile
+            followerData: [],
+            followingData: [],
+            followerRedirect: false,
+            followingRedirect: false,
+            firstName: "",
+            userPosts: [],
+            bio: "",
+            emptyList: false
         }
     }
 
@@ -24,22 +34,241 @@ class GenericProfile extends Component {
             }
         }).then((response) => {
             var first = response.data.firstname;
+            this.setState({firstName: first.charAt(0).toUpperCase() + first.substring(1)+"'s"});
             var last = response.data.lastname;
             var displayName = first.charAt(0).toUpperCase() + first.substring(1) + " " + last.charAt(0).toUpperCase() + last.substring(1);
             console.log(displayName);
             this.setState({userDisplayName: displayName});
             this.setState({userHandle: '@'+this.props.location.state.username});
-        })
-            .catch((err) => {
-                console.log('error getting info');
+            this.setState({bio:response.data.bio});
+            this.checkFollowingStatus(this.props.location.state.username);
+            //get bio
+
+        if (response.data.numPosts == false) {
+                console.log("User has no posts");
+                this.setState({emptyList: false})
+            }else {
+                console.log("u got mail");
+                
+                axios.get('http://localhost:5000/userposts', {
+                    params: {
+                        userHandle: this.props.location.state.username
+                      }
+                }).then((response) => {
+                    var first = response.data.firstname;
+                    var last = response.data.lastname;
+                  //  console.log(response.data.results);
+                    this.setState({userPosts: response.data.results});
+                    this.setState({emptyList: true});
+
+
+                })
+            }
+
+
+
+
             })
+          .catch((err) => {
+           console.log('error getting info');
+          })
     }
 
     timelineRedirect = () => {
         this.setState({timelineRedirect: true});
     };
-    render(){
 
+    checkFollowingStatus = (handle) => { // updates the following variable
+        // axios post to check if user is following this generic profile.
+        var currHandle = localStorage.getItem('currentUser');
+        axios.get('http://localhost:5000/searchFollowers',{
+            params: {
+                otherHandle: handle, // this is the user of the generic profile
+                userHandle: currHandle // this is the current user looking at the profile
+            }
+        }).then((response)=>{
+            // response will return a boolean. true will represent that currUser does follow
+            if(response.data.follow){
+                this.setState({following: true});
+                this.setState({status: "Following"});
+            }else{
+                this.setState({following: false});
+                this.setState({status: "Follow"});
+            }
+        })
+    };
+
+    updateFollowButton = () => {
+        if (this.state.status==="Follow") { // user wants to follow the generic user
+            // add axios call here
+            let currHandle = localStorage.getItem('currentUser');
+            axios.get('http://localhost:5000/followLogic', {
+                params: {
+                    otherHandle: this.props.location.state.username,
+                    userHandle: currHandle,
+                    follow: true
+                }
+            }).then((response)=>{
+                this.setState({status: "Following"});
+            }).catch((err)=>{
+                console.log("INVALID FOLLOW REQUEST");
+            });
+
+        } else { // user wants to unfollow the generic user
+            // add axios call here
+            let currHandle = localStorage.getItem('currentUser');
+            axios.get('http://localhost:5000/followLogic', {
+                params: {
+                    otherHandle: this.props.location.state.username,
+                    userHandle: currHandle,
+                    follow: false
+                }
+            }).then((response)=>{
+                this.setState({status: "Follow"});
+            }).catch((err)=>{
+                console.log("INVALID UNFOLLOW REQUEST");
+            })
+
+        }
+    };
+
+    printFollowers = (ev)  => {
+        console.log("got into function")
+        var currHandle = this.props.location.state.username;
+        axios.get('http://localhost:5000/followers', {
+            params: {
+              userHandle: currHandle
+            }
+          }).then((response) => {
+            console.log(response.data.results);
+            this.setState({followerData: this.state.followerData.concat([response.data.results])})
+            this.setState({followerRedirect: true});
+            console.log(this.state.followerData);
+          })
+          .catch((err) => {
+           console.log('error getting info');
+           this.setState({followerRedirect: false});
+
+          })
+    }
+
+    printFollowing = (ev)  => {
+        console.log("got into function")
+        var currHandle = this.props.location.state.username;
+        axios.get('http://localhost:5000/following', {
+            params: {
+              userHandle: currHandle
+            }
+          }).then((response) => {
+            console.log('yeet' + response.data.results);
+            this.setState({followingData: this.state.followingData.concat([response.data.results])})
+            console.log(this.state.followingData);
+            this.setState({followingRedirect: true});
+
+          })
+          .catch((err) => {
+           console.log('error getting info');
+           this.setState({followingRedirect: false});
+          })
+    }
+    handleLikes(uniqueKey){
+        let currUser = localStorage.getItem('currentUser');
+        let likeCountString = document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeCount")[0].textContent;
+        let status = document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeButton")[0].textContent;
+        let intCountString = parseInt(likeCountString.charAt(likeCountString.length -1));
+        if(status === "Like"){
+            axios.post('http://localhost:5000/updatelikes', {
+                currUser: currUser,
+                likeCount: intCountString + 1,
+                microblogID: uniqueKey,
+                status: "like"
+            }).then((response)=>{
+                intCountString+=1;
+                document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeCount")[0].textContent = "Likes: " + intCountString;
+                document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeButton")[0].textContent = "Unlike";
+            }).catch((err)=>{
+                console.log("Failed to update like count");
+            })
+        }else{
+            axios.post('http://localhost:5000/updatelikes', {
+                currUser: currUser,
+                likeCount: intCountString - 1,
+                microblogID: uniqueKey,
+                status: "unlike"
+            }).then((response)=>{
+                intCountString-=1;
+                document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeCount")[0].textContent = "Likes: " + intCountString;
+                document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("likeButton")[0].textContent = "Like";
+            }).catch((err)=>{
+                console.log("Failed to update like count");
+            })
+        }
+
+
+    }
+    handleQuotes(uniqueKey){
+        let currUser = localStorage.getItem('currentUser');
+        let quoteString = document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("quoteCount")[0].textContent;
+        let status = document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("quoteButton")[0].textContent;
+        let intCountString = parseInt(quoteString.charAt(quoteString.length -1));
+        if(status === "Quote"){ // user wants to quote post
+            axios.post('http://localhost:5000/updateQuotes',{
+                currUser: currUser,
+                quoteCount: intCountString +1,
+                microblogID: uniqueKey
+            }).then((response)=>{
+                intCountString += 1;
+                document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("quoteCount")[0].textContent = "Quotes: " + intCountString;
+                document.getElementById(uniqueKey).getElementsByClassName("postInfo")[0].getElementsByClassName("quoteButton")[0].textContent = "Quoted";
+            }).catch((err)=>{
+                console.log("Failed to quote");
+            })
+        } // User not allowed to unquote
+
+    }
+
+    render(){
+        let posts = [];
+    let microblogHolder = this.state.userPosts;
+    let currHandle = localStorage.getItem('currentUser');
+    if(!this.state.emptyList){
+        posts.push(
+            <div key={"empty list"} className="microblogs twist">
+                This user has no posts!
+            </div>
+        )
+    }else {
+        for (let i = 0; i < microblogHolder.length; i++) {
+            let topicString = microblogHolder[i].topics.join(', ');
+            let likeStatus;
+            let quoteStatus;
+            if (microblogHolder[i].likedUsers.includes(currHandle)) {
+                likeStatus = "Unlike"; // user already liked the post
+            } else {
+                likeStatus = "Like";
+            }
+            if (microblogHolder[i].quotedUsers.includes(currHandle)) {
+                quoteStatus = "Quoted"; // user already quoted the post and can't unquote
+            } else {
+                quoteStatus = "Quote";
+            }
+            posts.push(
+                <div id={microblogHolder[i]._id} key={microblogHolder[i]._id} className="microblogs twist">
+                    <h2>@{microblogHolder[i].username}: {microblogHolder[i].postBody}</h2>
+                    <h3>Topics: {topicString}</h3> {/* Check if it still works if topics is a list */}
+                    <div className="postInfo">
+                        <button onClick={() => this.handleLikes(microblogHolder[i]._id)}
+                                className="likeButton">{likeStatus}</button>
+                        <button onClick={() => this.handleQuotes(microblogHolder[i]._id)}
+                                className="quoteButton">{quoteStatus}</button>
+                        <p className="likeCount">Likes: {microblogHolder[i].likes}</p>
+                        <p className="quoteCount">Quotes: {microblogHolder[i].quoteCount}</p>
+                        
+                    </div>
+                </div>
+            )
+        }
+    }
         return (
             <div className="UserProfile">
                 <br/>
@@ -47,40 +276,37 @@ class GenericProfile extends Component {
                     <div className="row">
                         {/* User Profile */}
                         <div className="column">
-                            <button className = "redirect"><img id="settings" onClick = {this.timelineRedirect}/></button>
-                            {this.state.timelineRedirect ? <Redirect to='/timeline'/> : null}
+                            {/* <button className = "redirect"><img id="settings" onClick = {this.timelineRedirect}/></button> */}
+                            {/* <button className = "redirect" id="settings" onClick = {this.timelineRedirect}>Timeline</button>
+                            {this.state.timelineRedirect ? <Redirect to='/timeline'/> : null} */}
                             <div className="circle"/>
+
                             <br/>
                             <h3>{this.state.userDisplayName}</h3>
                             <h6>{this.state.userHandle}</h6>
-                            <p>Team 1 Squad</p>
+                            <p>{this.state.bio}</p>
                             <hr/>
-                            <p>+Followers</p>
-                            <p>+Following</p>
+                            <button onClick={this.updateFollowButton}>{this.state.status}</button>
+                            <button onClick = {this.printFollowers}>{this.state.firstName} Followers</button>
+                        {this.state.followerRedirect && <Redirect to={{
+                                    pathname: '/followers',
+                                    state: {"list": this.state.followerData}
+                                }}/>}
+                        <button onClick = {this.printFollowing}>{this.state.firstName} Following</button>
+                        {this.state.followingRedirect && <Redirect to={{
+                                    pathname: '/following',
+                                    state: {"list": this.state.followingData}
+                                }}/>}
                             <p>My Topics</p>
                             <p>
-                                <span id = "topics">CS</span>
-                                <span id = "topics">Math</span>
-                                <span id = "topics">English</span>
-                                <span id = "topics">History</span>
+                                <span className = "topics">CS</span>
+                                <span className = "topics">Math</span>
+                                <span className = "topics">English</span>
+                                <span className = "topics">History</span>
                             </p>
                         </div>
                         <div className='double-column'>
-                            <div className='twist'>
-                                This is my first post
-                            </div>
-                            <div className='twist'>
-                                Woah this is my second post
-                            </div>
-                            <div className='twist'>
-                                Third post gang
-                            </div>
-                            <div className='twist'>
-                                Fourth post
-                            </div>
-                            <div className='twist'>
-                                Fifth post
-                            </div>
+                            {posts}
                         </div>
                     </div>
 

@@ -2,10 +2,9 @@ import React, {Component} from 'react';
 import './App.css';
 import './Search.css'
 import { NavLink, Redirect} from 'react-router-dom'
-// import Form from 'react-bootstrap/Form'
-//import FormControl from 'react-bootstrap/FormControl'
 
-class Search extends Component{
+
+class Following extends Component{
     constructor(props){
         super(props);
         this.state = {
@@ -37,9 +36,9 @@ class Search extends Component{
         }
         return (
 
-            <div className="Search">
-              <h1> Search Results: </h1>
-                <div className="row-timeline">
+            <div className="Following">
+              <h1> Following! </h1>
+                <div className="row">
                   <div className="sidebar" >
                     <div className="links">
                         <ul className="navLinks">
@@ -61,4 +60,4 @@ class Search extends Component{
         );
     }
 }
-export default Search;
+export default Following;
