@@ -233,7 +233,7 @@ class Timeline extends Component{
                                         {/*Redirect to search in backend*/}
                                         <label htmlFor="searchparam">Search users:
                                         <br></br>
-                                        <input type="text"  name="searchparam" onChange={this.handleSearch.bind(this)}></input>
+                                        <input type="text"  placeholder = "search" name="searchparam" onChange={this.handleSearch.bind(this)}></input>
                                         </label>
                                         <br/>
                                         <input type="submit" value="Click to Search"/>
@@ -252,6 +252,7 @@ class Timeline extends Component{
                         <div className="microblogs">
                             <div className="topics-enter">
                                 <form >
+                                    <label htmlFor="enter-topics">
                                     Tag your post with topics: <br/>
                                     {this.state.topics.map(topic => (
                                         <div className="tag-topic-list" key={topic}>
@@ -266,17 +267,18 @@ class Timeline extends Component{
                                             </button>
                                         </div>
                                     ))}
-                                    <input
+                                    <input name="enter_topics"
                                         placeholder="Enter Topics:"
                                         value={this.state.value}
                                         onChange={this.handleChange}
                                         onKeyDown={this.handleKeyDown}
                                     />
+                                    </label>
                                 </form>
                             </div>
                             <form id="blogID" onSubmit={this.handleBlogPosting.bind(this)}>
                                 <br/>
-                                <label for="microblog">Create a new microblog: <br></br>
+                                <label htmlFor="microblog">Create a new microblog: <br></br>
                                   <textarea rows="4" cols="20" placeholder="Text goes here.." maxLength="280" name="microblog" onChange={this.handlePostBody.bind(this)}></textarea>
                                 </label>
                                 <br/>
