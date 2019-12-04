@@ -383,7 +383,7 @@ app.post('/server/followLogic', function(req, res){
 });
 
 // return list of users currUser follows
-app.post('/getfollowing', function(req, res){
+app.post('/server/getfollowing', function(req, res){
     console.log("made it into get following");
     User.findOne({
         'handle': req.body.currUser}, function(err, user) {
