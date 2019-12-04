@@ -271,6 +271,30 @@ class Timeline extends Component{
                     </div>
                     <div className="microOrder">
                         <div className="microblogs">
+                            <div className="topics">
+                                <form>
+                                    Create a new microblog: <br/>
+                                    {this.state.topics.map(topic => (
+                                        <div className="tag-topic" key={topic}>
+                                            {topic}
+
+                                            <button
+                                                type="button"
+                                                className="button"
+                                                onClick={() =>  this.handleDelete(topic)}
+                                            >
+                                                &times;
+                                            </button>
+                                        </div>
+                                    ))}
+                                    <input
+                                        placeholder="Enter Topics:"
+                                        value={this.state.value}
+                                        onChange={this.handleChange}
+                                        onKeyDown={this.handleKeyDown}
+                                    />
+                                </form>
+                            </div>
                             <form id="blogID" onSubmit={this.handleBlogPosting.bind(this)}>
                                 Create a new microblog: <br/>
                                 <input type="text" placeholder="Text goes here.." maxLength="280" name="microblog" onChange={this.handlePostBody.bind(this)}></input>
