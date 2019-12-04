@@ -6,8 +6,10 @@ const app = express();
 const port = 5000;
 const dbConnectionString = 'mongodb+srv://user:lebronjames@twistter-4gumf.mongodb.net/test?retryWrites=true&w=majority';
 const mongoose = require('mongoose');
+var ObjectId = require('mongodb').ObjectID;
 
 let User = require('./models/user');
+let Microblog = require('./models/microblog');
 app.use(cors());
 const bcrypt = require('bcrypt');
 
@@ -177,13 +179,18 @@ app.get('/userprofile', function(req, res){
     'handle': req.query.userHandle}, function(err, user) {
       if (user) {
         // user exists 
+        var numPosts = false;
+        if(user.microblog.length > 0){
+          numPosts = true;
+        }
         var userInfo = {
           firstname: user.firstname,
           lastname: user.lastname,
-          bio: user.bio
+          bio: user.bio,
+          numPosts: numPosts
         }
         res.status(200).send(userInfo);
-        res.end();
+         res.end();
   
       } else {
         // user does not exist
@@ -193,6 +200,76 @@ app.get('/userprofile', function(req, res){
       }
    })
 });
+
+app.get('/userposts', function(req, res){
+  console.log(req.query.userHandle);
+  let promisesInternal = [];
+  let blogList = [];
+  User.findOne({ 
+    'handle': req.query.userHandle}, function(err, user) {
+      console.log("hello");
+      if (user) {
+        // user exists 
+        
+        console.log("!!!!!!!!!!LENGTH: " + user.microblog.length);
+        for (let i = 0; i < user.microblog.length; i++) {
+        //  var id = JSON.stringify(userInfo[i]);
+            let internalPromise =
+              Microblog.findById({'_id': mongoose.Types.ObjectId(user.microblog[i])}, function (err, microblog) {
+                  if (err) {
+                      console.log(err);
+                  }
+                  if (microblog) {
+                    console.log("microblog: " + microblog);
+                      blogList.splice(blogList.length - 1, 0, microblog);
+                      // blogList.push(microblog);
+                  }
+                  console.log("bloglist: "+ blogList[i]);
+              }).exec();
+             promisesInternal.push(internalPromise);
+
+        }
+        // var userInfo = {
+        //   firstname: user.firstname,
+        //   lastname: user.lastname,
+        //   bio: user.bio,
+        //   microblog: blogList
+        // }
+        // res.status(200).send(userInfo);
+        // res.end();
+        Promise.all(promisesInternal)
+          .then((data) =>{
+              console.log("entered")
+              console.log("this is the appearence in then: " + blogList);
+              //res.status(200).json({results: blogList})
+              //console.log(user.microblog);
+              res.status(200).json({results: blogList});
+              res.end();
+          }).catch((error) => {
+            res.status(400).send();
+            res.end();
+        })
+  
+      } else {
+        // user does not exist
+        console.log('user not in base');
+        res.status(400).send('Email or Password does not exist');
+        res.end();
+      }
+   })
+
+   
+
+
+
+
+
+
+})
+
+
+
+
 
 //GETTING FOLLWERS OF CURRENT USER
 app.get('/followers', function(req, res){

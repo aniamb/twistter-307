@@ -40,7 +40,7 @@ class Search extends Component{
 
             <div className="Search">
               <h1> Search Results: </h1>
-                <div className="row">
+                <div className="row-timeline">
                   <div className="sidebar" >
                     <div className="links">
                         <ul className="navLinks">
